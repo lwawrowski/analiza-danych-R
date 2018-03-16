@@ -1,6 +1,6 @@
 # Regresja prosta
 
-Na podstawie [danych](/data/Salary_Data.csv) dotyczących informacji o doświadczeniu i wynagrodzeniu pracowników zbuduj model określający 'widełki' dla potencjalnych pracowników o doświadczeniu równym 8, 10 i 11 lat.
+Na podstawie [danych](data/Salary_Data.csv) dotyczących informacji o doświadczeniu i wynagrodzeniu pracowników zbuduj model określający 'widełki' dla potencjalnych pracowników o doświadczeniu równym 8, 10 i 11 lat.
 
 ```{r include=FALSE}
 library(tidyverse)
