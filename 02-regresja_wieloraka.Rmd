@@ -1,0 +1,48 @@
+# Regresja wieloraka
+
+Na podstawie danych dotyczących [zatrudnienia](data/pracownicy.csv) opracuj model, w którym zmienną zależną jest bieżące wynagrodzenie. Jaka cecha ma największy wpływ na tę wartość?
+
+```{r include=FALSE}
+library(car)
+library(MASS)
+library(haven)
+library(caTools)
+
+
+startups <- read.csv("data/50_Startups.csv")
+
+options(scipen=-1)
+
+model <- lm(Profit ~ R.D.Spend + Marketing.Spend, data=startups)
+summary(model)
+
+
+zatr <- read_sav("data/zatrudnienie.sav")
+
+write.table(zatr, file="data/zatr.csv", sep=";", dec=",", row.names=F)
+
+zatr <- zatr %>%
+  as.tbl() %>%
+  dplyr::select(-c(id, data_urodz)) %>%
+  mutate(płeć=as.factor(płeć),
+         kat_pracownia=as.factor(kat_pracownia),
+         związki=as.factor(związki))
+
+z <- read.csv("data/zatr.csv", sep=";", dec=",")
+
+set.seed(123)
+split = sample.split(z$pwynagrodzenie, SplitRatio = 0.5)
+training_set = subset(z, split == TRUE)
+test_set = subset(z, split == FALSE) 
+
+# m <- lm(bwynagrodzenie ~ ., data = training_set)
+# summary(m)
+
+
+# vif(m)
+# qqPlot(m)
+# studres(m)
+
+# scale(z)
+```
+

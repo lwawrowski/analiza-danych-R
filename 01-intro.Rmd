@@ -1,0 +1,40 @@
+# Wprowadzenie do analizy danych
+
+Podstawowe cele w analizie danych:
+
+- porównanie grup
+- prognozowanie
+- klasyfikacja
+
+Bez względu na cel analizy jest kilka pojęć, które są wspólne.
+
+## Hipoteza statystyczna
+
+Przypuszczenie dotyczące własności analizowanej cechy, np. średnia w populacji jest równa 10, rozkład cechy jest normalny.
+
+Formułuje się zawsze dwie hipotezy: hipotezę zerową ($H_0$) i hipotezę alternatywną ($H_1$). Hipoteza zerowa jest hipotezą mówiącą o równości:
+
+$H_0: \bar{x}=10$
+
+Z kolei hipoteza alternatywna zakłada coś przeciwnego:
+
+$H_1: \bar{x}\neq 10$
+
+Zamiast znaku nierówności ($\neq$) może się także pojawić znak mniejszości ($<$) lub większości ($>$).
+
+## Poziom istotności i wartość p
+
+Hipotezy statystyczne weryfikuje się przy określonym poziomie istotności $\alpha$, który wskazuje maksymalny poziom akceptowalnego błędu (najczęściej $\alpha=0,05$).
+
+Większość programów statystycznych podaje w wynikach testu wartość p. Jest to prawdopodobieństwo uzyskania obserwowanych wyników przy założeniu prawdziwości hipotezy zerowej. 
+
+Generalnie jeśli $p < \alpha$ - odrzucamy hipotezę zerową.
+
+[Krytyka wartości p](http://idane.pl/blog/asa)
+
+## Testy parametryczne i nieparametryczne
+
+Testy statystyczne dzielą się na dwie grupy:
+
+- parametryczne, które wymagają spełnienia założeń, ale są dokładniejsze,
+- nieparametryczne, które nie wymagają tylu założeń, ale są mniej dokładne.

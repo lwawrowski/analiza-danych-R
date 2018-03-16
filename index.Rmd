@@ -1,0 +1,29 @@
+--- 
+title: "Metody przetwarzania i analizy danych w R"
+author: "Łukasz Wawrowski"
+date: ""
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+github-repo: lwawrowski/analiza-danych-R
+description: "Materiały dydaktyczne do kursu Metody przetwarzania i analizy danych w R."
+---
+
+# Wprowadzenie {-}
+
+Literatura podstawowa:
+
+- Przemysław Biecek - [_Przewodnik po pakiecie R_](http://pbiecek.github.io/Przewodnik/)
+- Marek Gągolewski - [_Programowanie w języku R. Analiza danych, obliczenia, symulacje._](http://www.gagolewski.com/publications/programowanier/)
+- Garret Grolemund, Hadley Wickham - [_R for Data Science_](http://r4ds.had.co.nz/) ([polska wersja](link))
+
+Literatura dodatkowa:
+
+- [inne pozycje po polsku](https://github.com/mi2-warsaw/SER/blob/master/histoRia/README.md)
+- [inne pozycje po angielsku](https://bookdown.org/)
+
+Internet:
+
+- [R-bloggers](https://www.r-bloggers.com/)
+- [rweekly](https://rweekly.org/)
+
