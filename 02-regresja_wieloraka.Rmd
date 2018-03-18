@@ -46,3 +46,6 @@ test_set = subset(z, split == FALSE)
 # scale(z)
 ```
 
+## Zadanie 
+
+Na podstawie zbioru dotyczącego [50 startupów](data/50_Startups.csv) określ jakie czynniki w największym stopniu wpływają na przychód startupów.

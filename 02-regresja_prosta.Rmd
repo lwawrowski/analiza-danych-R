@@ -19,3 +19,6 @@ new <- data.frame(YearsExperience=c(8,10,11))
 pred <- predict(model, new)
 ```
 
+## Zadanie 
+
+Dla danych dotyczących [sklepu nr 77](data/sklep77.csv) opracuj model zależności sprzedaży od liczby klientów. Ile wynosi teoretyczna sprzedaż w dniach, w których liczba klientów będzie wynosiła 560, 740, 811 oraz 999 osób?
