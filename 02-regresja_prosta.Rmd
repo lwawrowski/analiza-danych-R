@@ -2,22 +2,9 @@
 
 Na podstawie [danych](data/Salary_Data.csv) dotyczących informacji o doświadczeniu i wynagrodzeniu pracowników zbuduj model określający 'widełki' dla potencjalnych pracowników o doświadczeniu równym 8, 10 i 11 lat.
 
-```{r include=FALSE}
-library(tidyverse)
+[regresja_prosta.Rmd](res/regresja_prosta.Rmd)
 
-dataset <- read.csv("data/Salary_Data.csv")
-
-ggplot(dataset, aes(Salary, YearsExperience)) + 
-  geom_point() + 
-  geom_smooth(method="lm")
-
-model <- lm(Salary ~ YearsExperience, data=dataset)
-summary(model)
-
-new <- data.frame(YearsExperience=c(8,10,11))
-
-pred <- predict(model, new)
-```
+[cały projekt](res/adr.zip)
 
 ## Zadanie 
 

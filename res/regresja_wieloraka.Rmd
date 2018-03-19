@@ -1,0 +1,79 @@
+---
+title: "Regresja wieloraka"
+output: html_notebook
+---
+
+Wczytanie biblioteki *tidyverse* oraz danych.
+
+```{r}
+library(tidyverse)
+
+dataset <- read.csv("dane/pracownicy.csv", sep=";", dec=",")
+
+summary(dataset)
+
+dataset2 <- dataset %>%
+  filter(!is.na(wiek)) %>%
+  select(-id, -data_urodz)
+
+summary(dataset2)
+```
+
+W zmiennej wiek występował brak danych, który został usunięty. Usunięto także kolumny, które nie przydadzą się w modelowaniu.
+
+Z racji tego, że celem modelowania nie jest predykcja, a ustalenie czynników wpływających na wielkość bieżącego wynagrodzenia, więc oprócz standardowych miar dopasowania modelu wyodrębnimy zbiór uczący (trenujący) oraz testujący (walidacyjny). Model zostanie dopasowany na podstawie danych uczących, a następnie zastosowany na zbiorze testującym w celu oceny dopasowania do danych, których wcześniej *nie widział*. 
+
+Ponadto dokonujemy przekształcenia typu cech, które są jakościowe (płeć, kat_pracownika, zwiazki) z typu liczbowego na czynnik/faktor, który będzie poprawnie interpretowany przez model.
+
+```{r}
+
+#install.packages("caTools")
+library(caTools)
+
+set.seed(123)
+dataset2 <- dataset2 %>%
+  mutate(podzial = sample.split(bwynagrodzenie, SplitRatio = 237),
+         plec=as.factor(plec),
+         kat_pracownika=as.factor(kat_pracownika),
+         zwiazki=as.factor(zwiazki))
+
+train <- dataset2 %>%
+  filter(podzial == TRUE) %>%
+  select(-podzial)
+
+test <- dataset2 %>%
+  filter(podzial == FALSE) %>%
+  select(-podzial)
+
+options(scipen = 1)
+ggplot(dataset2, aes(y=bwynagrodzenie, x=podzial)) + geom_boxplot()
+
+
+```
+
+Na podstawie wykresu pudełkowego możemy ocenić podobieństwo rozkładów w zbiorach uczącym oraz testującym.
+
+W modelu zmienna zależna to `bwynagrodzenie`, natomiast jako zmienne niezależne bierzemy pod uwagę wszystkie pozostałe cechy.
+
+```{r}
+model <- lm(bwynagrodzenie ~ ., data = train)
+summary(model)
+```
+
+Tak zbudowany model wyjaśnia 83% zmienności bieżącego wynagrodzenia, ale nie wszystkie zmienne są w tym modelu istotne.
+
+Parametry regresji mają następujące interpretacje:
+
+- plec1 - kobiety zarabiają przeciętnie o 3156,35 zł mniej niż mężczyźni,
+- edukacja - wzrost liczby lat nauki o rok powoduje średni wzrost bieżącego wynagrodzenia o 397,63 zł
+- kat_pracownika2 - pracownicy o kodzie 2 (urzędnik) zarabiają średnio o 6693,55 zł więcej niż pracownik o kodzie 1 (ochroniarz)
+- kat_pracownika2 - pracownicy o kodzie 3 (menedżer) zarabiają średnio o 11614,81 zł więcej niż pracownik o kodzie 1 (ochroniarz)
+- pwynagrodzenie - wzrost początkowego wynagrodzenia o 1 zł powoduje przecięny wzrost bieżącego wynagrodzenia o 1,28 zł
+- staz - wzrost stażu pracy o miesiąc skutkuje przeciętnym wzrostem bieżącego wynagrodzenia o 166,16 zł
+- doswiadcznie - wzrost doświadczenia o miesiąc powoduje średni spadek bieżącego wynagrodzenia o 22,97 zł
+- zwiazki1 - pracownicy należący do związków zawodowych zarabiają średnio o 1681,88 zł mniej aniżeli pracownicy, którzy do związków nie zależą
+- wiek - wzrost wieku pracownika o 1 rok to przecięnym spadek bieżącego wynagrodzenia o 35,32 zł
+
+Wszystkie te zależności obowiązują przy założeniu *ceteris paribus* - przy pozostałych warunkach niezmienionych.
+
+Ten model wymaga oczywiście ulepszenie do czego wykorzystamy m.in. pakiet [olsrr](https://cran.r-project.org/web/packages/olsrr/index.html).

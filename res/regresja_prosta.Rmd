@@ -1,0 +1,67 @@
+---
+title: "Regresja prosta"
+output: html_notebook
+---
+
+Wczytanie danych oraz pakietu tidyverse.
+
+```{r}
+library(tidyverse)
+
+dataset <- read.csv("dane/Salary_Data.csv")
+
+summary(dataset)
+```
+
+Użycie funkcji `summary()` na zaimportowanym zbiorze pozwala na sprawdzenie czy nie występują zera bądź braki danych.
+
+```{r}
+
+plot(dataset)
+
+```
+
+Najprostszym sposobem wizualizacji jest wykorzystanie funkcji `plot()`, niemniej taki wykres nie jest najpiękniejszy i trudno się go formatuje. Dużo lepiej skorzystać z pakietu `ggplot2`.
+
+```{r}
+
+ggplot(dataset, aes(x=YearsExperience, y=Salary)) + 
+  geom_point(colour = "blue") +
+  geom_smooth(method = "lm") +
+  xlab("Doświadczenie") + 
+  ylab("Pensja") +
+  xlim(0,12) +
+  ylim(35000, 126000) +
+  theme_bw()
+```
+
+W argumentach funkcji `ggplot()` podajemy co wizualizujemy, natomiast sposób prezentacji ustalany jest przez funkcje `geom`. Funkcje `xlab()` i `ylab()` określają etykiety osi, a `xlim()` i `ylim()` wartości graniczne. Funkcje rozpoczynające się od `theme_` określają wygląd wykresu.
+
+Modelowanie rozpoczynamy od określenia zmiennej zależnej i niezależnej.
+
+Zmienna zależna/objaśniana: pensja
+Zmienna niezależna/objaśniająca: doświadczenie
+
+```{r}
+model <- lm(Salary ~ YearsExperience, data = dataset)
+summary(model)
+```
+
+b1 = 9450 - wzrost doświadczenia o rok powoduje przeciętny wzrost pensji o 9450 zł
+b0 = 25792,2 - pracownik o doświadczeniu 0 lat uzyska pensję w wysokości 25792,2 zł
+
+resztowy błąd standardowy Su = 5788 - wartości z modelu różnią się od rzeczywistości średnio o +/- 5788 zł
+
+R2 = 0,957 - model wyjaśnia 96% zmienności pensji
+
+```{r}
+
+nowiPracownicy <- data.frame(YearsExperience=c(8,10,11))
+
+predict(model, nowiPracownicy)
+```
+
+Pracownik o stażu 8 lat - proponowana pensja 101391,9 zł +/- 5788 zł
+Pracownik o stażu 10 lat - proponowana pensja 120291,8 zł +/- 5788 zł
+Pracownik o stażu 11 lat - proponowana pensja 129741,8 zł +/- 5788 zł
+
