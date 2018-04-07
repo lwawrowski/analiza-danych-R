@@ -1,0 +1,13 @@
+# Klasyfikacja
+
+[A visual introduction to machine learning](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/) - niestety powstała tylko jedna część.
+
+## Regresja logistyczna
+
+## Drzewa klasyfikacyjne
+
+## Lasy losowe
+
+## KNN
+
+### Zadanie

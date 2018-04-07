@@ -1,0 +1,168 @@
+# Grupowanie
+
+Metody grupowania są wykorzystywane np. do segmentacji klientów, w przypadku, gdy nie jest znany końcowy podział.
+
+## Metoda k-średnich
+
+Algorytm:
+
+1. Wskaź liczbę grup $k$.
+2. Wybierz dowolne $k$ punktów jako centra grup.
+3. Przypisz każdą z obserwacji do najbliższego centroidu.
+4. Oblicz nowe centrum grupy.
+5. Przypisz każdą z obserwacji do nowych centroidów. Jeśli któraś obserwacja zmieniła grupę - przejdź do kroku nr 4, a w przeciwnym przypadku zakończ algorytm.
+
+Zalety:
+
+- dobrze działa zarówno na małych, jak i dużych zbiorach
+- efektywny
+
+Wady:
+
+- trzeba wskazać liczbę grup
+- losowy wybór punktów początkowych
+
+## Metoda hierarchiczna
+
+Algorytm:
+
+1. Każda obserwacji stanowi jedną z $N$ pojedyńczych grup.
+2. Na podstawie macierzy odległości połącz dwie najbliżej leżące obserwacje w jedną grupę ($N-1$ grup).
+3. Połącz dwa najbliżej siebie leżące grupy w jedną ($N-2$ grup).
+4. Powtórz krok nr 3, aż do uzyskania jednej grupy.
+
+Zalety:
+
+- prosty sposób ustalenia liczby grup
+- praktyczny sposób wizualizacji
+
+Wady:
+
+- nieodpowiedni dla dużych zbiorów
+
+### Zadanie
+
+Na podstawie zbioru zawierającego informacje o [klientach sklepu](data/klienci.csv) dokonaj grupowania klientów.
+
+Opis zbioru:
+
+- klientID - identyfikator klienta
+- plec - płeć
+- wiek - wiek
+- roczny_dochod - roczny dochód wyrażony w tys. dolarów
+- wskaznik_wydatkow - klasyfikacja sklepu od 1 do 100
+
+```{r kmeans, eval=FALSE, include=FALSE}
+library(tidyverse)
+
+sklep <- read.csv("data/klienci.csv")
+
+x <- sklep %>%
+  select(roczny_dochod, wskaznik_wydatkow) %>%
+  scale()
+
+zm_w_gr <- numeric(10)
+
+# wprowadzenie pętli
+
+for(i in 1:length(zm_w_gr)) {
+  gr <- kmeans(x, centers = i)
+  zm_w_gr[i] <- gr$tot.withinss
+}
+
+plot(1:10, zm_w_gr, type="b")
+
+zm_w_gr_df <- data.frame(k=1:10,
+                         wss=zm_w_gr)
+
+ggplot(zm_w_gr_df, aes(k, wss)) + geom_line() + geom_point()
+
+# programowanie funkcyjne
+
+kwadrat_liczby <- function(liczba){
+  liczba^2
+}
+
+kwadrat_liczby(4)
+
+wykres_osypiska <- function(dane, max_grup=10){
+  set.seed(8)
+  zm_w_gr <- numeric(max_grup)
+  
+  for(i in 1:length(zm_w_gr)) {
+    gr <- kmeans(dane, centers = i)
+    zm_w_gr[i] <- gr$tot.withinss
+  }
+  
+  zm_w_gr_df <- data.frame(k=1:max_grup,
+                         wss=zm_w_gr)
+
+  ggplot(zm_w_gr_df, aes(as.factor(k), wss)) + geom_line() + geom_point()
+
+}
+
+wykres_osypiska(x, 15)
+
+
+grupy_kmeans <- kmeans(x, 5)
+
+sklep_kmeans <- sklep %>%
+  mutate(grupa=as.factor(grupy_kmeans$cluster))
+
+sklep_kmeans %>%
+  group_by(grupa) %>%
+  summarise(sr_dochod=mean(roczny_dochod),
+            sr_wydatki=mean(wskaznik_wydatkow))
+
+ggplot(sklep_kmeans, aes(x=roczny_dochod, y=wskaznik_wydatkow)) + 
+  geom_point(aes(color=grupa))
+
+table(sklep_kmeans$grupa)
+
+
+```
+
+```{r hierarchiczne, eval=FALSE, include=FALSE}
+macierz_odl <- dist(x)
+
+dendrogram <- hclust(macierz_odl, method = "ward.D")
+
+plot(dendrogram, xlab="Klienci", ylab="Odległość euklidesowa")
+
+grupy_dendro <- cutree(dendrogram, 5)
+
+sklep_dendro <- sklep %>%
+  mutate(grupa=as.factor(grupy_dendro))
+
+sklep_dendro %>%
+  group_by(grupa) %>%
+  summarise(sr_dochod=mean(roczny_dochod),
+            sr_wydatki=mean(wskaznik_wydatkow))
+
+ggplot(sklep_dendro, aes(x=roczny_dochod, y=wskaznik_wydatkow)) + 
+  geom_point(aes(color=grupa))
+
+table(sklep_dendro$grupa)
+
+
+```
+
+### Zadanie 2
+
+Dokonaj grupowania danych dotyczących [32 samochodów](data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
+
+```{r inne zbiory, eval=FALSE, include=FALSE}
+
+auta <- read.csv("data/auta.csv", sep=";")
+
+auta_std <- auta %>%
+  select(pojemnosc, przebieg, lata, cena) %>%
+  scale()
+
+wykres_osypiska(auta_std)
+
+```
+
+### Zadanie 3
+
+Rozpoznawanie czynności na podstawie danych z przyspieszeniomierza w telefonie: [User Identification From Walking Activity Data Set ](http://archive.ics.uci.edu/ml/datasets/User+Identification+From+Walking+Activity#)

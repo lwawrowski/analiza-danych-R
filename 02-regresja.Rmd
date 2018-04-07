@@ -1,4 +1,18 @@
-# Regresja wieloraka
+# Regresja
+
+## Regresja prosta
+
+Na podstawie [danych](data/Salary_Data.csv) dotyczących informacji o doświadczeniu i wynagrodzeniu pracowników zbuduj model określający 'widełki' dla potencjalnych pracowników o doświadczeniu równym 8, 10 i 11 lat.
+
+[regresja_prosta.Rmd](res/regresja_prosta.Rmd)
+
+[cały projekt](res/adr.zip)
+
+### Zadanie 
+
+Dla danych dotyczących [sklepu nr 77](data/sklep77.csv) opracuj model zależności sprzedaży od liczby klientów. Ile wynosi teoretyczna sprzedaż w dniach, w których liczba klientów będzie wynosiła 560, 740, 811 oraz 999 osób?
+
+## Regresja wieloraka
 
 Na podstawie danych dotyczących [zatrudnienia](data/pracownicy.csv) opracuj model, w którym zmienną zależną jest bieżące wynagrodzenie. Jaka cecha ma największy wpływ na tę wartość?
 
@@ -20,7 +34,6 @@ Opis zbioru:
 
 [cały projekt](res/adr.zip)
 
-
-## Zadanie 
+### Zadanie 
 
 Na podstawie zbioru dotyczącego [50 startupów](data/50_Startups.csv) określ jakie czynniki w największym stopniu wpływają na przychód startupów.
