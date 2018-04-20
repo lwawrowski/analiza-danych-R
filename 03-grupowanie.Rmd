@@ -52,6 +52,11 @@ Opis zbioru:
 - roczny_dochod - roczny dochód wyrażony w tys. dolarów
 - wskaznik_wydatkow - klasyfikacja sklepu od 1 do 100
 
+[grupowanie.Rmd](res/grupowanie.Rmd)
+
+[cały projekt](res/adr.zip)
+
+
 ```{r kmeans, eval=FALSE, include=FALSE}
 library(tidyverse)
 
@@ -86,7 +91,7 @@ kwadrat_liczby <- function(liczba){
 kwadrat_liczby(4)
 
 wykres_osypiska <- function(dane, max_grup=10){
-  set.seed(8)
+  #set.seed(8)
   zm_w_gr <- numeric(max_grup)
   
   for(i in 1:length(zm_w_gr)) {
@@ -111,13 +116,17 @@ sklep_kmeans <- sklep %>%
 
 sklep_kmeans %>%
   group_by(grupa) %>%
-  summarise(sr_dochod=mean(roczny_dochod),
+  summarise(n=n(),
+            sr_dochod=mean(roczny_dochod),
             sr_wydatki=mean(wskaznik_wydatkow))
 
 ggplot(sklep_kmeans, aes(x=roczny_dochod, y=wskaznik_wydatkow)) + 
   geom_point(aes(color=grupa))
 
 table(sklep_kmeans$grupa)
+
+# clusterR
+# imputacja KNN
 
 
 ```

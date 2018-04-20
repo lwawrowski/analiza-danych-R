@@ -77,3 +77,158 @@ Parametry regresji mają następujące interpretacje:
 Wszystkie te zależności obowiązują przy założeniu *ceteris paribus* - przy pozostałych warunkach niezmienionych.
 
 Ten model wymaga oczywiście ulepszenie do czego wykorzystamy m.in. pakiet [olsrr](https://cran.r-project.org/web/packages/olsrr/index.html).
+
+Pierwszą kwestią, którą się zajmiemy jest współliniowość zmiennych. W regresji zmienne objaśniające powinny być jak najbardziej skorelowane ze zmienną objaśnianą, a możliwie nieskorelowane ze sobą. W związku z tym wybieramy ze zbioru wyłącznie cechy ilościowe, dla którym wyznaczymy współczynnik korelacji liniowej Pearsona.
+
+```{r}
+library(corrplot)
+library(olsrr)
+
+korelacje <- train %>%
+  select(-c(plec, kat_pracownika, zwiazki)) %>%
+  cor()
+
+corrplot(korelacje, method = "number", type = "upper")
+
+```
+
+Możemy zauważyć, że wartości bieżącego wynagrodzenia są najsilniej skorelowane w wartościami wynagrodzenia początkowego. Także doświadczenie i wiek są silnie ze sobą związane, co może sugerować, że obie zmienne wnoszą do modelu podobną informację. 
+
+W związku z tym powinniśmy wyeliminować niektóre zmienne z modelu pozostawiając te najważniejsze. Wyróżnia się trzy podjeścia do tego zagadnienia:
+
+- ekspercki dobór cech,
+- budowa wszystkich możliwych modeli i wybór najlepszego według określonego kryterium,
+- regresja krokowa.
+
+W przypadku budowy wszystkich możliwych modeli należy pamiętać o rosnącej wykładniczo liczbie modeli - $2^p-1$, gdzie $p$ oznacza liczbę zmiennych objaśniających. w rozważanym przypadku liczba modeli wynosi `r 2^8-1`.
+
+```{r}
+wszystkie_modele <- ols_step_all_possible(model)
+```
+
+W uzyskanym zbiorze danych są informacje o numerze modelu, liczbie użytych zmiennych, nazwie tych zmiennych oraz wiele miar jakości. Te, które warto wziąć pod uwagę to przede wszystkim:
+
+- `rsquare` - współczynnik R-kwadrat,
+- `aic` - kryterium informacyjne Akaike,
+- `msep` - błąd średniokwadratowy predykcji.
+
+Najwyższa wartość współczynnika $R^2$ związana jest z modelem zawierającym wszystkie dostępne zmienne objaśniające. Jest to pewna niedoskonałość tej miary, która rośnie wraz z liczbą zmiennych w modelu, nawet jeśli te zmienne nie są istotne.
+
+W przypadku kryteriów informacyjnych oraz błędu średniokwadratowego interesują nas jak najmniejsze wartości. Wówczas jako najlepszy należy wskazać model nr 219 zawierający 6 zmiennych objaśniających.
+
+Metodą, która także pozwoli uzyskać optymalny model, ale przy mniejszym obciążeniu obliczeniowym jest regresja krokowa polegająca na krokowym budowaniu modelu.
+
+```{r}
+ols_step_both_aic(model)
+```
+
+Otrzymany w ten sposób model jest tożsamy z modelem charakteryzującym się najlepszymi miarami jakości spośród zbioru wszystkich możliwych modeli:
+
+```{r}
+wybrany_model <- lm(bwynagrodzenie ~ pwynagrodzenie + kat_pracownika + doswiadczenie + staz + plec + edukacja, data = train)
+summary(wybrany_model)
+```
+
+Uzyskany model charakteryzuje się mniejszym błędem standardowym od modelu ze wszystkimi zmiennymi i tylko jedną nieistotną zmienną. Wyraz wolny (Intercept) nie musi być istotny w modelu.
+
+Wróćmy jeszcze na chwilę do tematu współliniowości zmiennych objaśniających:
+
+```{r}
+ols_vif_tol(wybrany_model)
+```
+
+Współczynnik tolerancji wskazuje na procent niewyjaśnionej zmienności danej zmiennej przez pozostałe zmienne objaśniające. Przykładowo współcznnik tolerancji dla początkowego wynagrodzenia wynosi 0,3371, co oznacza, że 33% zmienności początkowego wynagrodzenia nie jest wyjaśnione przez pozostałe zmienne w modelu. Z kolei współczynnik VIF jest obliczany na podstawie wartości współczynnika tolerancji i wskazuje o ile wariancja szacowanego współcznnika regresji jest podwyższona z powodu współliniowości danej zmiennej objaśniającej z pozostałymi zmiennymi objaśniającymi. Wartość współczynnika VIF powyżej 4 należy uznać za wskazującą na współliniowość. W analizowanym przypadku takie zmienne nie występują. 
+
+Ocena siły wpływu poszczególnych zmiennych objaśniających na zmienną objaśnianą w oryginalnej postaci modelu nie jest możliwa. Należy wyznaczyć standaryzowane współczynniki beta, które wyliczane są na danych standaryzowanych, czyli takich, które są pozbawione jednostek i cechują się średnią równą 0, a odchyleniem standardowym równym 1. Standaryzacja ma sens tylko dla cech numerycznych, w związku z czym korzystamy z funkcji `mutate_if()`, która jako pierwszy argument przyjmuje warunek, który ma być spełniony, aby była zastosowane przekształcenie podawane jako drugi argument.
+
+```{r}
+train_std <- train %>%
+  mutate_if(is.numeric, funs(scale))
+
+wybrany_model_std <- lm(bwynagrodzenie ~ pwynagrodzenie + kat_pracownika + 
+                          doswiadczenie + staz + plec + edukacja, data = train_std)
+summary(wybrany_model_std)
+
+
+```
+
+Spośród cech ilościowych największy wpływ na zmienną objaśnianą mają wartości wynagrodzenia początkowego, staż, edukacja i na końcu doświadczenie.
+
+Reszty czyli różnice pomiędzy obserwowanymi wartościami zmiennej objaśnianej, a wartościami wynikającymi z modelu w klasycznej metodzie najmniejszych kwadratów powinny być zbliżone do rozkładu normalnego. Oznacza to, że najwięcej reszt powinno skupiać się wokół zerowych różnic, natomiast jak najmniej powinno być wartości modelowych znacznie różniących się od tych rzeczywistych. 
+
+```{r}
+ols_plot_resid_hist(wybrany_model)
+```
+
+Reszty w naszym modelu wydają się być zbliżone do rozkładu normalnego. Jednoznaczą odpowiedź da jednak odpowiedni test.
+
+```{r}
+ols_test_normality(wybrany_model)
+```
+
+Hipoteza zerowa w tych testach mówi o zgodności rozkładu reszt z rozkładem normalnym. Na podstawie wartości p, które są mniejsze od $\alpha=0,05$ stwierdzamy, że są podstawy do odrzucenia tej hipotezy czyli reszty z naszego modelu nie mają rozkładu normalnego. W diagnostyce przyczyn takiego stanu rzeczy pomoże nam wykres kwantyl-kwantyl:
+
+```{r}
+ols_plot_resid_qq(wybrany_model)
+```
+
+Gdyby wszystkie punkty leżały na prostej to oznaczałoby to normalność rozkładu reszt. Tymczasem po lewej i prawej stronie tego wykresu znajdują się potencjalne wartości odstające, które znacznie wpływają na rozkład reszt modelu.
+
+Wartości odstające można ustalić na podstawie wielu kryteriów. Do jednych z najbardziej popularnych należy odległość Cooka:
+
+```{r}
+cook <- ols_plot_cooksd_bar(wybrany_model)
+```
+
+Przypisanie tej funkcji do obiektu zwraca nam tabelę z numerami zidentyfikowanych obserwacji wpływowych. W przypadku odległości Cooka jest to 12 obserwacji.
+
+Inną miarą są reszty studentyzowane.
+
+```{r}
+stud3 <- ols_plot_resid_stud(wybrany_model)
+```
+
+Wyżej wykorzystana funkcja jako kryterium odstawania przyjmuje wartość 3 identyfikując 4 obserwacje wpływowe. Z kolei dodanie do powyższej funkcji przyrostka _fit_ powoduje przyjęcie jako granicy wartości równej 2.
+
+```{r}
+obs_wplyw <- ols_plot_resid_stud_fit(wybrany_model)
+
+```
+
+W ten sposób zostało zidentyfikowanych 10 obserwacji odstających. Korzystając z tego ostatniego podejścia wyeliminujemy obserwacje odstające ze zbioru uczącego:
+
+```{r}
+nr_obs_wplyw <- obs_wplyw$outliers$observation
+
+train_bez_obs_wplyw <- train[-nr_obs_wplyw,]
+
+wybrany_model_out <- lm(bwynagrodzenie ~ pwynagrodzenie + kat_pracownika + doswiadczenie + staz + plec + edukacja, 
+                        data = train_bez_obs_wplyw)
+summary(wybrany_model_out)
+
+```
+
+Model dopasowny na takim zbiorze charakteryzuje się dużo mniejszym błędem standardowym oraz wyższym współczynnikiem $R^2$. Sprawdźmy w takim razie normalność reszt.
+
+```{r}
+ols_plot_resid_qq(wybrany_model_out)
+```
+
+Wykres kwantyl-kwantyl wygląda już dużo lepiej, ale dla pewności przeprowadzimy testy statystyczne.
+
+```{r}
+ols_test_normality(wybrany_model_out)
+```
+
+Tylko jeden test wskazał zgodność rozkładu reszt z rozkładem normalnym.
+
+Ostatni krok to tzw. sprawdzian krzyżowy (ang. cross validation) czyli ocena modelu na danych, których model nie widział wcześniej. Jako kryterium wykorzystamy współczynnik korelacji liniowej Pearsona pomiędzy wartościami rzeczywistymi, a teoretycznymi. W przypadku modelu bez wartości odstających $r=0,9458$.
+
+```{r}
+test <- test %>%
+  mutate(bwyn_model=predict(wybrany_model_out,.))
+
+cor(test$bwynagrodzenie, test$bwyn_model)
+```
+
+Ten sam model na danych testowych uzyskał współczynnik równy $r=0,9301$, zatem można uznać, że wypracowany model jest dobry.

@@ -1,0 +1,133 @@
+---
+title: "Grupowanie"
+output: html_notebook
+---
+
+Grupowanie polega na przypisanie obiektów do określonych grup/klastrów/skupień, w których znajdą się jednostki najbardziej do siebie podobne. Całe utrudnienie polega na tym, że nie wiemy ile tych grup ma powstać.
+
+W pierwszej kolejności wczytujemy dane oraz je standaryzujemy.
+
+```{r}
+library(tidyverse)
+library(ClusterR)
+
+klienci <- read.csv("dane/klienci.csv")
+
+cechy <- klienci %>%
+  select(roczny_dochod, wskaznik_wydatkow) %>%
+  scale() 
+```
+
+
+# Metoda k-średnich
+
+W metodzie k-średnich należy podać docelową liczbę skupień. Możemy spróbować ustalić tą wartość na podstawie wykresu osypiska (ang. elbow method).
+
+```{r}
+Optimal_Clusters_KMeans(cechy, max_clusters = 10, criterion = "WCSSE")
+```
+
+Wybieramy liczbę skupień po której nie następuje już gwałtowny spadek wartości wariancji wewnątrz-grupowej. W analizowanym przypadku będzie to 5 grup.
+
+Następnie przeprowadzamy grupowanie ustalając liczbę grup na 5 oraz ustalając początkowe centra skupień algorytmem `kmeans++`, który zmniejsza szansę niewłaściwego przypisania.
+
+```{r}
+grupy_kmeans <- KMeans_rcpp(cechy, 5, initializer = "kmeans++")
+
+```
+
+Uzyskane grupy przypisujemy do danych początkowych i przeprowadzamy analizę średnich wartości cech względem grup.
+
+```{r}
+klienci <- klienci %>%
+  mutate(grupa_kmeans=as.factor(grupy_kmeans$clusters))
+
+klienci %>%
+  group_by(grupa_kmeans) %>%
+  summarise(n=n(),
+            sr_dochod=mean(roczny_dochod),
+            sr_wydatki=mean(wskaznik_wydatkow))
+```
+
+W grupie nr 1 znalazły się osoby, które mają niskie dochody, ale dużo wydają, grupa 2 to klienci o niskich dochodach i wydatkach, grupa nr 3 ma wysokie dochody i małe wydatki, grupa 4 to z kolei osoby o wysokich dochodach i wydatkach. Najliczniejsza grupa nr 5 to klienci o przeciętnych dochodach i wydatkach.
+
+Dodatkowo ten podział możemy przedstawić na wykresie.
+
+```{r}
+ggplot(klienci, aes(x=roczny_dochod, y=wskaznik_wydatkow)) +
+  geom_point(aes(color=grupa_kmeans))
+```
+
+# Metoda hierarchiczna
+
+W metodzie hierarchicznej bazuje się na macierzy odległości pomiędzy obserwacjami. Można zastosować wiele miar odległości, ale najczęściej wykorzystywana jest odległość euklidesowa. Druga zmienna, na którą mamy wpływ to metoda łączenia skupień - w tym przypadku najlepsze rezultaty daje metoda Warda. Z kolei wyniki grupowania metodą hierarchiczną są prezentowane na dendrogramie.
+
+```{r}
+macierz_odl <- dist(cechy)
+
+dendrogram <- hclust(macierz_odl, method = "ward.D")
+
+plot(dendrogram, xlab="Klienci", ylab="Odległość euklidesowa")
+```
+
+Na podstawie dendrogramu identyfikujemy największe różnice odległości opisane na osi Y. Także w tym przypadku identyfikujemy 5 grup.
+
+```{r}
+plot(dendrogram, xlab="Klienci", ylab="Odległość euklidesowa")
+rect.hclust(dendrogram, k=5, border="red")
+```
+
+Sprawdźmy jak wyglądają średnie wydatki i dochody w grupach określonych na podstawie metody hierarchicznej.
+
+```{r}
+klienci <- klienci %>%
+  mutate(grupa_dendro=as.factor(cutree(dendrogram, 5)))
+
+klienci %>%
+  group_by(grupa_dendro) %>%
+  summarise(n=n(),
+            sr_dochod=mean(roczny_dochod),
+            sr_wydatki=mean(wskaznik_wydatkow))
+```
+
+Metoda hierarchiczna zastosowała inną numerację grup. Liczebności tych grup nieznacznie się różnią, ale charakterystyki wewnątrz grupowe są bardzo podobne do tych określonych na podstawie metody k-średnich.
+
+```{r}
+ggplot(klienci, aes(x=roczny_dochod, y=wskaznik_wydatkow)) +
+  geom_point(aes(color=grupa_dendro))
+```
+
+Tworząc tabelę krzyżową możemy zobaczyć, że tylko 4 obserwacje zmieniły przypisanie do grup.
+
+```{r}
+table(klienci$grupa_kmeans, klienci$grupa_dendro)
+```
+
+Porównajmy jeszcze wyniki działania tych dwóch metod na wykresach:
+
+```{r}
+klienci %>%
+  select(roczny_dochod, wskaznik_wydatkow, grupa_kmeans, grupa_dendro) %>%
+  gather(metoda, grupa, -roczny_dochod, -wskaznik_wydatkow) %>%
+  ggplot(aes(x=roczny_dochod, y=wskaznik_wydatkow)) +
+  geom_point(aes(color=grupa)) +
+  facet_wrap(~ metoda)
+```
+
+Obserwacje problematyczne pochodziły z grupy klientów o przeciętnych dochodach oraz wydatkach.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
