@@ -1,13 +1,4 @@
-# Wprowadzenie do analizy danych
-
-Podstawowe cele w analizie danych:
-
-- porównanie grup
-- prognozowanie
-- klasyfikacja
-- grupowanie
-
-Bez względu na cel analizy jest kilka pojęć, które są wspólne.
+# Testowanie hipotez 
 
 ## Hipoteza statystyczna
 

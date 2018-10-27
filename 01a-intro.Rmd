@@ -1,0 +1,46 @@
+# Wprowadzenie 
+
+## Narzędzie
+
+- darmowe
+- wszechstronne
+- wsparcie społeczności
+- wersja desktopowa i serwerowa
+
+czyli **R** - środowisko do obliczeń statystycznych i wizualizacji wyników
+
+- strona projektu: [r-project.org](https://www.r-project.org/)
+- świetne IDE: [RStudio](https://www.rstudio.com/)
+- wersja przeglądarkowa: [rstudio.cloud](https://rstudio.cloud/)
+
+[R + Python](https://www.business-science.io/business/2018/10/08/python-and-r.html)
+
+## Cele analiz
+
+Podstawowe:
+
+- wnioskowanie statystyczne - porównywanie grup
+- regresja - poszukiwanie związków
+- klasyfikacja - przyporządkowanie do grup
+- grupowanie - poszukiwanie grup
+- prognozowanie - patrzenie w przyszłość
+
+Inne:
+
+- analiza języka naturalnego
+- rozpoznawanie obrazów
+- analiza koszykowa
+- ...
+
+### Eksporacja danych
+
+Pakiet `tidyverse`
+
+```{r}
+library(tidyverse)
+```
+
+- analiza częstości dla zmiennych jakościowych
+- analiza struktury dla zmiennych ilościowych
+
+Case study: [Wybory 2018](data/wybory2018.xlsx)
