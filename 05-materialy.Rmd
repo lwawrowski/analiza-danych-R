@@ -1,0 +1,11 @@
+# Materiały z zajęć
+
+## 28.10.2018
+
+[Wprowadzenie do R](res\skrypt20181028.R)
+
+[Analiza sejmików](res\analiza20181028.R)
+
+## 17.11.2018
+
+[Rossmann](data\rossmann.xlsx)
