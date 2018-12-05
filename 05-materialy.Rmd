@@ -6,6 +6,10 @@
 
 [Analiza sejmików](res\analiza20181028.R)
 
-## 17.11.2018
+## 18.11.2018
+
+[Analiza struktury](https://departmentofstatisticspue.github.io/statystyka-opisowa/analiza-struktury.html)
 
 [Rossmann](data\rossmann.xlsx)
+
+[Analiza struktury w R](res\zajecia20181118.R)
