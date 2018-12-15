@@ -13,3 +13,9 @@
 [Rossmann](data\rossmann.xlsx)
 
 [Analiza struktury w R](res\zajecia20181118.R)
+
+## 16.12.2018
+
+[Prezentacja](prezentacje\03.html)
+
+[Pracownicy](data\pracownicy.csv)
