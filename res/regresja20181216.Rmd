@@ -1,0 +1,75 @@
+---
+title: "Regresja"
+author: "ŁW"
+date: "16 grudnia 2018"
+output: html_document
+---
+
+# Regresja
+
+## Wczytanie danych
+
+Utworzenie nowego kawałka kodu (ctrl + alt + i).
+
+```{r message=FALSE}
+library(tidyverse)
+library(readxl)
+
+rossmann <- read_xlsx("rossmann.xlsx") 
+
+sklep77 <- rossmann %>%
+  filter(sklep_id == 77 & czy_otwarty == "Tak")
+```
+
+## Model regresji
+
+```{r}
+model <- lm(sprzedaz ~ liczba_klientow, data = sklep77)
+summary(model)
+```
+
+Postać modelu:  
+y = b1 * x + b0  
+y - sprzedaż, x - liczba klientów  
+sprzedaz = 16,34 * liczba_klientow - 3216  
+
+Współczynnik kierunkowy: 16,34
+
+- o ile zmieni się y jeżeli x wzrośnie o jednostkę
+- wzrost liczby klientów o 1 oznacza średni wzrost sprzedaży o 16,34 euro
+
+Wyraz wolny: -3216
+
+- ile wyniesie y jeżeli x będzie równy 0
+- teoretyczna sprzedaż przy liczbie klientów równej 0 wyniesie -3216 euro
+
+Resztowy błąd standardowy: 606,6
+
+- wartości modelowe sprzedaży różnią się średnio od wartości rzeczywistych o +/- 606,6 euro
+
+Współczynnik R-kwadrat: 0,9123 = 91,23%
+
+- liczba klientów wyjaśnia 91,23% zmienności sprzedaży
+
+```{r}
+nowe_dane <- data.frame(liczba_klientow=c(1000,1200))
+
+predict(model, nowe_dane)
+```
+
+Prognozowa sprzedaż w przypadku 1000 klientów wyniesie 13128 euro +/- 606,6 euro.
+
+Prognozowa sprzedaż w przypadku 1200 klientów wyniesie 16396 euro +/- 606,6 euro.
+
+# Zadanie
+
+```{r}
+pracownicy <- read.csv("Salary_Data.csv")
+model2 <- lm(Salary ~ YearsExperience, data=pracownicy)
+summary(model2)
+```
+
+```{r}
+plot(pracownicy$YearsExperience, pracownicy$Salary)
+```
+
