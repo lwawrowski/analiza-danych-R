@@ -23,3 +23,23 @@
 [Korelacja w R](res\korelacje20181216.R)
 
 [Regresja w R](res\regresja20181216.Rmd)
+
+## 26.01.2019
+
+[Pensja i doświaczenie](data\salary.xlsx)
+
+[Pracownicy](data\pracownicy.xlsx)
+
+Opis zbioru:
+
+- id - kod pracownika
+- plec - płeć pracownika (0 - mężczyzna, 1 - kobieta)
+- data_urodz - data urodzenia
+- edukacja - wykształcenie (w latach nauki)
+- kat_pracownika - grupa pracownicza (1 - ochroniarz, 2 - urzędnik, 3 - menedżer)
+- bwynagrodzenie - bieżące wynagrodzenie
+- pwynagrodzenie - początkowe wynagrodzenie
+- staz - staż pracy (w miesiącach)
+- doswiadczenie - poprzednie zatrudnienie (w miesiącach)
+- zwiazki - przynależność do związków zawodowych (0 - nie, 1 - tak)
+- wiek - wiek (w latach)
