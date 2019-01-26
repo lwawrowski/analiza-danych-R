@@ -18,4 +18,8 @@
 
 [Prezentacja](prezentacje\03.html)
 
-[Pracownicy](data\pracownicy.csv)
+[Pracownicy](data\Salary_Data.csv)
+
+[Korelacja w R](res\korelacje20181216.R)
+
+[Regresja w R](res\regresja20181216.Rmd)
