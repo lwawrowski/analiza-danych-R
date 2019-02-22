@@ -43,3 +43,5 @@ Opis zbioru:
 - doswiadczenie - poprzednie zatrudnienie (w miesiącach)
 - zwiazki - przynależność do związków zawodowych (0 - nie, 1 - tak)
 - wiek - wiek (w latach)
+
+[Regresja w R](res\regresja20190126.R)
