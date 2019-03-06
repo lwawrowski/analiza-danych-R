@@ -14,7 +14,7 @@ Dla danych dotyczących [sklepu nr 77](data/sklep77.csv) opracuj model zależno�
 
 ## Regresja wieloraka
 
-Na podstawie danych dotyczących [zatrudnienia](data/pracownicy.csv) opracuj model, w którym zmienną zależną jest bieżące wynagrodzenie. Jaka cecha ma największy wpływ na tę wartość?
+Na podstawie danych dotyczących [zatrudnienia](data/pracownicy.xlsx) opracuj model, w którym zmienną zależną jest bieżące wynagrodzenie. Jaka cecha ma największy wpływ na tę wartość?
 
 Opis zbioru:
 
@@ -223,4 +223,11 @@ Tylko jeden test wskazał zgodność rozkładu reszt z rozkładem normalnym.
 
 ### Zadanie 
 
-Na podstawie zbioru dotyczącego [50 startupów](data/50_Startups.csv) określ jakie czynniki w największym stopniu wpływają na przychód startupów.
+Na podstawie zbioru dotyczącego [50 startupów](data/50_Startups.csv) określ jakie czynniki wpływają na przychód startupów. Na zajęciach 27.04.2019 r. przedyskutujemy wyniki.
+
+```{r}
+startupy <- read.csv("data/50_Startups.csv")
+
+summary(startupy)
+```
+
