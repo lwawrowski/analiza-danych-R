@@ -1,48 +1,20 @@
 # Grupowanie
 
-Metody grupowania są wykorzystywane np. do segmentacji klientów, w przypadku, gdy nie jest znany końcowy podział.
+Grupowanie polega na przypisanie obiektów do określonych grup/klastrów/skupień/segmentów, w których znajdą się jednostki najbardziej do siebie podobne, a powstałe grupy będą się między sobą różnić. Całe utrudnienie polega na tym, że nie wiemy ile tych grup ma powstać.
 
 ## Metoda k-średnich
 
-Algorytm:
+Najpopularniejszą metodą grupowania jest metoda k-średnich. Do jej zalet należy zaliczyć to, że dobrze działa zarówno na małych, jak i dużych zbiorach i jest bardzo efektywny - zwykle osiąga zbieżność w mniej niż 10 iteracjach. Z wad należy wskazać losowy wybór początkowych centrów skupień, co może skutkować nieprawidłowym przypisaniem obiektów do grup.
 
-1. Wskaź liczbę grup $k$.
+Algorytm postępowania jest następujący:
+
+1. Wskaż liczbę grup $k$.
 2. Wybierz dowolne $k$ punktów jako centra grup.
 3. Przypisz każdą z obserwacji do najbliższego centroidu.
 4. Oblicz nowe centrum grupy.
 5. Przypisz każdą z obserwacji do nowych centroidów. Jeśli któraś obserwacja zmieniła grupę - przejdź do kroku nr 4, a w przeciwnym przypadku zakończ algorytm.
 
-Zalety:
-
-- dobrze działa zarówno na małych, jak i dużych zbiorach
-- efektywny
-
-Wady:
-
-- trzeba wskazać liczbę grup
-- losowy wybór punktów początkowych
-
-## Metoda hierarchiczna
-
-Algorytm:
-
-1. Każda obserwacji stanowi jedną z $N$ pojedyńczych grup.
-2. Na podstawie macierzy odległości połącz dwie najbliżej leżące obserwacje w jedną grupę ($N-1$ grup).
-3. Połącz dwa najbliżej siebie leżące grupy w jedną ($N-2$ grup).
-4. Powtórz krok nr 3, aż do uzyskania jednej grupy.
-
-Zalety:
-
-- prosty sposób ustalenia liczby grup
-- praktyczny sposób wizualizacji
-
-Wady:
-
-- nieodpowiedni dla dużych zbiorów
-
-### Zadanie
-
-Na podstawie zbioru zawierającego informacje o [klientach sklepu](data/klienci.csv) dokonaj grupowania klientów.
+Wykorzystamy informacje ze zbioru zawierającego informacje o [klientach sklepu](data/klienci.csv) i dokonamy grupowania tych klientów.
 
 Opis zbioru:
 
@@ -52,126 +24,184 @@ Opis zbioru:
 - roczny_dochod - roczny dochód wyrażony w tys. dolarów
 - wskaznik_wydatkow - klasyfikacja sklepu od 1 do 100
 
-[grupowanie.Rmd](res/grupowanie.Rmd)
+Wczytujemy zbiór danych i sprawdzamy czy pomiędzy zmiennymi są widoczne jakieś zależności.
 
-[cały projekt](res/adr.zip)
-
-
-```{r kmeans, eval=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 
-sklep <- read.csv("data/klienci.csv")
+klienci <- read.csv("data/klienci.csv")
 
-x <- sklep %>%
+ggplot(klienci, aes(x=wiek, y=roczny_dochod)) +
+  geom_point()
+
+```
+
+Pomiędzy wiekiem a rocznym dochodem nie widać zależności.
+
+```{r}
+ggplot(klienci, aes(x=wiek, y=wskaznik_wydatkow)) +
+  geom_point()
+```
+
+W przypadku wieku i wskaźnika wydatków moglibyśmy się pokusić o podział zbioru na dwie grupy za pomocą przekątnej.
+
+```{r}
+ggplot(klienci, aes(x=wskaznik_wydatkow, y=roczny_dochod)) +
+  geom_point()
+
+```
+
+Po zestawieniu rocznego dochodu i wskaźnika wydatków wyłania się 5 potencjalnych grup, zatem te dwie cechy wykorzystamy do grupowania. Jednak przed zastosowaniem algorytmu musimy te dane przygotować normalizując zakres obu cech - w tym przypadku za pomocą standaryzacji.
+
+```{r}
+klienci_z <- klienci %>%
   select(roczny_dochod, wskaznik_wydatkow) %>%
   scale()
 
-zm_w_gr <- numeric(10)
+head(klienci_z)
+```
+
+W przypadku, gdy podział na grupy nie jest tak oczywisty lub bierzemy pod uwagę więcej niż dwa kryteria to wówczas w wyznaczeniu optymalnej liczby skupień może pomóc wykres osypiska (ang. elbow method). Polega to na przeprowadzeniu grupowania (z wykorzystaniem funkcji `kmeans()`) dla różniej liczby grup i porównanie wariancji wewnątrz-grupowej. Dane do stworzenia wykresu osypiska możemy obliczyć w pętli:
+
+```{r}
+zm_w_gr <- numeric(15)
 
 # wprowadzenie pętli
 
 for(i in 1:length(zm_w_gr)) {
-  gr <- kmeans(x, centers = i)
+  set.seed(14)
+  gr <- kmeans(klienci_z, centers = i)
   zm_w_gr[i] <- gr$tot.withinss
 }
 
-plot(1:10, zm_w_gr, type="b")
-
-zm_w_gr_df <- data.frame(k=1:10,
-                         wss=zm_w_gr)
-
-ggplot(zm_w_gr_df, aes(k, wss)) + geom_line() + geom_point()
-
-# programowanie funkcyjne
-
-kwadrat_liczby <- function(liczba){
-  liczba^2
-}
-
-kwadrat_liczby(4)
-
-wykres_osypiska <- function(dane, max_grup=10){
-  #set.seed(8)
-  zm_w_gr <- numeric(max_grup)
-  
-  for(i in 1:length(zm_w_gr)) {
-    gr <- kmeans(dane, centers = i)
-    zm_w_gr[i] <- gr$tot.withinss
-  }
-  
-  zm_w_gr_df <- data.frame(k=1:max_grup,
-                         wss=zm_w_gr)
-
-  ggplot(zm_w_gr_df, aes(as.factor(k), wss)) + geom_line() + geom_point()
-
-}
-
-wykres_osypiska(x, 15)
-
-
-grupy_kmeans <- kmeans(x, 5)
-
-sklep_kmeans <- sklep %>%
-  mutate(grupa=as.factor(grupy_kmeans$cluster))
-
-sklep_kmeans %>%
-  group_by(grupa) %>%
-  summarise(n=n(),
-            sr_dochod=mean(roczny_dochod),
-            sr_wydatki=mean(wskaznik_wydatkow))
-
-ggplot(sklep_kmeans, aes(x=roczny_dochod, y=wskaznik_wydatkow)) + 
-  geom_point(aes(color=grupa))
-
-table(sklep_kmeans$grupa)
-
-# clusterR
-# imputacja KNN
-
+plot(1:15, zm_w_gr, type="b")
 
 ```
 
-```{r hierarchiczne, eval=FALSE, include=FALSE}
-macierz_odl <- dist(x)
+Wybieramy liczbę skupień po której nie następuje już gwałtowny spadek wartości wariancji wewnątrz-grupowej. Według tego kryterium powinniśmy wybrać wartość 6 zamiast 5. Sprawdźmy zatem jakie otrzymamy przyporządkowanie do grup. Następnie informację o tym przypisaniu umieszczamy w oryginalnym zbiorze danych i przedstawiamy na wykresie. W celu uzyskania powtarzalnych wyników zastosujemy stałe ziarno generatora.
+
+```{r}
+set.seed(14)
+grupy <- kmeans(x = klienci_z, centers = 5)
+
+klienci$grupa <- as.factor(grupy$cluster)
+
+ggplot(klienci, aes(x=wskaznik_wydatkow, 
+                    y=roczny_dochod,
+                    color=grupa)) +
+  geom_point()
+
+```
+
+Jak zauważamy ten podział nie jest właściwy. Ze względu na losowy przydział centrów skupień na początku algorytmu istnieje spora szansa, że rozwiązanie nie będzie optymalne. Rozwiązaniem tego problemu jest użycie algorytmu kmeans++ do początkowego ustalenia centrów. Ta metoda jest zaimplementowana w pakiecie `ClusterR`. Ponadto jest tam także funkcja do ustalenia optymalnej liczby skupień na podstawie wykresu osypiska.
+
+```{r message=FALSE, warning=FALSE}
+library(ClusterR)
+
+Optimal_Clusters_KMeans(data = klienci_z, max_clusters = 15, criterion = "WCSSE")
+```
+
+Wybieramy liczbę skupień po której nie następuje już gwałtowny spadek wartości wariancji wewnątrz-grupowej. W analizowanym przypadku będzie to 5 grup. Następnie korzystamy z funkcji `KMeans_rcpp` do wyznaczenia przynależności do grup. Ta funkcja domyślnie korzysta z algorytmu kmeans++, zatem nie ma niebezpieczeństwa, że uzyskamy niewłaściwe przyporządkowanie.
+
+```{r}
+grupy2 <- KMeans_rcpp(data = klienci_z, clusters = 5)
+
+klienci$grupa2 <- as.factor(grupy2$clusters)
+
+ggplot(klienci, aes(x=wskaznik_wydatkow, 
+                    y=roczny_dochod,
+                    color=grupa2)) +
+  geom_point()
+
+```
+
+Ostatnim etapem analizy jest odpowiednia charakterystyka uzyskanych klastrów - najczęściej wyznacza się średnie wartości cech w ramach każdej grupy.
+
+```{r}
+klienci %>%
+  select(-klientID, -plec, -grupa) %>%
+  group_by(grupa2) %>%
+  summarise_all(.funs = "mean")
+
+```
+
+W grupie pierwszej znalazły się osoby z niskimi dochodami i wysokim wskaźnikiem wydatków. Grupa druga to klienci o niskich dochodach i wydatkach - ich przeciwieństwem jest grupa 4. W grupie 3 są osoby z wysokimi dochodami, ale niskimi wydatkami. Grupa 5 to z kolei średniacy - klienci o średnich dochodach i wydatkach. 
+
+## Metoda hierarchiczna
+
+Alternatywną metodą grupowania jest metoda hierarchiczna. Do jej zalet zaliczymy prosty sposób ustalenia liczby grup oraz praktyczny sposób wizualizacji. Niestety nie jest to metoda odpowiednia dla dużych zbiorów danych.
+
+Algorytm postępowania:
+
+1. Każda obserwacji stanowi jedną z $N$ pojedynczych grup.
+2. Na podstawie macierzy odległości połącz dwie najbliżej leżące obserwacje w jedną grupę ($N-1$ grup).
+3. Połącz dwa najbliżej siebie leżące grupy w jedną ($N-2$ grup).
+4. Powtórz krok nr 3, aż do uzyskania jednej grupy.
+
+Dla tych samych danych przeprowadzimy grupowanie, ale tym razem metodą hierarchiczną. W metodzie hierarchicznej bazuje się na macierzy odległości pomiędzy obserwacjami. Można zastosować wiele miar odległości, ale najczęściej wykorzystywana jest odległość euklidesowa. Druga zmienna, na którą mamy wpływ to metoda łączenia skupień - w tym przypadku najlepsze rezultaty daje metoda Warda. Z kolei wyniki grupowania metodą hierarchiczną są prezentowane na dendrogramie.
+
+```{r}
+macierz_odl <- dist(klienci_z)
 
 dendrogram <- hclust(macierz_odl, method = "ward.D")
 
 plot(dendrogram, xlab="Klienci", ylab="Odległość euklidesowa")
+```
 
+Na podstawie dendrogramu identyfikujemy największe różnice odległości opisane na osi Y. Także w tym przypadku identyfikujemy 5 grup. Istnieje także wiele kryteriów, które mają na celu wyznaczyć optymalną liczbę grup - link.
+
+```{r}
+plot(dendrogram, xlab="Klienci", ylab="Odległość euklidesowa")
+rect.hclust(dendrogram, k=5, border="red")
+```
+
+Następnie dopisujemy do oryginalnego zbioru danych etykiety utworzonych grup.
+
+```{r}
 grupy_dendro <- cutree(dendrogram, 5)
 
-sklep_dendro <- sklep %>%
-  mutate(grupa=as.factor(grupy_dendro))
+klienci$grupa3 <- as.factor(grupy_dendro)
 
-sklep_dendro %>%
-  group_by(grupa) %>%
-  summarise(sr_dochod=mean(roczny_dochod),
-            sr_wydatki=mean(wskaznik_wydatkow))
-
-ggplot(sklep_dendro, aes(x=roczny_dochod, y=wskaznik_wydatkow)) + 
-  geom_point(aes(color=grupa))
-
-table(sklep_dendro$grupa)
-
+ggplot(klienci, aes(x=wskaznik_wydatkow, 
+                    y=roczny_dochod,
+                    color=grupa3)) +
+  geom_point()
 
 ```
 
-### Zadanie 2
+Uzyskane wyniki są bardzo zbliżone do tych otrzymanych za pomocą algorytmu k-średnich.
 
-Dokonaj grupowania danych dotyczących [32 samochodów](data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
-
-```{r inne zbiory, eval=FALSE, include=FALSE}
-
-auta <- read.csv("data/auta.csv", sep=";")
-
-auta_std <- auta %>%
-  select(pojemnosc, przebieg, lata, cena) %>%
-  scale()
-
-wykres_osypiska(auta_std)
+```{r}
+klienci %>%
+  select(-klientID, -plec, -grupa, -grupa2) %>%
+  group_by(grupa3) %>%
+  summarise_all(.funs = "mean")
 
 ```
 
-### Zadanie 3
+Metoda hierarchiczna zastosowała inną numerację grup. Liczebności tych grup nieznacznie się różnią, ale charakterystyki wewnątrz grupowe są bardzo podobne do tych określonych na podstawie metody k-średnich.
 
-Rozpoznawanie czynności na podstawie danych z przyspieszeniomierza w telefonie: [User Identification From Walking Activity Data Set ](http://archive.ics.uci.edu/ml/datasets/User+Identification+From+Walking+Activity#)
+Tworząc tabelę krzyżową możemy zobaczyć, że tylko 4 obserwacje zmieniły przypisanie do grup.
+
+```{r}
+table(klienci$grupa2, klienci$grupa3)
+```
+
+Porównajmy jeszcze wyniki działania tych dwóch metod na wykresach:
+
+```{r}
+klienci %>%
+  select(roczny_dochod, wskaznik_wydatkow, grupa2, grupa3) %>%
+  gather(metoda, grupa, -roczny_dochod, -wskaznik_wydatkow) %>%
+  ggplot(aes(x=wskaznik_wydatkow, y=roczny_dochod)) +
+  geom_point(aes(color=grupa)) +
+  facet_wrap(~ metoda)
+```
+
+Problematyczne obserwacje pochodziły z grupy klientów o przeciętnych dochodach oraz wydatkach.
+
+### Zadania
+
+1. Dokonaj grupowania danych dotyczących [32 samochodów](data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
+
+2. Rozpoznawanie czynności na podstawie danych z przyspieszeniomierza w telefonie: [User Identification From Walking Activity Data Set ](http://archive.ics.uci.edu/ml/datasets/User+Identification+From+Walking+Activity#)
