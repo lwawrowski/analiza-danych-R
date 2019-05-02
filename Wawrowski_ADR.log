@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99998 (MiKTeX 2.9.6500 64-bit) (preloaded format=xelatex 2018.1.29)  29 APR 2019 21:10
+This is XeTeX, Version 3.14159265-2.6-0.99998 (MiKTeX 2.9.6500 64-bit) (preloaded format=xelatex 2018.1.29)  2 MAY 2019 15:41
 entering extended mode
 **./Wawrowski_ADR.tex
 (Wawrowski_ADR.tex
@@ -1265,49 +1265,56 @@ e pdf)
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[36] [37]
-File: Wawrowski_ADR_files/figure-latex/unnamed-chunk-38-1.pdf Graphic file (typ
+[36]
+File: Wawrowski_ADR_files/figure-latex/unnamed-chunk-37-1.pdf Graphic file (typ
 e pdf)
-<use Wawrowski_ADR_files/figure-latex/unnamed-chunk-38-1.pdf>
+<use Wawrowski_ADR_files/figure-latex/unnamed-chunk-37-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[37] [38]
 File: Wawrowski_ADR_files/figure-latex/unnamed-chunk-39-1.pdf Graphic file (typ
 e pdf)
 <use Wawrowski_ADR_files/figure-latex/unnamed-chunk-39-1.pdf>
-
-Underfull \vbox (badness 1742) has occurred while \output is active []
-
-[38]
 File: Wawrowski_ADR_files/figure-latex/unnamed-chunk-40-1.pdf Graphic file (typ
 e pdf)
 <use Wawrowski_ADR_files/figure-latex/unnamed-chunk-40-1.pdf>
 
+Underfull \vbox (badness 1742) has occurred while \output is active []
+
+[39]
+File: Wawrowski_ADR_files/figure-latex/unnamed-chunk-41-1.pdf Graphic file (typ
+e pdf)
+<use Wawrowski_ADR_files/figure-latex/unnamed-chunk-41-1.pdf>
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[39] [40]
-File: Wawrowski_ADR_files/figure-latex/unnamed-chunk-43-1.pdf Graphic file (typ
+[40] [41]
+File: Wawrowski_ADR_files/figure-latex/unnamed-chunk-44-1.pdf Graphic file (typ
 e pdf)
-<use Wawrowski_ADR_files/figure-latex/unnamed-chunk-43-1.pdf>
-[41] [42
-
-]
+<use Wawrowski_ADR_files/figure-latex/unnamed-chunk-44-1.pdf>
+[42]
 Chapter 5.
-[43] [44]
+[43
+
+] [44]
 Chapter 6.
 [45
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1778.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1807.
 [46]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1778.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1807.
 (Wawrowski_ADR.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1778.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1778.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1807.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1807.
  ) 
 Here is how much of TeX's memory you used:
- 22874 strings out of 427839
- 421714 string characters out of 3152538
- 565736 words of memory out of 3000000
- 26600 multiletter control sequences out of 15000+200000
- 543007 words of font info for 54 fonts, out of 3000000 for 9000
+ 22881 strings out of 427839
+ 421992 string characters out of 3152538
+ 565690 words of memory out of 3000000
+ 26604 multiletter control sequences out of 15000+200000
+ 543015 words of font info for 55 fonts, out of 3000000 for 9000
  1328 hyphenation exceptions out of 8191
  45i,6n,68p,10456b,454s stack positions out of 5000i,500n,10000p,200000b,50000s
 
