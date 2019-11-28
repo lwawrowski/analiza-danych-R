@@ -1,0 +1,97 @@
+---
+title: "Metody przetwarzania<br>i analizy danych"
+subtitle: "Wprowadzenie do R"
+author: "&copy; Łukasz Wawrowski"
+date: ""
+output:
+  xaringan::moon_reader:
+    css: ["default.css", "default-fonts.css"]
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(countdown)
+```
+
+# Testowanie hipotez
+
+1. Sformułowanie dwóch wykluczających się hipotez - zerowej $H_0$ oraz alternatywnej $H_1$
+
+2. Wybór odpowiedniego testu statystycznego
+
+3. Określenie dopuszczalnego prawdopodobieństwo popełnienia błędu I rodzaju (czyli poziomu istotności $\alpha$) 
+
+4. Podjęcie decyzji
+
+---
+
+# Wartość p
+
+.pull-left[
+
+- najostrzejszy poziom istotności, przy którym możemy odrzucić hipotezę $H_0$
+
+- podjęcie decyzji na podstawie porównania wartości p z poziomem istotności $\alpha$
+
+- $p < \alpha$ - odrzucamy hipotezę zerową
+
+- [Rozważania o p-value](http://cejsh.icm.edu.pl/cejsh/element/bwmeta1.element.cejsh-e3daa053-7cf2-4eee-9192-16c48c3a7a45/c/05.pdf)
+
+]
+
+.pull-right[
+
+![](img/freddie.jpg)
+
+]
+
+---
+
+# Testy statystyczne
+
+![](img/07_testy_diagram_v3.png)
+
+---
+
+# Testy statystyczne
+
+|                       | Skala nominalna - nieparametryczne | Skala porządkowa - nieparametryczne                  | Skala ilorazowa - parametryczne             |
+|-----------------------|------------------------------------|------------------------------------------------------|---------------------------------------------|
+| Jedna próba           | Test zgodności $\chi^2$ - `prop.test()`     | Test zgodności Shapiro-Wilka - `shapiro.test()`, Test Wilcoxona - `wilcox.test()` | Test t - `t.test()`                   |
+| Dwie próby niezależne | Test niezależności $\chi^2$ - `chisq.test()`, Test zgodności $\chi^2$ - `prop.test()` | Test Flignera-Killeena - `fligner.test()`, Test Manna-Whitneya - `wilcox.test()` | Test F - `var.test()`, Test t - `t.test()`                |
+| Dwie próby zależne    | Test McNemara - `mcnemar.test()`     | Test Wilcoxona - `wilcox.test()`  | Test t - `t.test()`    |
+| K prób niezależnych   | Test zgodności $\chi^2$ - `chisq.test()` | Test Flignera-Killeena - `fligner.test()`, Test Kruskala-Wallisa - `kruskal.test()` | Test Bartletta - `bartlett.test()`, ANOVA - `aov()` |
+
+---
+
+<center><img src="img/tests.png" height="600px"></center>
+
+[źródło](https://philipppro.github.io/Statistical_tests_overview/)
+
+---
+
+# Test niezależności $\chi^2$
+
+
+
+---
+
+# Test normalności
+
+
+---
+
+# Porównanie wartości przeciętnych
+
+
+---
+
+class: inverse, center, middle
+
+# Pytania?
