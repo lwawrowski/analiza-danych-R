@@ -1,6 +1,6 @@
 ---
 title: "Metody przetwarzania <br>i analizy danych"
-subtitle: "Wprowadzenie do R"
+subtitle: "Badania eksploracyjne"
 author: "&copy; Łukasz Wawrowski"
 date: ""
 output:

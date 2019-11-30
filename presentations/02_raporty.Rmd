@@ -19,6 +19,22 @@ library(tidyverse)
 library(countdown)
 ```
 
+# Zbiór danych - [pracownicy](http://www.wawrowski.edu.pl/data/pracownicy.xlsx)
+
+- id - kod pracownika
+- plec - płeć pracownika (0 - mężczyzna, 1 - kobieta)
+- data_urodz - data urodzenia
+- edukacja - wykształcenie (w latach nauki)
+- kat_pracownika - grupa pracownicza (1 - specjalista, 2 - menedżer, 3 - konsultant)
+- bwynagrodzenie - bieżące wynagrodzenie
+- pwynagrodzenie - początkowe wynagrodzenie
+- staz - staż pracy (w miesiącach)
+- doswiadczenie - poprzednie zatrudnienie (w miesiącach)
+- zwiazki - przynależność do związków zawodowych (0 - nie, 1 - tak)
+- wiek - wiek (w latach)
+
+---
+
 # R jako narzędzie do raportowania
 
 Połączenie języka __R__ i __markdown__ umożliwia tworzenie dynamicznych raportów, które można eksportować do plików:
@@ -324,6 +340,18 @@ __Wynik__
 Średnia długość płatków irysów wynosi `r round(mean(iris$Petal.Length),2)` centymetry.
 
 ]
+
+---
+
+class: inverse
+
+# Zadanie
+
+1. Dodaj do dokumentu dowolny wykres stworzony na podstawie zbioru _pracownicy_.
+
+2. W raporcie umieść zdanie _Średni wiek pracowników wynosi X lat_, gdzie X to wartość obliczona na podstawie zbioru danych.
+
+`r countdown(minutes = 10, seconds = 0, top = 0)`
 
 ---
 
