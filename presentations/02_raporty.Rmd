@@ -347,11 +347,13 @@ class: inverse
 
 # Zadanie
 
-1. Dodaj do dokumentu dowolny wykres stworzony na podstawie zbioru _pracownicy_.
+1. Dodaj do dokumentu dowolny wykres stworzony na podstawie zbioru _pracownicy_. Nie wyświetlaj kodu tego wykresu.
 
 2. W raporcie umieść zdanie _Średni wiek pracowników wynosi X lat_, gdzie X to wartość obliczona na podstawie zbioru danych.
 
-`r countdown(minutes = 10, seconds = 0, top = 0)`
+3. Umieść w raporcie tabelę zawierającą średnie wynagrodzenia (początkowe i bieżące) w grupach kategorii pracownika.
+
+`r countdown(minutes = 20, seconds = 0, top = 0)`
 
 ---
 
