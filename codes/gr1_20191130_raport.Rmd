@@ -1,0 +1,68 @@
+---
+title: "Raport pracownicy"
+author: "ŁW"
+date: "30 11 2019"
+output: word_document
+---
+
+```{r wczytanie danych, include=FALSE}
+library(tidyverse)
+library(readxl)
+
+pracownicy <- read_excel("data/pracownicy.xlsx")
+```
+
+## Podsumowanie 
+
+```{r}
+summary(pracownicy)
+```
+
+## Tabela
+
+Poniższa tabela wygenerowana z wykorzystaniem funkcji kable.
+
+```{r}
+pracownicy %>% 
+  count(kat_pracownika) %>%
+  knitr::kable()
+```
+
+## Wykres
+
+```{r wykres, fig.height=4, fig.width=8, warning=FALSE}
+ggplot(pracownicy, aes(x = wiek, 
+                       y = bwynagrodzenie)) +
+  geom_point()
+```
+
+Minimalny wiek pracownika wynosi `r min(pracownicy$wiek, na.rm=T)` lat.
+
+```{r include=FALSE}
+max_wiek <- max(pracownicy$wiek, na.rm = T)
+```
+
+Maksymalny wiek pracownika to `r max_wiek` lat.
+
+```{r}
+sr_wyn <- pracownicy %>% 
+  group_by(kat_pracownika) %>%
+  summarise(sr_p=mean(pwynagrodzenie),
+            sr_b=mean(bwynagrodzenie)) %>%
+  knitr::kable()
+
+sr_wyn
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
