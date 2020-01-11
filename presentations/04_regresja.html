@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Metody przetwarzania i analizy danych</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="© Łukasz Wawrowski" />
+    <link href="libs/countdown-0.3.3/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.3.3/countdown.js"></script>
+    <link rel="stylesheet" href="default.css" type="text/css" />
+    <link rel="stylesheet" href="default-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Metody przetwarzania<br>i analizy danych
+## Regresja liniowa
+### © Łukasz Wawrowski
+
+---
+
+
+
+
+# Regresja
+
+Funkcyjne odwzorowanie zależności pomiędzy badanymi zmiennymi. 
+
+Cele analizy regresji:
+
+- poznawcze - badanie związków przyczynowo-skutkowych
+
+- predycyjne - oszacowanie nieznanej wartości cechy
+
+Model regresji jest tylko przybliżeniem rzeczywistości!
+
+---
+
+# Regresja prosta
+
+Analiza dwóch cech:
+
+- zmienna objaśniana (zależna) oznaczana jako `\(y\)`
+
+- zmienna objaśniająca (niezależna) oznaczana jako `\(x\)`
+
+Przykłady: 
+
+- zależność wielkości sprzedaży od wydatków na reklamę
+
+- zależność wynagrodzenia od lat doświadczenia
+
+---
+
+# Przykład
+
+Zbiór [salary](http://www.wawrowski.edu.pl/data/salary.xlsx) zawiera informacje o rocznym wynagrodzeniu (w $) oraz liczbie lat doświadczenia. 
+
+---
+
+# Wykres rozrzutu
+
+![](04_regresja_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+
+class: inverse
+
+# Zadanie
+
+Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
+
+<div class="countdown" id="timer_5e19b87e" style="top:0;right:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Wykres rozrzutu
+
+![](04_regresja_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+
+# Regresja prosta
+
+Ogólna postać regresji prostej jest następująca:
+
+`$$\hat{y}_{i}=b_{1}x_{i}+b_{0}$$`
+
+gdzie `\(\hat{y}\)` oznacza wartość teoretyczną, leżącą na wyznaczonej prostej. 
+
+Wobec tego wartości empiryczne (y) będą opisane formułą:
+
+`$$y_{i}=b_{1}x_{i}+b_{0}+u_{i}$$`
+
+w której `\(u_i\)` oznacza składnik resztowy wyliczany jako `\(u_{i}=y_{i}-\hat{y}_{i}\)`. 
+
+---
+
+# Regresja prosta w R
+
+
+```r
+lm(formula = zmienna_zalezna ~ zmienna_niezalezna, data = zbior_danych)
+```
+
+- `formula` - zdefiniowanie zależności funkcyjnej z wykorzystaniem tyldy
+
+- `data` - zbiór danych
+
+Domyślnie funkcja `lm` zwraca tylko parametry `\(b\)`. 
+
+Aby uzyskać szczegółowe informacje na temat modelu należy dodatkowo zastosować funkcję `summary()`:
+
+
+```r
+model &lt;- lm(formula = zmienna_zalezna ~ zmienna_niezalezna, data = zbior_danych)
+summary(model)
+```
+
+---
+
+# Współczynniki `\(b\)`
+
+**Współczynnik kierunkowy** `\(b_1\)` informuje o ile przeciętne zmieni się wartość zmiennej objaśnianej `\(y\)`, gdy wartość zmiennej objaśniającej `\(x\)` wzrośnie o jednostkę.
+
+**Wyraz wolny** `\(b_0\)` to wartość zmiennej objaśnianej `\(y\)`, w sytuacji w której wartość zmiennej objaśniającej `\(x\)` będzie równa 0. Często interpretacja tego parametru nie ma sensu.
+
+---
+
+# Dopasowanie modelu
+
+**Odchylenie standardowe składnika resztowego** jest pierwiastkiem z sumy kwadratów reszt podzielonej przez liczbę obserwacji pomniejszoną o 2:
+
+`$$S_{u}=\sqrt{\frac{\sum\limits_{i=1}^{n}{(y_{i}-\hat{y}_{i})^2}}{n-2}}$$`
+
+Miara ta określa, o ile, przeciętnie biorąc `\(+/-\)`, wartości empiryczne zmiennej objaśnianej odchylają się od wartości teoretycznych tej zmiennej, obliczonej na podstawie funkcji regresji.
+
+---
+
+# Dopasowanie modelu 
+
+**Współczynnik determinacji** określa, jaki procent wariancji zmiennej objaśnianej został wyjaśniony przez funkcję regresji. `\(R^2\)` przyjmuje wartości z przedziału `\(&lt;0;1&gt;\)` ( `\(&lt;0\%;100\%&gt;\)` ), przy czym model regresji tym lepiej opisuje zachowanie się badanej zmiennej objaśnianej, im `\(R^2\)` jest bliższy jedności (bliższy 100%)
+
+`$$R^2=1-\frac{\sum\limits_{i=1}^{n}{(y_{i}-\hat{y}_{i})^2}}{\sum\limits_{i=1}^{n}{(y_{i}-\bar{y}_{i})^2}}$$`
+
+---
+
+# Test Walda
+
+- sprawdzenie istoności parametrów `\(b\)`
+
+- sprawdzenie istotności całego wektora parametrów `\(b\)`
+
+---
+
+# Predykcja
+
+W celu wykorzystania modelu regresji do prognozowania należy stworzyć lub wczytać zbiór danych z danymi, dla których chcemy uzyskać wartości.
+
+
+```r
+nowe_dane &lt;- data.frame(x=c(10,20,30))
+
+predict(object = model, newdata = nowe_dane)
+```
+
+---
+
+class: inverse
+
+# Zadanie 
+
+Stwórz model regresji prostej objaśniający zależność sprzedaży od liczby klientów na podstawie [sklepu Rossmann](http://www.wawrowski.edu.pl/data/sklep77.xlsx). Jaka jest prognozowana sprzedaż dla 300, 700 i 1050 klientów?
+
+<div class="countdown" id="timer_5e19b718" style="top:0;right:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">15</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Regresja wieloraka
+
+Ogólna postać regresji wielorakiej jest następująca:
+
+`$$\hat{y}_{i}=b_{1}x_{1i}+b_{2}x_{2i}+...+b_{k}x_{ki}+b_{0}$$`
+
+W tym przypadku nie wyznaczamy prostej tylko `\(k\)`-wymiarową przestrzeń.
+
+---
+
+# Przykład
+
+Na podstawie zbioru [pracownicy](http://www.wawrowski.edu.pl/data/pracownicy.xlsx) zbuduj model objaśniający wysokość bieżącego wynagrodzenia.
+
+- id - kod pracownika
+- plec - płeć pracownika (0 - mężczyzna, 1 - kobieta)
+- data_urodz - data urodzenia
+- edukacja - wykształcenie (w latach nauki)
+- kat_pracownika - grupa pracownicza (1 - specjalista, 2 - menedżer, 3 - konsultant)
+- bwynagrodzenie - bieżące wynagrodzenie
+- pwynagrodzenie - początkowe wynagrodzenie
+- staz - staż pracy (w miesiącach)
+- doswiadczenie - poprzednie zatrudnienie (w miesiącach)
+- zwiazki - przynależność do związków zawodowych (0 - nie, 1 - tak)
+- wiek - wiek (w latach)
+
+---
+
+class: inverse
+
+# Zadanie
+
+Na bazie zbioru pracownicy stwórz nowy zbiór danych, który nie będzie zawierał niepotrzebnych zmienne oraz braków danych.
+
+<div class="countdown" id="timer_5e19b886" style="top:0;right:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Dychotomizacja zmiennej
+
+Zamiana zmiennej ilościowej zawierającej `\(k\)` wariantów na `\(k-1\)` zmiennych zerojedynkowych.
+
+.pull-left[
+Oryginalny zbiór
+
+| id | stanowisko |
+|----|------------|
+| 1  | specjalista|
+| 2  | menedżer   |
+| 3  | specjalista|
+| 4  | konsultant |
+| 5  | konsultant |
+
+]
+
+.pull-right[
+Zmienna zerojedynkowa
+
+| id | menedżer | konsultant |
+|----|----------|------------|
+| 1  | 0 | 0 |
+| 2  | 1 | 0 |
+| 3  | 0 | 0 |
+| 4  | 0 | 1 |
+| 5  | 0 | 1 |
+
+]
+
+---
+
+# Dychotomizacja zmiennej
+
+Współczynnik `\(b\)` dla zmiennej dychotomicznej informuje o ile przeciętne zmieni się wartość zmiennej objaśnianej `\(y\)` w odniesieniu do kategorii bazowej dychotomicznej zmiennej `\(x\)`.
+
+Przykładowo, przyjmując za kategorię bazową stanowisko _specjalista_, współczynnik `\(b\)` dla kategorii _menedżer_ poinformuje o ile średnio wartość bieżącego wynagrodzenia jest wyższa lub niższa od _specjalisty_.
+
+---
+
+class: inverse, center, middle
+
+# Pytania?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,265 @@
+---
+title: "Metody przetwarzania<br>i analizy danych"
+subtitle: "Regresja liniowa"
+author: "&copy; Łukasz Wawrowski"
+date: ""
+output:
+  xaringan::moon_reader:
+    css: ["default.css", "default-fonts.css"]
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(countdown)
+
+salary <- readxl::read_xlsx("../data/salary.xlsx")
+
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 12, fig.height = 6)
+```
+
+# Regresja
+
+Funkcyjne odwzorowanie zależności pomiędzy badanymi zmiennymi. 
+
+Cele analizy regresji:
+
+- poznawcze - badanie związków przyczynowo-skutkowych
+
+- predycyjne - oszacowanie nieznanej wartości cechy
+
+Model regresji jest tylko przybliżeniem rzeczywistości!
+
+---
+
+# Regresja prosta
+
+Analiza dwóch cech:
+
+- zmienna objaśniana (zależna) oznaczana jako $y$
+
+- zmienna objaśniająca (niezależna) oznaczana jako $x$
+
+Przykłady: 
+
+- zależność wielkości sprzedaży od wydatków na reklamę
+
+- zależność wynagrodzenia od lat doświadczenia
+
+---
+
+# Przykład
+
+Zbiór [salary](http://www.wawrowski.edu.pl/data/salary.xlsx) zawiera informacje o rocznym wynagrodzeniu (w $) oraz liczbie lat doświadczenia. 
+
+---
+
+# Wykres rozrzutu
+
+```{r echo=FALSE}
+plot(salary)
+```
+
+---
+
+class: inverse
+
+# Zadanie
+
+Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
+
+`r countdown(minutes = 10, seconds = 0, top = 0)`
+
+---
+
+# Wykres rozrzutu
+
+```{r echo=FALSE}
+
+ggplot(salary, aes(x = YearsExperience, y = Salary)) + 
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+---
+
+# Regresja prosta
+
+Ogólna postać regresji prostej jest następująca:
+
+$$\hat{y}_{i}=b_{1}x_{i}+b_{0}$$
+
+gdzie $\hat{y}$ oznacza wartość teoretyczną, leżącą na wyznaczonej prostej. 
+
+Wobec tego wartości empiryczne (y) będą opisane formułą:
+
+$$y_{i}=b_{1}x_{i}+b_{0}+u_{i}$$
+
+w której $u_i$ oznacza składnik resztowy wyliczany jako $u_{i}=y_{i}-\hat{y}_{i}$. 
+
+---
+
+# Regresja prosta w R
+
+```{r eval=FALSE}
+lm(formula = zmienna_zalezna ~ zmienna_niezalezna, data = zbior_danych)
+```
+
+- `formula` - zdefiniowanie zależności funkcyjnej z wykorzystaniem tyldy
+
+- `data` - zbiór danych
+
+Domyślnie funkcja `lm` zwraca tylko parametry $b$. 
+
+Aby uzyskać szczegółowe informacje na temat modelu należy dodatkowo zastosować funkcję `summary()`:
+
+```{r eval=FALSE}
+model <- lm(formula = zmienna_zalezna ~ zmienna_niezalezna, data = zbior_danych)
+summary(model)
+```
+
+---
+
+# Współczynniki $b$
+
+**Współczynnik kierunkowy** $b_1$ informuje o ile przeciętne zmieni się wartość zmiennej objaśnianej $y$, gdy wartość zmiennej objaśniającej $x$ wzrośnie o jednostkę.
+
+**Wyraz wolny** $b_0$ to wartość zmiennej objaśnianej $y$, w sytuacji w której wartość zmiennej objaśniającej $x$ będzie równa 0. Często interpretacja tego parametru nie ma sensu.
+
+---
+
+# Dopasowanie modelu
+
+**Odchylenie standardowe składnika resztowego** jest pierwiastkiem z sumy kwadratów reszt podzielonej przez liczbę obserwacji pomniejszoną o 2:
+
+$$S_{u}=\sqrt{\frac{\sum\limits_{i=1}^{n}{(y_{i}-\hat{y}_{i})^2}}{n-2}}$$
+
+Miara ta określa, o ile, przeciętnie biorąc $+/-$, wartości empiryczne zmiennej objaśnianej odchylają się od wartości teoretycznych tej zmiennej, obliczonej na podstawie funkcji regresji.
+
+---
+
+# Dopasowanie modelu 
+
+**Współczynnik determinacji** określa, jaki procent wariancji zmiennej objaśnianej został wyjaśniony przez funkcję regresji. $R^2$ przyjmuje wartości z przedziału $<0;1>$ ( $<0\%;100\%>$ ), przy czym model regresji tym lepiej opisuje zachowanie się badanej zmiennej objaśnianej, im $R^2$ jest bliższy jedności (bliższy 100%)
+
+$$R^2=1-\frac{\sum\limits_{i=1}^{n}{(y_{i}-\hat{y}_{i})^2}}{\sum\limits_{i=1}^{n}{(y_{i}-\bar{y}_{i})^2}}$$
+
+---
+
+# Test Walda
+
+- sprawdzenie istoności parametrów $b$
+
+- sprawdzenie istotności całego wektora parametrów $b$
+
+---
+
+# Predykcja
+
+W celu wykorzystania modelu regresji do prognozowania należy stworzyć lub wczytać zbiór danych z danymi, dla których chcemy uzyskać wartości.
+
+```{r eval=FALSE}
+nowe_dane <- data.frame(x=c(10,20,30))
+
+predict(object = model, newdata = nowe_dane)
+```
+
+---
+
+class: inverse
+
+# Zadanie 
+
+Stwórz model regresji prostej objaśniający zależność sprzedaży od liczby klientów na podstawie [sklepu Rossmann](http://www.wawrowski.edu.pl/data/sklep77.xlsx). Jaka jest prognozowana sprzedaż dla 300, 700 i 1050 klientów?
+
+`r countdown(minutes = 15, seconds = 0, top = 0)`
+
+---
+
+# Regresja wieloraka
+
+Ogólna postać regresji wielorakiej jest następująca:
+
+$$\hat{y}_{i}=b_{1}x_{1i}+b_{2}x_{2i}+...+b_{k}x_{ki}+b_{0}$$
+
+W tym przypadku nie wyznaczamy prostej tylko $k$-wymiarową przestrzeń.
+
+---
+
+# Przykład
+
+Na podstawie zbioru [pracownicy](http://www.wawrowski.edu.pl/data/pracownicy.xlsx) zbuduj model objaśniający wysokość bieżącego wynagrodzenia.
+
+- id - kod pracownika
+- plec - płeć pracownika (0 - mężczyzna, 1 - kobieta)
+- data_urodz - data urodzenia
+- edukacja - wykształcenie (w latach nauki)
+- kat_pracownika - grupa pracownicza (1 - specjalista, 2 - menedżer, 3 - konsultant)
+- bwynagrodzenie - bieżące wynagrodzenie
+- pwynagrodzenie - początkowe wynagrodzenie
+- staz - staż pracy (w miesiącach)
+- doswiadczenie - poprzednie zatrudnienie (w miesiącach)
+- zwiazki - przynależność do związków zawodowych (0 - nie, 1 - tak)
+- wiek - wiek (w latach)
+
+---
+
+class: inverse
+
+# Zadanie
+
+Na bazie zbioru pracownicy stwórz nowy zbiór danych, który nie będzie zawierał niepotrzebnych zmienne oraz braków danych.
+
+`r countdown(minutes = 10, seconds = 0, top = 0)`
+
+---
+
+# Dychotomizacja zmiennej
+
+Zamiana zmiennej ilościowej zawierającej $k$ wariantów na $k-1$ zmiennych zerojedynkowych.
+
+.pull-left[
+Oryginalny zbiór
+
+| id | stanowisko |
+|----|------------|
+| 1  | specjalista|
+| 2  | menedżer   |
+| 3  | specjalista|
+| 4  | konsultant |
+| 5  | konsultant |
+
+]
+
+.pull-right[
+Zmienna zerojedynkowa
+
+| id | menedżer | konsultant |
+|----|----------|------------|
+| 1  | 0 | 0 |
+| 2  | 1 | 0 |
+| 3  | 0 | 0 |
+| 4  | 0 | 1 |
+| 5  | 0 | 1 |
+
+]
+
+---
+
+# Dychotomizacja zmiennej
+
+Współczynnik $b$ dla zmiennej dychotomicznej informuje o ile przeciętne zmieni się wartość zmiennej objaśnianej $y$ w odniesieniu do kategorii bazowej dychotomicznej zmiennej $x$.
+
+Przykładowo, przyjmując za kategorię bazową stanowisko _specjalista_, współczynnik $b$ dla kategorii _menedżer_ poinformuje o ile średnio wartość bieżącego wynagrodzenia jest wyższa lub niższa od _specjalisty_.
+
+---
+
+class: inverse, center, middle
+
+# Pytania?
