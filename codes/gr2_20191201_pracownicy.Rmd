@@ -1,0 +1,66 @@
+---
+title: "Analiza pracowników"
+author: "ŁW"
+date: "1 12 2019"
+output: word_document
+---
+
+```{r wczytywanie danych, include=FALSE}
+library(tidyverse)
+library(readxl)
+
+pracownicy <- read_excel("data/pracownicy.xlsx")
+```
+
+# Podsumowanie danych
+
+```{r podsumowanie}
+summary(pracownicy)
+```
+
+# Kategoria pracownika
+
+```{r}
+pracownicy %>% 
+  count(kat_pracownika) %>% 
+  knitr::kable()
+```
+
+# Wykres
+
+```{r fig.height=4, fig.width=8, warning=FALSE}
+ggplot(pracownicy, aes(x = wiek, 
+                       y = doswiadczenie)) +
+  geom_point()
+```
+
+Minimalny wiek pracowników to `r min(pracownicy$wiek, na.rm=T)` lata.
+
+```{r include=FALSE}
+max_lata <- max(pracownicy$wiek, na.rm = T)
+```
+
+Maksymalny wiek wynosi `r max_lata` lata.
+
+# Zadanie
+
+```{r}
+pracownicy %>% 
+  group_by(kat_pracownika) %>% 
+  summarise(sr_bwyn=mean(bwynagrodzenie),
+            sr_pwyn=mean(pwynagrodzenie)) %>%
+  knitr::kable()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
