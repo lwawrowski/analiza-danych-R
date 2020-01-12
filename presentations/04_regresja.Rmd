@@ -260,6 +260,66 @@ Przykładowo, przyjmując za kategorię bazową stanowisko _specjalista_, wspó�
 
 ---
 
+# Badanie współliniowości
+
+Pakiet [corrplot]() służący do wizualizacji współczynnika korelacji.
+
+Współczynnik korelacji informuje o sile zależności pomiędzy dwoma cechami jakościowymi. Jest wielkością unormowaną, przyjmuje wartości z przedziału $r\in<-1;1>$.
+
+Jeśli:
+
+- $r_{xy}=1$ --- korelacja dodatnia doskonała,
+- $0<r_{xy}<1$ --- korelacja dodatnia niedoskonała (słaba/umiarkowana/silna)
+- $r_{xy}=0$ --- brak zależności,
+- $-1<r_{xy}<0$ --- korelacja ujemna niedoskonała (słaba/umiarkowana/silna)
+- $r_{xy}=-1$ --- korelacja ujemna doskonała.
+
+---
+
+# Dobór i weryfikacja modelu
+
+Pakiet [olsrr]() zawiera narzędzia do analizy modeli liniowych.
+
+- wybór cech do modelu
+
+- badanie współliniowości
+
+- badanie normalności
+
+- analiza wartości odstających
+
+---
+
+# Dobór modelu
+
+Wyróżnia się trzy podejścia do tego zagadnienia:
+
+- ekspercki dobór cech
+
+- budowa wszystkich możliwych modeli i wybór najlepszego według określonego kryterium
+
+- regresja krokowa
+
+---
+
+# Badanie współliniowości
+
+**Współczynnik tolerancji** wskazuje na procent niewyjaśnionej zmienności danej zmiennej przez pozostałe zmienne objaśniające.
+
+**Współczynnik VIF** jest obliczany na podstawie wartości współczynnika tolerancji i wskazuje o ile wariancja szacowanego współczynnika regresji jest podwyższona z powodu współliniowości danej zmiennej objaśniającej z pozostałymi zmiennymi objaśniającymi. Wartość współczynnika VIF powyżej 4 należy uznać za wskazującą na współliniowość.
+
+---
+
+class: inverse
+
+# Zadanie
+
+Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/adr/data/startups.xlsx) określ jakie czynniki wpływają na przychód startupów.
+
+`r countdown(minutes = 15, seconds = 0, top = 0)`
+
+---
+
 class: inverse, center, middle
 
 # Pytania?
