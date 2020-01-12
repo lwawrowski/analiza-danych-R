@@ -288,39 +288,12 @@ Tylko jeden test wskazał zgodność rozkładu reszt z rozkładem normalnym.
 
 ### Zadanie 
 
-Na podstawie zbioru dotyczącego [50 startupów](data/50_Startups.csv) określ jakie czynniki wpływają na przychód startupów. Na zajęciach 27.04.2019 r. przedyskutujemy wyniki.
+Na podstawie zbioru dotyczącego [50 startupów](data/50_Startups.csv) określ jakie czynniki wpływają na przychód startupów.
 
 ```{r}
-startupy <- read.csv("data/50_Startups.csv")
+startupy <- read_xlsx("data/startups.xlsx")
+
+startupy <- janitor::clean_names(startupy)
 
 summary(startupy)
 ```
-
-Podsumowanie danych pokazuje występowanie zer w wartościach zmiennych R.D.Spend i Marketing.Spend - należy je wyeliminować.
-
-```{r}
-startupy <- startupy %>%
-  filter(R.D.Spend != 0, Marketing.Spend != 0)
-```
-
-Na tak przygotowanym zbiorze możemy dopasować model ze wszystkimi zmiennymi.
-
-```{r}
-model <- lm(Profit ~ ., data=startupy)
-summary(model)
-```
-
-Jedyną istotną zmienną objaśniającą jest cecha R.D.Spend. W związku z tym używamy funkcji krokowej metody doboru zmiennych w celu znalezienia istotnych czynników wpływających na przychód startupu.
-
-```{r}
-ols_step_both_p(model)
-```
-
-Algorytm proponuje tylko dwie cechy w modelu R.D.Spend i Administration.
-
-```{r}
-model_2zm <- lm(Profit ~ R.D.Spend + Administration, data=startupy)
-summary(model_2zm)
-```
-
-W związku z czym stwierdzamy, że tylko te dwie cechy wpływają istotnie na przychód - wydatki na R&D wpływają na niego pozytywnie, a na administracje ujemnie.

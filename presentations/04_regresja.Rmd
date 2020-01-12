@@ -320,6 +320,26 @@ Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/adr
 
 ---
 
+# Pakiet _janitor_ 
+
+Surowe dane zwykle nie posiadają nazw kolumn przystosowanych do przetwarzania przez komputer
+
+- nazwy zmiennych nie powinny zawierać polskich liter i spacji
+
+- nazwy zmiennych nie powinny zaczynać się od liczby
+
+Te problemy rozwiązuje pakiet _janitor_ (dozorca, woźny) i funkcja `clean_names()`:
+
+```r
+
+zbior <- janitor::clean_names(zbior)
+
+```
+
+- funkcja ta zamienia wielkie litery na małe, spacje na podkreślniki i znaki transliteruje do ASCII.
+
+---
+
 class: inverse, center, middle
 
 # Pytania?
