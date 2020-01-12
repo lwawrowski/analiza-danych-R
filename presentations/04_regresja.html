@@ -70,7 +70,7 @@ class: inverse
 
 Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
 
-<div class="countdown" id="timer_5e19ba66" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e1ac3d6" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -174,7 +174,7 @@ class: inverse
 
 Stwórz model regresji prostej objaśniający zależność sprzedaży od liczby klientów na podstawie [sklepu Rossmann](http://www.wawrowski.edu.pl/adr/data/sklep77.xlsx). Jaka jest prognozowana sprzedaż dla 300, 700 i 1050 klientów?
 
-<div class="countdown" id="timer_5e19b731" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e1ac371" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">15</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -214,7 +214,7 @@ class: inverse
 
 Na bazie zbioru pracownicy stwórz nowy zbiór danych, który nie będzie zawierał niepotrzebnych zmienne oraz braków danych.
 
-<div class="countdown" id="timer_5e19badf" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e1ac214" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -257,6 +257,88 @@ Zmienna zerojedynkowa
 Współczynnik `\(b\)` dla zmiennej dychotomicznej informuje o ile przeciętne zmieni się wartość zmiennej objaśnianej `\(y\)` w odniesieniu do kategorii bazowej dychotomicznej zmiennej `\(x\)`.
 
 Przykładowo, przyjmując za kategorię bazową stanowisko _specjalista_, współczynnik `\(b\)` dla kategorii _menedżer_ poinformuje o ile średnio wartość bieżącego wynagrodzenia jest wyższa lub niższa od _specjalisty_.
+
+---
+
+# Badanie współliniowości
+
+Pakiet [corrplot](https://cran.r-project.org/web/packages/corrplot/) służący do wizualizacji współczynnika korelacji.
+
+Współczynnik korelacji informuje o sile zależności pomiędzy dwoma cechami jakościowymi. Jest wielkością unormowaną, przyjmuje wartości z przedziału `\(r\in&lt;-1;1&gt;\)`.
+
+Jeśli:
+
+- `\(r_{xy}=1\)` --- korelacja dodatnia doskonała,
+- `\(0&lt;r_{xy}&lt;1\)` --- korelacja dodatnia niedoskonała (słaba/umiarkowana/silna)
+- `\(r_{xy}=0\)` --- brak zależności,
+- `\(-1&lt;r_{xy}&lt;0\)` --- korelacja ujemna niedoskonała (słaba/umiarkowana/silna)
+- `\(r_{xy}=-1\)` --- korelacja ujemna doskonała.
+
+---
+
+# Dobór i weryfikacja modelu
+
+Pakiet [olsrr](https://cran.r-project.org/web/packages/olsrr/) zawiera narzędzia do analizy modeli liniowych.
+
+- wybór cech do modelu
+
+- badanie współliniowości
+
+- badanie normalności
+
+- analiza wartości odstających
+
+---
+
+# Dobór modelu
+
+Wyróżnia się trzy podejścia do tego zagadnienia:
+
+- ekspercki dobór cech
+
+- budowa wszystkich możliwych modeli i wybór najlepszego według określonego kryterium
+
+- regresja krokowa
+
+---
+
+# Badanie współliniowości
+
+**Współczynnik tolerancji** wskazuje na procent niewyjaśnionej zmienności danej zmiennej przez pozostałe zmienne objaśniające.
+
+**Współczynnik VIF** jest obliczany na podstawie wartości współczynnika tolerancji i wskazuje o ile wariancja szacowanego współczynnika regresji jest podwyższona z powodu współliniowości danej zmiennej objaśniającej z pozostałymi zmiennymi objaśniającymi. Wartość współczynnika VIF powyżej 4 należy uznać za wskazującą na współliniowość.
+
+---
+
+class: inverse
+
+# Zadanie
+
+Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/adr/data/startups.xlsx) określ jakie czynniki wpływają na przychód startupów.
+
+<div class="countdown" id="timer_5e1ac149" style="top:0;right:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">15</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+# Pakiet _janitor_ 
+
+Surowe dane zwykle nie posiadają nazw kolumn przystosowanych do przetwarzania przez komputer
+
+- nazwy zmiennych nie powinny zawierać polskich liter i spacji
+
+- nazwy zmiennych nie powinny zaczynać się od liczby
+
+Te problemy rozwiązuje pakiet _janitor_ (dozorca, woźny) i funkcja `clean_names()`:
+
+```r
+
+zbior &lt;- janitor::clean_names(zbior)
+
+```
+
+- funkcja ta zamienia wielkie litery na małe, spacje na podkreślniki i znaki transliteruje do ASCII.
 
 ---
 
