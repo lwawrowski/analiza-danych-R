@@ -264,7 +264,7 @@ Przykładowo, przyjmując za kategorię bazową stanowisko _specjalista_, wspó�
 
 Pakiet [corrplot](https://cran.r-project.org/web/packages/corrplot/) służący do wizualizacji współczynnika korelacji.
 
-Współczynnik korelacji informuje o sile zależności pomiędzy dwoma cechami jakościowymi. Jest wielkością unormowaną, przyjmuje wartości z przedziału $r\in<-1;1>$.
+Współczynnik korelacji informuje o sile zależności pomiędzy dwoma cechami ilościowymi. Jest wielkością unormowaną, przyjmuje wartości z przedziału $r\in<-1;1>$.
 
 Jeśli:
 
