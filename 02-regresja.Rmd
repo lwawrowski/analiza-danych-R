@@ -272,7 +272,7 @@ wybrany_model <- lm(bwynagrodzenie ~ pwynagrodzenie + kat_pracownika + doswiadcz
 summary(wybrany_model)
 ```
 
-Uzyskany model charakteryzuje się mniejszym błędem standardowym od modelu ze wszystkimi zmiennymi i tylko jedną nieistotną zmienną. Wyraz wolny `(Intercept)` nie musi być istotny w modelu.
+Uzyskany model charakteryzuje się nieznacznie większym błędem resztowym od modelu ze wszystkimi zmiennymi, ale wszystkie zmienne są istotne. Wyraz wolny `(Intercept)` nie musi być istotny w modelu.
 
 Wróćmy jeszcze na chwilę do tematu współliniowości zmiennych objaśniających:
 
