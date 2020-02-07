@@ -1,6 +1,6 @@
 # Testowanie hipotez 
 
-[Prezentacja](presentations/03_testy.Rmd)
+[Prezentacja](presentations/03_testy.html)
 
 ## Wprowadzenie
 
