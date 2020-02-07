@@ -1,5 +1,9 @@
 # Testowanie hipotez 
 
+[Prezentacja](presentations/03_testy.Rmd)
+
+## Wprowadzenie
+
 Do rozwiązania wybranych zagadnień analizy statystycznej wystarczą metody weryfikacji hipotez statystycznych. Taki proces można przedstawić w następujących krokach:
 
 1. Sformułowanie dwóch wykluczających się hipotez - zerowej $H_0$ oraz alternatywnej $H_1$

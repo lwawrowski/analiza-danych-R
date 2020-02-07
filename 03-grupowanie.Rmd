@@ -1,5 +1,9 @@
 # Grupowanie
 
+[Prezentacja](presentations/05_grupowanie.html)
+
+## Wprowadzenie
+
 Grupowanie polega na przypisanie obiektów do określonych grup/klastrów/skupień/segmentów, w których znajdą się jednostki najbardziej do siebie podobne, a powstałe grupy będą się między sobą różnić. Całe utrudnienie polega na tym, że nie wiemy ile tych grup ma powstać.
 
 ## Metoda k-średnich
@@ -81,7 +85,7 @@ plot(1:15, zm_w_gr, type="b")
 Wybieramy liczbę skupień po której nie następuje już gwałtowny spadek wartości wariancji wewnątrz-grupowej. Według tego kryterium powinniśmy wybrać wartość 6 zamiast 5. Sprawdźmy zatem jakie otrzymamy przyporządkowanie do grup. Następnie informację o tym przypisaniu umieszczamy w oryginalnym zbiorze danych i przedstawiamy na wykresie. W celu uzyskania powtarzalnych wyników zastosujemy stałe ziarno generatora.
 
 ```{r}
-set.seed(14)
+set.seed(12)
 grupy <- kmeans(x = klienci_z, centers = 5)
 
 klienci$grupa <- as.factor(grupy$cluster)

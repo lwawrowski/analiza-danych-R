@@ -1,5 +1,9 @@
 # Regresja
 
+[Prezentacja](presentations/04_regresja.html)
+
+## Wprowadzenie
+
 Metody regresji pozwalają na analizowanie zależności przyczynowo-skutkowych oraz predycję nieznanych wartości. Korzystając z tej metody należy jednak pamiętać, że model regresji jest tylko przybliżeniem rzeczywistości.
 
 Przykłady zastosowania regresji:
