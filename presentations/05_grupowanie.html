@@ -4,6 +4,8 @@
     <title>Metody przetwarzania i analizy danych</title>
     <meta charset="utf-8" />
     <meta name="author" content="© Łukasz Wawrowski" />
+    <link href="libs/countdown-0.3.3/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.3.3/countdown.js"></script>
     <link rel="stylesheet" href="default.css" type="text/css" />
     <link rel="stylesheet" href="default-fonts.css" type="text/css" />
   </head>
@@ -98,7 +100,40 @@ gdzie: `\(\bar{x}\)` - średnia, `\(s\)` - odchylenie standardowe.
 
 # Metoda k-średnich
 
-gif
+![](img/kmeans.gif)
+
+[źródło](https://dashee87.github.io/data%20science/general/Clustering-with-Scikit-with-GIFs/)
+
+---
+
+# Przykład
+
+Segementacja [klientów sklepu](http://www.wawrowski.edu.pl/adr/data/klienci.csv) w oparciu o następujące dane:
+
+- klientID - identyfikator klienta
+
+- plec - płeć
+
+- wiek - wiek
+
+- roczny_dochod - roczny dochód wyrażony w tys. dolarów
+
+- wskaznik_wydatkow - klasyfikacja sklepu od 1 do 100
+
+---
+
+class: inverse
+
+# Zadanie
+
+1. Dokonaj grupowania danych dotyczących [32 samochodów](http://www.wawrowski.edu.pl/adr/data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
+
+2. Przeprowadź grupowanie [powiatów na podstawie wybranych wskaźników z 2018 roku](http://www.wawrowski.edu.pl/adr/data/daneGUS.RData).
+
+
+<div class="countdown" id="timer_5e3d885b" style="top:0;right:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">15</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
 
 ---
 
@@ -106,11 +141,31 @@ gif
 
 1. Każda obserwacji stanowi jedną z `\(N\)` pojedynczych grup.
 
-2. Na podstawie macierzy odległości połącz dwie najbliżej leżące obserwacje w jedną grupę ($N-1$ grup).
+2. Na podstawie macierzy odległości połącz dwie najbliżej leżące obserwacje w jedną grupę.
 
-3. Połącz dwa najbliżej siebie leżące grupy w jedną ($N-2$ grup).
+3. Połącz dwa najbliżej siebie leżące grupy w jedną.
 
 4. Powtórz krok nr 3, aż do uzyskania jednej grupy.
+
+---
+
+# Dendrogram
+
+&lt;img src="img/dendrogram.png" height="500px"&gt;
+
+[źródło](https://www.data-to-viz.com/graph/dendrogram.html)
+
+---
+
+class: inverse
+
+# Zadanie
+
+Do danych z poprzedniego zadania zastosuj metodę hierarchiczną.
+
+<div class="countdown" id="timer_5e3d8795" style="top:0;right:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
 
 ---
 

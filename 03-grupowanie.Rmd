@@ -209,3 +209,46 @@ Problematyczne obserwacje pochodziły z grupy klientów o przeciętnych dochodac
 1. Dokonaj grupowania danych dotyczących [32 samochodów](data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
 
 2. Rozpoznawanie czynności na podstawie danych z przyspieszeniomierza w telefonie: [User Identification From Walking Activity Data Set ](http://archive.ics.uci.edu/ml/datasets/User+Identification+From+Walking+Activity#)
+
+```{r eval=FALSE, include=FALSE}
+library(bdl)
+
+lud <- get_data_by_variable(varId = "72305", unitLevel = 5, year = 2018) %>% 
+  select(id, name, liczba_ludnosci=val) 
+
+sb <- get_data_by_variable(varId = "60270", unitLevel = 5, year = 2018) %>% 
+  select(id, name, stopa_bezrobocia=val)
+
+mal <- get_data_by_variable(varId = "450543", unitLevel = 5, year = 2018) %>% 
+  select(id, name, malzenstwa_na_1000lud=val)
+
+proc_poprod <- get_data_by_variable(varId = "60565", unitLevel = 5, year = 2018) %>% 
+  select(id, name, procent_ludnosc_poprod=val)
+
+proc_pomoc_spol <- get_data_by_variable(varId = "458700", unitLevel = 5, year = 2018) %>% 
+  select(id, name, procent_pomoc_spoleczna=val)
+
+rodz500 <- get_data_by_variable(varId = "634990", unitLevel = 5, year = 2018) %>% 
+  select(id, name, srednia_liczba_rodzin500plus=val)
+
+podmioty <- get_data_by_variable(varId = "458173", unitLevel = 5, year = 2018) %>% 
+  select(id, name, podmioty_regon_1000lud=val)
+
+wyn <- get_data_by_variable(varId = "64428", unitLevel = 5, year = 2018) %>% 
+  select(id, name, wynagrodzenia=val)
+
+lek <- get_data_by_variable(varId = "454186", unitLevel = 5, year = 2018) %>% 
+  select(id, name, lekarze_10000lud=val)
+
+dane_gus2018 <- inner_join(lud, sb) %>% 
+  inner_join(., mal) %>% 
+  inner_join(., proc_poprod) %>% 
+  inner_join(., proc_pomoc_spol) %>% 
+  inner_join(., rodz500) %>% 
+  inner_join(., podmioty) %>% 
+  inner_join(., wyn) %>% 
+  inner_join(., lek)
+
+save(dane_gus2018, file = "data/daneGUS.RData")
+```
+
