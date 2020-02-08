@@ -208,6 +208,29 @@ Problematyczne obserwacje pochodziły z grupy klientów o przeciętnych dochodac
 
 1. Dokonaj grupowania danych dotyczących [32 samochodów](data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
 
+```{r eval=FALSE, include=FALSE}
+library(tidyverse)
+library(ClusterR)
+
+auta <- read_csv2("data/auta.csv")
+
+auta_z <- auta %>% 
+  select(pojemnosc:cena) %>% 
+  scale()
+
+Optimal_Clusters_KMeans(data = auta_z, max_clusters = 15)
+
+auta_gr <- KMeans_rcpp(data = auta_z, clusters = 6)
+
+auta$grupy <- as.factor(auta_gr$clusters)
+
+auta %>% 
+  select(grupy, pojemnosc:cena) %>% 
+  group_by(grupy) %>% 
+  summarise_all("mean")
+```
+
+
 2. Rozpoznawanie czynności na podstawie danych z przyspieszeniomierza w telefonie: [User Identification From Walking Activity Data Set ](http://archive.ics.uci.edu/ml/datasets/User+Identification+From+Walking+Activity#)
 
 ```{r eval=FALSE, include=FALSE}
