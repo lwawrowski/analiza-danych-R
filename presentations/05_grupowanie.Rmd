@@ -83,6 +83,36 @@ gdzie: $\bar{x}$ - średnia, $s$ - odchylenie standardowe.
 
 ---
 
+# Standaryzacja
+
+```{r echo=FALSE}
+library(patchwork)
+
+sklep77 <- read_csv2("../data/sklep77.csv") %>% 
+  filter(czy_otwarty == "Tak")
+
+p1 <- ggplot(sklep77, aes(x=liczba_klientow, y=sprzedaz)) +
+  geom_point() +
+  xlab("Liczba klientów (w osobach)") +
+  ylab("Sprzedaż (w EUR)") +
+  ggtitle("Wartości oryginalne") +
+  theme_light()
+
+p2 <- sklep77 %>% 
+  mutate_at(vars(4:5), scale) %>% 
+  ggplot(aes(x=liczba_klientow, y=sprzedaz)) +
+  geom_point() +
+  xlab("Liczba klientów") +
+  ylab("Sprzedaż") +
+  ggtitle("Wartości standaryzowane") +
+  theme_light()
+
+p1 + p2
+```
+
+
+---
+
 # Metoda k-średnich
 
 1. Wskaż liczbę grup $k$.
