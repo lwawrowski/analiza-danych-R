@@ -22,5 +22,4 @@ Dodatkowa:
 - [inne pozycje po polsku](https://github.com/mi2-warsaw/SER/blob/master/histoRia/README.md)
 - [inne pozycje po angielsku](https://bookdown.org/)
 
-
 [Skrypty z zajęć](https://github.com/lwawrowski/cdv_bigdata)

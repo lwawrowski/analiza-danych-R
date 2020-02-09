@@ -1,0 +1,34 @@
+# Analiza opisowa 
+
+## Wprowadzenie
+
+[Prezentacja](presentations/01_eda.html)
+
+## Eksploracyjna analiza danych
+
+Explanatory Data Analysis (EDA) polega na opisie i wizualizacji danch bez zakładania hipotez badawczych. W R dostępnych jest wiele pakietów, które wspierają ten proces - [The Landscape of R Packages for Automated Exploratory Data Analysis](https://journal.r-project.org/archive/2019/RJ-2019-033/index.html).
+
+Najczęściej pobieramym pakietem jest [summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html) z następującymi funkcjami:
+
+- `view(dfSummary(zbior))` - wyświetla podsumowanie zawierające kilka statystyk opisowych, częstości, histogram i braki danych
+- `freq(zbior$zmienna)` - wyświetla tabelę częstości
+- `descr(zbior)` - wyświetla zestaw 15 statystyk opisowych
+
+Poniżej znajduje się krótki opis tych 15 miar:
+
+- średnia (mean) - przeciętna wartość cechy
+- odchylenie standardowe (std. dev) - o ile wartości cechy odchylają się średnio od średniej
+- minimum (min) - minimalna wartość cechy
+- kwartyl pierwszy (Q1) - 25% obserwacji ma wartości poniżej Q1, a 75% obserwacji powyżej
+- mediana (median) - wartość środkowa, 50% obserwacji ma wartości poniżej Q1, a 50% obserwacji powyżej
+- kwartyl trzeci (Q3) - 75% obserwacji ma wartości poniżej Q3, a 25% obserwacji powyżej
+- maksimum (max) - maksymalna wartość cechy
+- odchylenie medianowe (MAD) - mediana odchyleń od mediany
+- rozstęp międzykwartylowy (IQR) - różnica pomiędzy trzecim i pierwszym kwartylem
+- współczynnik zmienności (CV) - udział odchylenia standardowego w średniej wartości cechy (w %)
+- skośność (skewness) - asymetria rozkładu cechy, $< 0$ - lewostronna, $> 0$ - prawostronna, $= 0$ - symetryczny
+- błąd standardowy skośności (se.skewness)
+- kurtoza (kurtosis) - skupienie wartości wokół średniej, $< 0$ - słabe, $> 0$ - silne, $= 0$ - normalne
+- liczba obserwacji bez braków danych (N.Valid)
+- odsetek obserwacji bez braków danych (Pct.Valid)
+
