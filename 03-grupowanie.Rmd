@@ -220,7 +220,7 @@ auta_z <- auta %>%
 
 Optimal_Clusters_KMeans(data = auta_z, max_clusters = 15)
 
-auta_gr <- KMeans_rcpp(data = auta_z, clusters = 6)
+auta_gr <- KMeans_rcpp(data = auta_z, clusters = 5)
 
 auta$grupy <- as.factor(auta_gr$clusters)
 
@@ -228,6 +228,21 @@ auta %>%
   select(grupy, pojemnosc:cena) %>% 
   group_by(grupy) %>% 
   summarise_all("mean")
+
+library(clusterCrit)
+
+intCriteria(auta_z, as.integer(auta_gr$clusters), "cal")
+
+row.names(auta_z) <- auta$model
+
+macierz_odl <- dist(auta_z)
+
+auta_hc <- hclust(macierz_odl, method = "ward.D")
+
+plot(auta_hc, hang = -1, cex = 0.8)
+
+ggdendro::ggdendrogram(auta_hc)
+
 ```
 
 
