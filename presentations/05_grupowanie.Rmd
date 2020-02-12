@@ -137,7 +137,7 @@ p1 + p2
 
 # Przykład
 
-Segementacja [klientów sklepu](http://www.wawrowski.edu.pl/adr/data/klienci.csv) w oparciu o następujące dane:
+Segementacja [klientów sklepu](http://www.wawrowski.edu.pl/data/klienci.csv) w oparciu o następujące dane:
 
 - klientID - identyfikator klienta
 
@@ -155,10 +155,9 @@ class: inverse
 
 # Zadanie
 
-1. Dokonaj grupowania danych dotyczących [32 samochodów](http://www.wawrowski.edu.pl/adr/data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
+1. Dokonaj grupowania danych dotyczących [32 samochodów](http://www.wawrowski.edu.pl/data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
 
-2. Przeprowadź grupowanie [powiatów na podstawie wybranych wskaźników z 2018 roku](http://www.wawrowski.edu.pl/adr/data/daneGUS.RData).
-
+2. Przeprowadź grupowanie [powiatów na podstawie wybranych wskaźników z 2018 roku](http://www.wawrowski.edu.pl/data/daneGUS.RData).
 
 `r countdown(minutes = 15, seconds = 0, top = 0)`
 

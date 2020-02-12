@@ -55,7 +55,7 @@ Przykłady:
 
 # Przykład
 
-Zbiór [salary](http://www.wawrowski.edu.pl/adr/data/salary.xlsx) zawiera informacje o rocznym wynagrodzeniu (w $) oraz liczbie lat doświadczenia. 
+Zbiór [salary](http://www.wawrowski.edu.pl/data/salary.xlsx) zawiera informacje o rocznym wynagrodzeniu (w $) oraz liczbie lat doświadczenia. 
 
 ---
 
@@ -176,7 +176,7 @@ class: inverse
 
 # Zadanie 
 
-Stwórz model regresji prostej objaśniający zależność sprzedaży od liczby klientów na podstawie [sklepu Rossmann](http://www.wawrowski.edu.pl/adr/data/sklep77.xlsx). Jaka jest prognozowana sprzedaż dla 300, 700 i 1050 klientów?
+Stwórz model regresji prostej objaśniający zależność sprzedaży od liczby klientów na podstawie [sklepu Rossmann](http://www.wawrowski.edu.pl/data/sklep77.xlsx). Jaka jest prognozowana sprzedaż dla 300, 700 i 1050 klientów?
 
 `r countdown(minutes = 15, seconds = 0, top = 0)`
 
@@ -194,7 +194,7 @@ W tym przypadku nie wyznaczamy prostej tylko $k$-wymiarową przestrzeń.
 
 # Przykład
 
-Na podstawie zbioru [pracownicy](http://www.wawrowski.edu.pl/adr/data/pracownicy.xlsx) zbuduj model objaśniający wysokość bieżącego wynagrodzenia.
+Na podstawie zbioru [pracownicy](http://www.wawrowski.edu.pl/data/pracownicy.xlsx) zbuduj model objaśniający wysokość bieżącego wynagrodzenia.
 
 - id - kod pracownika
 - plec - płeć pracownika (0 - mężczyzna, 1 - kobieta)
@@ -314,7 +314,7 @@ class: inverse
 
 # Zadanie
 
-Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/adr/data/startups.xlsx) określ jakie czynniki wpływają na przychód startupów.
+Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/data/startups.xlsx) określ jakie czynniki wpływają na przychód startupów.
 
 `r countdown(minutes = 15, seconds = 0, top = 0)`
 
