@@ -192,6 +192,12 @@ W tym przypadku nie wyznaczamy prostej tylko $k$-wymiarową przestrzeń.
 
 ---
 
+# Regresja trzech zmiennych
+
+![](img/multiple_reg.png)
+
+---
+
 # Przykład
 
 Na podstawie zbioru [pracownicy](http://www.wawrowski.edu.pl/data/pracownicy.xlsx) zbuduj model objaśniający wysokość bieżącego wynagrodzenia.

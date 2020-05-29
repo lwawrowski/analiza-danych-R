@@ -1,45 +1,129 @@
 # Klasyfikacja
 
-[A visual introduction to machine learning](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/)
+[Prezentacja](presentations/06_klasyfikacja.html)
 
-## Drzewa klasyfikacyjne
-
-Zalety:
-
-- łatwa interpretacja
-- nie trzeba normalizować cech
-- rozwiązuje problemy liniowe i nieliniowe
-
-Wady:
-
-- mała efektywność przy małych zbiorach danych
-- łatwo można przeuczyć
+```{r include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, eval=FALSE, include=FALSE)
+```
 
 
-## KNN
+```{r}
+library(tidyverse)
+library(rpart)
+library(rpart.plot)
 
-Algorytm:
+options(scipen = 999)
 
-1. Określ liczbę sąsiadów - $K$
-2. Wyznacz $K$ sąsiadów dla nowego punktu na podstawie wybranej odległości
-3. Oblicz liczbę sąsiadów, w każdej z grup
-4. Przypisz nową obserwację do grupy, w której ma więcej najbliższych sąsiadów
+# [A visual introduction to machine learning](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/)
 
-Zalety:
+# http://www.r2d3.us/visual-intro-to-machine-learning-part-2/
 
-- łatwa interpretacja
-- szybki i efektywny
+# https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
 
-Wady:
+credit <- readxl::read_xlsx("data/german_credit_data.xlsx") %>% janitor::clean_names()
 
-- trzeba określić liczbę sąsiadów
+credit <- credit %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(job=as.factor(job),
+         installment = credit_amount/duration)
+
+m1 <- rpart(risk ~ ., data = credit)
+
+rpart.plot(m1)
+```
+
+```{r}
+predicted_risk <- predict(object = m1, newdata = credit, type = "class")
+
+caret::confusionMatrix(data = predicted_risk, reference = credit$risk, positive = "good")
+```
 
 
-### Zadanie
+```{r}
+split <- caret::createDataPartition(credit$risk, p = 0.8)
 
-Zbuduj model klasyfikacyjny dla zbioru [danych](data/Social_Network_Ads.csv) dotyczących cech internautów oraz informacji czy zamówili reklamowany produkt czy nie.
+train_data <- credit[split$Resample1,]
+test_data <- credit[-split$Resample1,]
 
-Przeprowadź imputację braków danych dla zbioru [pracowników](data/pracownicy.RData).
+m2 <- rpart(risk ~ ., data = train_data)
+
+rpart.plot(m2)
+```
+
+```{r}
+pred_risk_train <- predict(m1, train_data, "class")
+pred_risk_test <- predict(m1, test_data, "class")
+
+caret::confusionMatrix(data = pred_risk_train, reference = train_data$risk, positive = "good", mode = "everything")
+caret::confusionMatrix(data = pred_risk_test, reference = test_data$risk, positive = "good", mode = "everything")
+```
+
+```{r}
+library(h2o)
+h2o.init()
+
+test_data_h2o <- as.h2o(test_data)
+train_data_h2o <- as.h2o(train_data)
+
+y_var <- "risk"
+x_var <- names(credit)[-10]
+
+m3 <- h2o.gbm(x = x_var, y = y_var, training_frame = train_data_h2o, validation_frame = test_data_h2o, seed = 1)
+
+m3
+```
+
+```{r}
+pred_risk_test_m3 <- as.data.frame(h2o.predict(m3, test_data_h2o))
+
+caret::confusionMatrix(pred_risk_test_m3$predict, test_data$risk, positive = "good", mode = "everything")
+```
+
+```{r}
+gbm_params <- list(learn_rate = seq(0.01, 0.1, 0.01),
+                    max_depth = seq(2, 10, 1),
+                    sample_rate = seq(0.5, 1.0, 0.1),
+                    col_sample_rate = seq(0.1, 1.0, 0.1),
+                    ntrees = seq(50,150,10))
+
+search_criteria <- list(strategy = "RandomDiscrete", max_models = 36, seed = 1)
+
+gbm_grid <- h2o.grid(algorithm = "gbm", 
+                      x = x_var, 
+                      y = y_var,
+                      grid_id = "gbm_grid1",
+                      training_frame = train_data_h2o,
+                      validation_frame = test_data_h2o,
+                      seed = 1,
+                      hyper_params = gbm_params,
+                      search_criteria = search_criteria)
+
+gbm_gridperf <- h2o.getGrid(grid_id = "gbm_grid",
+                            sort_by = "auc",
+                            decreasing = TRUE)
+
+m4 <- h2o.getModel(gbm_gridperf@model_ids[[1]])
+
+m4
+```
+
+```{r}
+pred_risk_test_m4 <- as.data.frame(h2o.predict(m4, test_data_h2o))
+
+caret::confusionMatrix(pred_risk_test_m4$predict, test_data$risk, positive = "good", mode = "everything")
+```
+
+```{r}
+plot(h2o.performance(m4, valid = T), type = "roc")
+```
+
+```{r}
+h2o.varimp(m4)
+```
+
+```{r}
+h2o.partialPlot(m4, data = train_data_h2o, cols = c("credit_amount"))
+```
 
 ```{r eval=FALSE, include=FALSE}
 library(tidyverse)

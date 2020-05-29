@@ -345,7 +345,9 @@ stud2 <- ols_plot_resid_stud_fit(wybrany_model)
 W ten sposób zostało zidentyfikowanych 22 obserwacji odstających. Korzystając z odległości Cooka wyeliminujemy obserwacje odstające ze zbioru:
 
 ```{r}
-outliers <- cook$outliers$observation
+outliers <- cook$data %>% 
+  filter(color=="outlier") %>% 
+  .$obs
 
 pracownicy_out <- pracownicy2[-outliers,]
 
