@@ -327,7 +327,7 @@ Wartości odstające można ustalić na podstawie wielu kryteriów. Do jednych z
 cook <- ols_plot_cooksd_bar(wybrany_model)
 ```
 
-Przypisanie tej funkcji do obiektu zwraca nam tabelę z numerami zidentyfikowanych obserwacji wpływowych. W przypadku odległości Cooka jest to 35 obserwacji.
+Przypisanie tej funkcji do obiektu zwraca nam tabelę z numerami zidentyfikowanych obserwacji wpływowych. W przypadku odległości Cooka jest to 35 obserwacji. Granica przynależności do grupy wartości odstających jest wyznaczana według wzoru: $4/n$, gdzie $n$ to liczba wszystkich obserwacji. 
 
 Inną miarą są reszty studentyzowane.
 
@@ -345,9 +345,7 @@ stud2 <- ols_plot_resid_stud_fit(wybrany_model)
 W ten sposób zostało zidentyfikowanych 22 obserwacji odstających. Korzystając z odległości Cooka wyeliminujemy obserwacje odstające ze zbioru:
 
 ```{r}
-outliers <- cook$data %>% 
-  filter(color=="outlier") %>% 
-  .$obs
+outliers <- cook$data$obs[cook$data$color == "outlier"]
 
 pracownicy_out <- pracownicy2[-outliers,]
 
