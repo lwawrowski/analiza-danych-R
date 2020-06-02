@@ -74,13 +74,12 @@ class: inverse
 
 # Zadanie
 
-W klasyfikacji bardzo ważne jest odpowiednie przygotowanie zbioru danych oraz dobór predyktorów. Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawierała wysokość raty.
+W klasyfikacji bardzo ważne jest odpowiednie przygotowanie zbioru danych oraz dobór predyktorów. Może w tym pomóc pakiet [vtreat](https://cran.r-project.org/web/packages/vtreat/index.html) dokładnie omówiony w tym [webinarze](https://www.youtube.com/watch?v=sniHkkrAsOc). 
+
+
+Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawierała wysokość raty.
 
 `r countdown(minutes = 5, seconds = 0, top = 0)`
-
-???
-
-Pakiet https://cran.r-project.org/web/packages/vtreat/index.html https://www.youtube.com/watch?v=sniHkkrAsOc
 
 ---
 
@@ -223,6 +222,8 @@ H2O is an open source, in-memory, distributed, fast, and scalable machine learni
 - wbudowane metody Explainable AI (XAI) (patrz też: [DrWhy](https://github.com/ModelOriented/DrWhy/blob/master/README.md))
 
 - interfejs graficzny `h2o.flow()`
+
+- automatyczny dobór modelu `h2o.automl()` - [webinar](https://www.youtube.com/watch?v=DjzKTeIIxOY&t=2978s)
 
 ---
 

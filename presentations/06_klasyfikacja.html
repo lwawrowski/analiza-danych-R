@@ -75,15 +75,14 @@ class: inverse
 
 # Zadanie
 
-W klasyfikacji bardzo ważne jest odpowiednie przygotowanie zbioru danych oraz dobór predyktorów. Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawierała wysokość raty.
+W klasyfikacji bardzo ważne jest odpowiednie przygotowanie zbioru danych oraz dobór predyktorów. Może w tym pomóc pakiet [vtreat](https://cran.r-project.org/web/packages/vtreat/index.html) dokładnie omówiony w tym [webinarze](https://www.youtube.com/watch?v=sniHkkrAsOc). 
 
-<div class="countdown" id="timer_5ed13f29" style="top:0;right:0;" data-warnwhen="0">
+
+Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawierała wysokość raty.
+
+<div class="countdown" id="timer_5ed63f6d" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
-
-???
-
-Pakiet https://cran.r-project.org/web/packages/vtreat/index.html https://www.youtube.com/watch?v=sniHkkrAsOc
 
 ---
 
@@ -227,6 +226,8 @@ H2O is an open source, in-memory, distributed, fast, and scalable machine learni
 
 - interfejs graficzny `h2o.flow()`
 
+- automatyczny dobór modelu `h2o.automl()` - [webinar](https://www.youtube.com/watch?v=DjzKTeIIxOY&amp;t=2978s)
+
 ---
 
 # Walidacja krzyżowa
@@ -327,7 +328,7 @@ Sprawdź jak model będzie się sprawdzał na danych, w których braki danych s�
 credit_wna &lt;- credit %&gt;% mutate_at(c("saving_accounts", "checking_account"), fct_explicit_na)
 ```
 
-<div class="countdown" id="timer_5ed13f7e" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5ed63d08" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
