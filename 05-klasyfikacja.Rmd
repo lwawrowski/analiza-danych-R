@@ -2,103 +2,180 @@
 
 [Prezentacja](presentations/06_klasyfikacja.html)
 
-```{r include=FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, eval=FALSE, include=FALSE)
-```
+## Wprowadzenie
 
+Celem analizy klasyfikacji jest zbudowanie modelu predykcyjnego, który w rezultacie zwróci prawdopodobieństwo przynależności danej obserwacji do jeden z dwóch klas. Przykładowo na podstawie danych o klientach banku można stworzyć model oceny zdolności kredytowej dla nowych klientów. W tym rozdziale posłużymy się [German Credit Data](https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)) do budowy takiego predyktora. Wybrane kolumny z tego zbioru znajdują się w [tym pliku](data/german_credit_data.xlsx).
+
+W pierwszym kroku wczytujemy dane i dokonujemy niezbędnych przekształceń tego zbioru. Z wykorzystaniem funkcji `clean_names()` z pakietu _janitor_ zamieniamy nazwy kolumn w przyjazne przetwarzaniu przez komputer (brak spacji, polskich znaków, itp.). Następnie zmienne tekstowe zamieniamy na zmienne jakościowe - faktory oraz tworzymy nową kolumnę zawierającą wysokość raty kredytu.
 
 ```{r}
 library(tidyverse)
+library(readxl)
+library(janitor)
+
+credit <- read_xlsx("data/german_credit_data.xlsx") %>% 
+  clean_names() %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(job=as.factor(job),
+         installment=credit_amount/duration)
+
+summary(credit)
+```
+
+Zamiana cech tekstowych na faktory pozwala w podsumowaniu wygenerowanym przez funkcję `summary()` obserwować od razu częstości poszczególnych wariantów. Możemy zaobserwować występowanie braków danych w zmiennych saving accounts i checking_account. Generalnie jest to zbyt duży problem, bo tylko niektóre algorytmy klasyfikacji nie obsługują braków danych w zmiennych objaśniających. Ważne jest, żeby braki danych nie występowały dla cechy decyzyjnej.
+
+Obserwacje z brakami danych można usunąć, ale często spowodowałoby to znaczne zmniejszenie próby badawczej, zatem stosuje się metody mające na celu uzupełnienie braków danych. W najprostszym przypadku braki można zastąpić średnią, medianą lub dominantą. Do bardziej zaawansowanych sposobów należy metoda najbliższych sąsiadów ([VIM](https://cran.r-project.org/web/packages/VIM/index.html)) albo imputacja wielokrotna ([mice](https://cran.r-project.org/web/packages/mice/index.html)).
+
+W omawianym przypadku klientów wiarygodnych jest 700, a tych, którzy nie spłacili zobowiązania 300. Mamy zatem do czynienia z niezbalansowaną próbą. W idealnym przypadku klasyfikacji, przypadków z każdej grupy powinno być tyle samo. W przeciwnym przypadku model będzie działał lepiej dla klasy większościowej. Najprostszą metodą balansowania danych jest upsampling czyli dolosowywanie obserwacji z klasy mniejszościowej, tak aby wyrównać liczebności. Przeciwieństwem tego podejścia jest downsampling. Alternatywnie można zastosować metodę SMOTE, która generuje sztuczne obserwacje dla klasy mniejszościowej (pakiety [DMwR](https://cran.r-project.org/web/packages/DMwR/index.html), [imbalance](https://cran.r-project.org/web/packages/imbalance/index.html)). 
+
+## Drzewa decyzyjne
+
+Najpopularniejszą metodą klasyfikacji są drzewa decyzyjne, które charakteryzują się z reguły dobrą efektywnością i pozwalają na łatwą interpretację zastosowanych reguł klasyfikacji. Wykorzystamy pakiet [rpart](https://cran.r-project.org/web/packages/rpart/index.html) do stworzenia drzewa oraz pakiet [rpart.plot](https://cran.r-project.org/web/packages/rpart.plot/index.html) do wizualizacji.
+
+Proces tworzenia drzewa jest bardzo prosty, a argumenty w funkcji `rpart()` są takie same jak w regresji liniowej.
+
+```{r}
 library(rpart)
 library(rpart.plot)
 
-options(scipen = 999)
-
-# [A visual introduction to machine learning](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/)
-
-# http://www.r2d3.us/visual-intro-to-machine-learning-part-2/
-
-# https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
-
-credit <- readxl::read_xlsx("data/german_credit_data.xlsx") %>% janitor::clean_names()
-
-credit <- credit %>% 
-  mutate_if(is.character, as.factor) %>% 
-  mutate(job=as.factor(job),
-         installment = credit_amount/duration)
-
-m1 <- rpart(risk ~ ., data = credit)
+m1 <- rpart(formula = risk ~ ., data = credit)
 
 rpart.plot(m1)
 ```
 
-```{r}
-predicted_risk <- predict(object = m1, newdata = credit, type = "class")
+W rezultacie uzyskujemy drzewo decyzyjne z optymalnie dobranymi zmiennymi objaśniającymi. W każdym węźle drzewa podane są następujące wartości: - prognozowana klasa, prawdopodobieństwa zaklasyfikowania do klasy pozytywnej, odsetek obserwacji w węźle. Domyślnym progiem klasyfikacji jest wartość 0,5. Jeżeli prawdopodobieństwo jest poniżej tej wartości to nastąpi przypisanie do grupy klientów niespłacających pożyczki, a jeśli powyżej to do tej drugiej grupy.
 
-caret::confusionMatrix(data = predicted_risk, reference = credit$risk, positive = "good")
+Oceny jakości klasyfikatora dokonuje się na podstawie [macierzy pomyłek](https://pl.wikipedia.org/wiki/Tablica_pomy%C5%82ek) oraz miar wyznaczonych na jej podstawie. Najpopularniejsze z nich to:
+
+- dokładność (accuracy): % poprawnie zaklasyfikowanych
+- precyzja (precison): % poprawnie rozpoznanych przypadków pozytywnych TP/(TP+FP)
+- czułość (sensitivity/recall): % prawdziwie pozytywnych TP/(TP+FN)
+- swoistość (specificity): % prawdziwie negatywnych TN/(TN+FP)
+- F1: średnia harmoniczna z czułości i precyzji 2TP/(2TP+FP+FN)
+
+Im wyższe wartości tych miar tym lepszy klasyfikator. Do wyznaczenia tych miar w R służy funkcja z pakietu [caret](https://topepo.github.io/caret/). W tym celu trzeba wyznaczyć wartości prognozowanej klasy na podstawie modelu.
+
+```{r}
+library(caret)
+
+pred_risk_m1 <- predict(object = m1, newdata = credit, type = "class")
 ```
 
+Argument `type` określa typ predykcji: `"class"` oznacza prognozowaną klasę, a `"prob"` prawdopodobieństwo. Na tej podstawie oraz wartości rzeczywistych tworzymy macierz pomyłek:
 
 ```{r}
-split <- caret::createDataPartition(credit$risk, p = 0.8)
+confusionMatrix(data = pred_risk_m1, reference = credit$risk, 
+                positive = "good", mode = "everything")
+```
 
-train_data <- credit[split$Resample1,]
-test_data <- credit[-split$Resample1,]
+W naszym przykładzie spośród 1000 klientów, model jako wiarygodnych kredytobiorców zaklasyfikował 640, a 117 prawidłowo jako osoby, które nie spłaciły zobowiązania. W 60 przypadkach model uznał brak zdolności kredytowej u klienta, podczas gdy w rzeczywistości pożyczka została spłacona. Dla 183 klientów podjętoby odwrotną decyzję - model przyznałby kredyt, a w rzeczywistości osoby te nie spłaciły pożyczki. Dokładność w tym przypadku wynosi 75,7%, a precyzja 77,8%. Czułość tego predyktora jest wysoka (91,4%), ale swoistość już nie (39%), na co może mieć wpływ niezbalansowanie danych.
 
-m2 <- rpart(risk ~ ., data = train_data)
+Przedstawiony powyżej przykład miał charakter analizy ekspolarycyjnej - opartej na całym zbiorze danych. W praktyce stosuje się podejście polegające na podziale zbioru danych na zbiór treningowy oraz walidacyjny. Na danych ze zbioru treningowego buduje się model, który następnie testowany jest na danych, których nigdy wcześniej "nie widział" - na zbiorze walidacyjnym. Miary klasyfikacji obliczone na podstawie zbioru walidacyjnego dostarczają realnej oceny jakości klasyfikatora.
+
+Do podziału zbioru służy funkcja `createDataPartition()` z pakietu _caret_. Zbiory treningowy i walidacyjny tworzone są w taki sposób, aby zachować proporcje w zmiennej decyzyjnej. Domyślnie funkcja dzieli zbiór danych w układzie 50/50, natomiast w tym przykładzie 80% obserwacji umieścimy w zbiorze treningowym. 
+
+```{r}
+set.seed(123)
+split <- createDataPartition(y = credit$risk, p = 0.8)
+
+train_credit <- credit[split$Resample1,]
+valid_credit <- credit[-split$Resample1,]
+
+summary(train_credit)
+summary(valid_credit)
+```
+
+Wykorzystując tak przygotowane dane możemy jeszcze raz wykorzystać drzewa decyzyjne do stworzenia klasyfikatora, ale tym razem wyłącznie na zbiorze treningowym.
+
+```{r}
+m2 <- rpart(risk ~ ., train_credit)
 
 rpart.plot(m2)
 ```
 
-```{r}
-pred_risk_train <- predict(m1, train_data, "class")
-pred_risk_test <- predict(m1, test_data, "class")
+Utworzone drzewo będzie różnić się od tego, które powstało na podstawie całego zbioru danych. Następnie obliczamy prognozowane klasy na obu zbiorach i wyznaczamy macierze pomyłek.
 
-caret::confusionMatrix(data = pred_risk_train, reference = train_data$risk, positive = "good", mode = "everything")
-caret::confusionMatrix(data = pred_risk_test, reference = test_data$risk, positive = "good", mode = "everything")
+```{r}
+pred_risk_m2_train <- predict(object = m2, newdata = train_credit, type = "class")
+pred_risk_m2_valid <- predict(object = m2, newdata = valid_credit, type = "class")
+
+# train
+confusionMatrix(data = pred_risk_m2_train, reference = train_credit$risk, 
+                positive = "good", mode = "everything")
+
+# valid
+confusionMatrix(data = pred_risk_m2_valid, reference = valid_credit$risk, 
+                positive = "good", mode = "everything")
 ```
+
+Generalnie wyniki w obu przypadkach powinny być do siebie zbliżone, przy czym na zbiorze walidacyjnym miary jakości predycji mogą być trochę gorsze. Bardzo wysoka wartość dokładność na zbiorze treningowym, a niska na zbiorze walidacyjnym jest symptomem przeuczenia modelu - algorytm nauczył się odpowiedzi "na pamięć".
+
+## Gradient Boosting Machine
+
+Spróbujemy polepszyć jakość klasyfikacji z wykorzystaniem metody gradient boostingu. W tym celu wykorzystamy pakiet [h2o](https://www.h2o.ai/), który dostarcza kompleksowych rozwiązań z zakresu machine learning. W pierwszej kolejności trzeba zmienić format danych na ten obsługowany przez pakiet.
 
 ```{r}
 library(h2o)
+
 h2o.init()
+h2o.no_progress() # brak pasków postępu
 
-test_data_h2o <- as.h2o(test_data)
-train_data_h2o <- as.h2o(train_data)
+train_credit_h2o <- as.h2o(train_credit)
+valid_credit_h2o <- as.h2o(valid_credit)
+```
 
+Następnie deklarujemy nazwy wykorzystywanych zmiennych i uruchamiamy procedurę:
+
+```{r}
 y_var <- "risk"
 x_var <- names(credit)[-10]
 
-m3 <- h2o.gbm(x = x_var, y = y_var, training_frame = train_data_h2o, validation_frame = test_data_h2o, seed = 1)
+m3 <- h2o.gbm(x = x_var, 
+              y = y_var, 
+              training_frame = train_credit_h2o, 
+              validation_frame = valid_credit_h2o, 
+              seed = 1)
 
 m3
 ```
 
-```{r}
-pred_risk_test_m3 <- as.data.frame(h2o.predict(m3, test_data_h2o))
+Z funkcji pakietu h2o dostajemy pokaźny wydruk podsumowania klasyfikacji wraz z macierzami pomyłek. Pakiet h2o optymalizuje jakość predycji maksymalizująć miarę F1 - średnią harmoniczną czułości i swoistości. Zatem w tym przypadku podział na klasy wg prawdopodobieństwa nie odbywa się już na podstawie wartości 0,5.
 
-caret::confusionMatrix(pred_risk_test_m3$predict, test_data$risk, positive = "good", mode = "everything")
+Stworzymy macierz pomyłek dla zbioru walidacyjnego w tym samym formacie, co wcześniej:
+
+```{r}
+pred_risk_m3_valid <- as.data.frame(h2o.predict(object = m3, newdata = valid_credit_h2o))
+
+confusionMatrix(data = pred_risk_m3_valid$predict, reference = valid_credit$risk, 
+                positive = "good", mode = "everything")
 ```
+
+Możemy zauważyć nieznaczną poprawę dokładności predykcji w porównaniu do drzewa decyzyjnego - z 73,5% do 75%. Natomiast ten algorytm został uruchomiony z domyślnymi parametrami i być może wybór innych wartości mógłby poprawić jakość predykcji. Poszukiwania najlepszych wartości do algorytmu nosi nazwę tuningu hiperparametrów. Z racji tego, że przeszukiwana przestrzeń parametrów mogłaby być bardzo duża to z reguły przeprowadza się to w sposób losowy. Poniżej lista możliwych do zastosowania parametrów w metodzie GBM.
 
 ```{r}
 gbm_params <- list(learn_rate = seq(0.01, 0.1, 0.01),
-                    max_depth = seq(2, 10, 1),
-                    sample_rate = seq(0.5, 1.0, 0.1),
-                    col_sample_rate = seq(0.1, 1.0, 0.1),
-                    ntrees = seq(50,150,10))
+                   max_depth = seq(2, 10, 1),
+                   sample_rate = seq(0.5, 1.0, 0.1),
+                   col_sample_rate = seq(0.1, 1.0, 0.1),
+                   ntrees = seq(50,150,10))
 
 search_criteria <- list(strategy = "RandomDiscrete", max_models = 36, seed = 1)
+```
 
+Wszystkich kombinacji parametrów jest 59400 i weryfikacja ich wszystkich zajęła by sporo czasu, zatem w sposób losowy szukamy najlepszych 36 modeli. Z tego zestawu wybieramy najlepszy według kryterium jakim jest miara AUC.
+
+```{r}
 gbm_grid <- h2o.grid(algorithm = "gbm", 
-                      x = x_var, 
-                      y = y_var,
-                      grid_id = "gbm_grid1",
-                      training_frame = train_data_h2o,
-                      validation_frame = test_data_h2o,
-                      seed = 1,
-                      hyper_params = gbm_params,
-                      search_criteria = search_criteria)
+                     x = x_var, 
+                     y = y_var,
+                     grid_id = "gbm_grid1",
+                     training_frame = train_credit_h2o,
+                     validation_frame = valid_credit_h2o,
+                     seed = 1,
+                     hyper_params = gbm_params,
+                     search_criteria = search_criteria)
 
-gbm_gridperf <- h2o.getGrid(grid_id = "gbm_grid",
+gbm_gridperf <- h2o.getGrid(grid_id = "gbm_grid1",
                             sort_by = "auc",
                             decreasing = TRUE)
 
@@ -107,78 +184,70 @@ m4 <- h2o.getModel(gbm_gridperf@model_ids[[1]])
 m4
 ```
 
-```{r}
-pred_risk_test_m4 <- as.data.frame(h2o.predict(m4, test_data_h2o))
+Standardowo utworzymy macierz pomyłek i obliczymy pozostałe miary:
 
-caret::confusionMatrix(pred_risk_test_m4$predict, test_data$risk, positive = "good", mode = "everything")
+```{r}
+pred_risk_m4_valid <- as.data.frame(h2o.predict(object = m4, newdata = valid_credit_h2o))
+
+confusionMatrix(data = pred_risk_m4_valid$predict, reference = valid_credit$risk, 
+                positive = "good", mode = "everything")
 ```
+
+Finalny model charakteryzuje się dokładnością na poziomie 76,5%, zatem udało się poprawić jego jakość w porównaniu do drzewa decyzyjnego oraz wersji GBM z domyślnymi parametrami. 
+
+Innym sposobem oceny jakości modelu jest symulacja wyniku biznesowego na podstawie kosztów dla każdej komórki macierzy pomyłek. W naszym przypadku przyjmiemy bardzo uproszczone miary: średnia kwota kredytu: 3500, marża na spłaconym kredycie: 20%, strata na niespłaconym kredycie: 50%.
+
+```{r}
+# m2
+42*-(3500*0.5)+129*(3500*0.2)
+# m3
+50*-(3500*0.5)+140*(3500*0.2)
+# m4
+43*-(3500*0.5)+136*(3500*0.2)
+```
+
+Największą korzyść uzyskamy korzystając z modelu `m4`. 
+
+Jakość predykcji możemy także spróbować poprawić manewrując progiem prawdopodobieństwa klasyfikacji. Narzędziem, które może w tym pomóc jest krzywa ROC, która przestawia wartości czułości i swoistości dla różnych progów.
 
 ```{r}
 plot(h2o.performance(m4, valid = T), type = "roc")
 ```
 
+Przekątna przedstawia klasyfikator losowy, natomiast punkty leżące powyżej to klasyfikatory lepsze od losowego. Klasyfikator idealny byłby krzywą o następującym przebiegu (0,0) -> (0,1) -> (1,1). Pole pod krzywą ROC jest także miarą jakości klasyfikacji - AUC, której wysokie wartości są pożądane.
+
+Zastosowany przez nas model GBM jest pewną czarną skrzynką, zatem nie wiadomo dokładnie na podstawie jakich reguł ta klasyfikacja przebiega, ale możemy wykorzystać pewne miary tzw. Explainable AI w celu opisu modelu.
+
+Pierwszą z nich jest ważność cech, która określa jak bardzo model wykorzystuje daną cechę do predycji.
+
 ```{r}
 h2o.varimp(m4)
+h2o.varimp_plot(m4)
 ```
+
+Na tej podstawie możemy stwierdzić, że najważniejszą cechą mającą wpływ na klasyfikację jest checking_account. Na kolejnych miejscach jest installment oraz credit_amount. Najmniej ważna jest zmienna housing.
+
+Innym metodem opisu działania modelu jest partial dependency plot, przedstawiający zależność prawdopodobieństwa klasyfikacji od wartości danej cechy niezależnej.
 
 ```{r}
-h2o.partialPlot(m4, data = train_data_h2o, cols = c("credit_amount"))
+h2o.partialPlot(object = m4, data = valid_credit_h2o, cols = c("checking_account","credit_amount"))
 ```
 
-```{r eval=FALSE, include=FALSE}
-library(tidyverse)
-library(caTools)
-library(rpart)
-library(rpart.plot)
-library(caret)
+W tym przypadku możemy zaobserwować, że im klient bogatszy tym większa szansa na klasyfikację do grupy wiarygodnych kredytobiorców. Z kolei wraz ze wzrostem wysokości kredytu to prawdopodobieństwo maleje.
 
-homes <- read.csv("data/part_1_data.csv")
+### Zadania
 
-podzial <- sample.split(Y = homes$in_sf, SplitRatio = 0.75)
+1. Sprawdź jak model będzie się sprawdzał na danych, w których braki danych są traktowane jako osobna kategoria:
 
-train <- homes[podzial,]
-test <- homes[!podzial,]
-
-drzewo <- rpart(in_sf ~ ., data = train, method = "class")
-
-rpart.plot(drzewo)
-
-printcp(drzewo)
-
-in_sf_test <- predict(drzewo, newdata = test, 
-                      type = "class")
-in_sf_test
-
-cm <- table(test$in_sf, in_sf_test)
-cm
-
-confusionMatrix(cm)
-
-# zbiór uczący
-
-in_sf_train <- predict(drzewo, newdata = train, 
-                       type = "class")
-
-table(train$in_sf, in_sf_train)
-
-# obcięcie
-
-optimum <- drzewo$cptable[which.min(drzewo$cptable[,"xerror"]),"CP"]
-optimum
-
-drzewo_opt <- prune(drzewo, cp = optimum)
-
-rpart.plot(drzewo_opt)
-
-in_sf_train <- predict(drzewo_opt, newdata = train, 
-                       type = "class")
-
-table(train$in_sf, in_sf_train)
-
-in_sf_test <- predict(drzewo_opt, newdata = test, 
-                      type = "class")
-
-table(test$in_sf, in_sf_test)
-
+```{r, eval = FALSE}
+credit_wna <- credit %>% mutate_at(c("saving_accounts", "checking_account"), fct_explicit_na)
 ```
 
+2. Na podstawie charakterystyki [mieszkań](http://www.wawrowski.edu.pl/data/sf_ny_homes.csv) przeprowadź klasyfikację ich umiejscowienia - San Francisco vs. New York.
+
+```{r, eval = FALSE}
+homes <- read_csv("http://www.wawrowski.edu.pl/data/sf_ny_homes.csv")
+
+homes <- homes %>% 
+  mutate(in_sf=as.factor(in_sf))
+```
