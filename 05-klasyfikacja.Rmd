@@ -168,14 +168,14 @@ Wszystkich kombinacji parametrów jest 59400 i weryfikacja ich wszystkich zaję�
 gbm_grid <- h2o.grid(algorithm = "gbm", 
                      x = x_var, 
                      y = y_var,
-                     grid_id = "gbm_grid1",
+                     grid_id = "gbm_grid",
                      training_frame = train_credit_h2o,
                      validation_frame = valid_credit_h2o,
                      seed = 1,
                      hyper_params = gbm_params,
                      search_criteria = search_criteria)
 
-gbm_gridperf <- h2o.getGrid(grid_id = "gbm_grid1",
+gbm_gridperf <- h2o.getGrid(grid_id = "gbm_grid",
                             sort_by = "auc",
                             decreasing = TRUE)
 
