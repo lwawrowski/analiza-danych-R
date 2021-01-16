@@ -73,7 +73,7 @@ class: inverse
 
 Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
 
-`r countdown(minutes = 10, seconds = 0, top = 0)`
+`r countdown(minutes = 5, seconds = 0, top = 0)`
 
 ---
 
@@ -85,6 +85,112 @@ ggplot(salary, aes(x = YearsExperience, y = Salary)) +
   geom_point() +
   geom_smooth(method = "lm")
 
+```
+
+---
+
+# Regresja prosta
+
+Weźmy pod uwagę prosty przykład dochodów i wydatków:
+
+```{r echo=FALSE}
+d <- data.frame(wydatki=c(2300,1800,2400,2300,2800,2000,2100),
+                dochody=c(2600,2400,2900,2800,3000,2500,2700))
+
+d %>% knitr::kable()
+```
+
+---
+
+# Regresja prosta
+
+Wykres rozrzutu
+
+```{r echo=FALSE}
+ggplot(d, aes(x = dochody, y = wydatki)) + 
+  geom_point(size = 2) +
+  xlab("dochody (X)") + 
+  ylab("wydatki (Y)") +
+  xlim(2400,3000) +
+  ylim(1600,3100) +
+  theme_light()
+```
+
+---
+
+# Regresja prosta
+
+Spróbujmy teraz dopasować kilka prostych - mogą one przebiegać na wiele różnych sposobów.
+
+```{r echo=FALSE}
+ggplot(d, aes(x = dochody, y = wydatki)) + 
+  geom_point(size = 2) +
+  geom_hline(yintercept = 2243, color = "blue", alpha = 0.8, size = 1.1) +
+  geom_abline(slope = 1.9, intercept = -2780, color = "green", alpha = 0.8, size = 1.1) +
+  geom_abline(slope = 1.357, intercept = -1421.429, color = "red", alpha = 0.8, size = 1.1) +
+  xlab("dochody (X)") + 
+  ylab("wydatki (Y)") +
+  xlim(2400,3000) +
+  ylim(1600,3100) +
+  theme_light()
+```
+
+---
+
+# Regresja prosta
+
+W następnym kroku obliczamy różnice pomiędzy istniejącymi punktami, a odpowiadającym im wartościom na prostej: 
+
+```{r echo=FALSE}
+d <- d %>% 
+  mutate(niebieska_y=dochody-2243,
+         zielona_y=1.9*dochody-2780,
+         czerwona_y=1.357*dochody-1421.429) %>% 
+  mutate(niebieska=(wydatki-niebieska_y)^2,
+         zielona=(wydatki-zielona_y)^2,
+         czerwona=(wydatki-czerwona_y)^2)
+
+line1 <- data.frame(x = c(d$dochody[1], d$dochody[1]), y=c(d$wydatki[1], d$czerwona_y[1]))
+line2 <- data.frame(x = c(d$dochody[2], d$dochody[2]), y=c(d$wydatki[2], d$czerwona_y[2]))
+line3 <- data.frame(x = c(d$dochody[3], d$dochody[3]), y=c(d$wydatki[3], d$czerwona_y[3]))
+line4 <- data.frame(x = c(d$dochody[4], d$dochody[4]), y=c(d$wydatki[4], d$czerwona_y[4]))
+line5 <- data.frame(x = c(d$dochody[5], d$dochody[5]), y=c(d$wydatki[5], d$czerwona_y[5]))
+line6 <- data.frame(x = c(d$dochody[6], d$dochody[6]), y=c(d$wydatki[6], d$czerwona_y[6]))
+line7 <- data.frame(x = c(d$dochody[7], d$dochody[7]), y=c(d$wydatki[7], d$czerwona_y[7]))
+
+ggplot(d, aes(x = dochody, y = wydatki)) + 
+  geom_point(size = 2) +
+  geom_hline(yintercept = 2243, color = "blue", alpha = 0.8, size = 1.1) +
+  geom_abline(slope = 1.9, intercept = -2780, color = "green", alpha = 0.8, size = 1.1) +
+  geom_abline(slope = 1.357, intercept = -1421.429, color = "red", alpha = 0.8, size = 1.1) +
+  geom_line(data = line1, aes(x=x, y=y), color = "grey60", size = 1.2) +
+  geom_line(data = line2, aes(x=x, y=y), color = "grey60", size = 1.2) +
+  geom_line(data = line3, aes(x=x, y=y), color = "grey60", size = 1.2) +
+  geom_line(data = line4, aes(x=x, y=y), color = "grey60", size = 1.2) +
+  geom_line(data = line5, aes(x=x, y=y), color = "grey60", size = 1.2) +
+  geom_line(data = line6, aes(x=x, y=y), color = "grey60", size = 1.2) +
+  geom_line(data = line7, aes(x=x, y=y), color = "grey60", size = 1.2) +
+  xlab("dochody (X)") + 
+  ylab("wydatki (Y)") +
+  xlim(2400,3000) +
+  ylim(1600,3100) +
+  theme_light()
+```
+
+---
+
+# Regresja prosta
+
+Oznaczając $y_i$ jako rzeczywista wartość wydatków i $\hat{y_i}$ jako wartość leżącą na prostej zależy nam na minimalizowaniu wyrażenia $\sum\limits_{i=1}^{n}{(y_{i}-\hat{y}_{i})^2} \rightarrow min$. Różnica $y_{i}-\hat{y}_{i}$ jest nazywana resztą (ang. residual). Wyznaczając te wartości dla analizowanych przez nas prostych otrzymamy następujące wyniki:
+
+```{r echo=FALSE}
+d %>% 
+  select(6:8) %>% 
+  pivot_longer(1:3) %>% 
+  group_by(name) %>% 
+  summarise(suma_kwadratow_reszt=round(sum(value))) %>% 
+  arrange(suma_kwadratow_reszt) %>% 
+  knitr::kable()
 ```
 
 ---
@@ -154,7 +260,7 @@ $$R^2=1-\frac{\sum\limits_{i=1}^{n}{(y_{i}-\hat{y}_{i})^2}}{\sum\limits_{i=1}^{n
 
 # Test Walda
 
-- sprawdzenie istoności parametrów $b$
+- sprawdzenie istotności parametrów $b$
 
 - sprawdzenie istotności całego wektora parametrów $b$
 
@@ -178,7 +284,7 @@ class: inverse
 
 Stwórz model regresji prostej objaśniający zależność sprzedaży od liczby klientów na podstawie [sklepu Rossmann](http://www.wawrowski.edu.pl/data/sklep77.xlsx). Jaka jest prognozowana sprzedaż dla 300, 700 i 1050 klientów?
 
-`r countdown(minutes = 15, seconds = 0, top = 0)`
+`r countdown(minutes = 10, seconds = 0, top = 0)`
 
 ---
 
@@ -220,9 +326,9 @@ class: inverse
 
 # Zadanie
 
-Na bazie zbioru pracownicy stwórz nowy zbiór danych, który nie będzie zawierał niepotrzebnych zmienne oraz braków danych.
+Na bazie zbioru pracownicy stwórz nowy zbiór danych, który nie będzie zawierał niepotrzebnych zmiennych oraz braków danych.
 
-`r countdown(minutes = 10, seconds = 0, top = 0)`
+`r countdown(minutes = 5, seconds = 0, top = 0)`
 
 ---
 
@@ -320,29 +426,11 @@ class: inverse
 
 # Zadanie
 
-Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/data/startups.xlsx) określ jakie czynniki wpływają na przychód startupów.
+Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/data/startups.xlsx) określ jakie czynniki wpływają na przychód startupów. 
 
-`r countdown(minutes = 15, seconds = 0, top = 0)`
+Przyda się pakiet _janitor_ i funkcja `clean_names()` do uporządkowania nazw kolumn.
 
----
-
-# Pakiet _janitor_ 
-
-Surowe dane zwykle nie posiadają nazw kolumn przystosowanych do przetwarzania przez komputer
-
-- nazwy zmiennych nie powinny zawierać polskich liter i spacji
-
-- nazwy zmiennych nie powinny zaczynać się od liczby
-
-Te problemy rozwiązuje pakiet _janitor_ (dozorca, woźny) i funkcja `clean_names()`:
-
-```r
-
-zbior <- janitor::clean_names(zbior)
-
-```
-
-- funkcja ta zamienia wielkie litery na małe, spacje na podkreślniki i znaki transliteruje do ASCII.
+`r countdown(minutes = 10, seconds = 0, top = 0)`
 
 ---
 
