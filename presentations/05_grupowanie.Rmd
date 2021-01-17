@@ -151,15 +151,21 @@ Segementacja [klientów sklepu](http://www.wawrowski.edu.pl/data/klienci.csv) w 
 
 ---
 
+# Zbiór palmerpenguins
+
+[Zbiór danych na temat pingwinów](https://github.com/allisonhorst/palmerpenguins)
+
+<img src="img/lter_penguins.png" width="600px">
+
+---
+
 class: inverse
 
 # Zadanie
 
-1. Dokonaj grupowania danych dotyczących [32 samochodów](http://www.wawrowski.edu.pl/data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
+Dokonaj grupowania danych dotyczących [32 samochodów](http://www.wawrowski.edu.pl/data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
 
-2. Przeprowadź grupowanie [powiatów na podstawie wybranych wskaźników z 2018 roku](http://www.wawrowski.edu.pl/data/daneGUS.RData).
-
-`r countdown(minutes = 15, seconds = 0, top = 0)`
+`r countdown(minutes = 10, seconds = 0, top = 0)`
 
 ---
 
@@ -190,6 +196,32 @@ class: inverse
 Do danych z poprzedniego zadania zastosuj metodę hierarchiczną.
 
 `r countdown(minutes = 10, seconds = 0, top = 0)`
+
+---
+
+# Redukcja wymiarów
+
+- [PCA](https://miroslawmamczur.pl/na-czym-polega-analiza-skladowych-glownych-pca/)
+
+- [t-SNE](https://miroslawmamczur.pl/jak-dziala-metoda-redukcji-wymiarow-t-sne/)
+
+- [UMAP](https://cran.r-project.org/web/packages/umap/vignettes/umap.html)
+
+Wiele narzędzi do wizualizacji wyników można znaleźć w pakiecie [factoextra](https://github.com/kassambara/factoextra).
+
+---
+
+# Inne algorytmy grupowania
+
+- DBSCAN
+
+- BIRCH
+
+- MeanShift
+
+- GMM
+
+[Skuteczność algorytmów](https://towardsdatascience.com/the-5-clustering-algorithms-data-scientists-need-to-know-a36d136ef68)
 
 ---
 
