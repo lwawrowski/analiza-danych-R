@@ -4,6 +4,7 @@
     <title>Metody przetwarzania i analizy danych</title>
     <meta charset="utf-8" />
     <meta name="author" content="© Łukasz Wawrowski" />
+    <script src="libs/header-attrs-2.5/header-attrs.js"></script>
     <link href="libs/countdown-0.3.5/countdown.css" rel="stylesheet" />
     <script src="libs/countdown-0.3.5/countdown.js"></script>
     <link rel="stylesheet" href="default.css" type="text/css" />
@@ -52,6 +53,10 @@ Uczenie nienadzorowane - końcowy wynik nie jest znany
 
 - wieloetykietowa (multilabel) - gatunek filmu
 
+[A visual introduction to machine learning](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/)
+
+[Model Tuning and the Bias-Variance Tradeoff](http://www.r2d3.us/visual-intro-to-machine-learning-part-2/)
+
 ---
 
 # Przykład
@@ -71,16 +76,31 @@ Uczenie nienadzorowane - końcowy wynik nie jest znany
 
 ---
 
+# Podział danych
+
+- dane uczące (treningowe) - zbiór przykładów używanych do dopasowania parametrów algorytmu
+
+- dane testowe - niezależny od danych uczących zbiór przykładów o takim samym rozkładzie jak dane uczące
+
+- dane walidacyjne - zbiór przykładów używanych do dopasowania hiperparametrów 
+
+Często nazewnictwo danych testowych i walidacyjnych jest mylone.
+
+[Wikipedia](https://en.wikipedia.org/wiki/Training%2C_validation%2C_and_test_sets)
+
+Pakiet [rsample](https://cran.r-project.org/web/packages/rsample/index.html) zawiera funkcje do podziału zbiorów.
+
+---
+
 class: inverse
 
 # Zadanie
 
 W klasyfikacji bardzo ważne jest odpowiednie przygotowanie zbioru danych oraz dobór predyktorów. Może w tym pomóc pakiet [vtreat](https://cran.r-project.org/web/packages/vtreat/index.html) dokładnie omówiony w tym [webinarze](https://www.youtube.com/watch?v=sniHkkrAsOc). 
 
-
 Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawierała wysokość raty.
 
-<div class="countdown" id="timer_5ed665bc" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60143f31" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -88,9 +108,9 @@ Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawiera�
 
 # Główne problemy
 
-- braki danych - niektóre algorytmy klasyfikacji nie obsługują braków danych. Usunięcie tych obserwacji spowodowałoby znaczne zmniejszenie próby badawczej, zatem stosuje się metody mające na celu uzupełnienie braków danych. W najprostszym przypadku braki można zastąpić średnią lub dominantą. Do bardziej zaawansowanych należy metoda najbliższych sąsiadów ([VIM](https://cran.r-project.org/web/packages/VIM/index.html)) albo imputacja wielokrotna ([mice](https://cran.r-project.org/web/packages/mice/index.html)).
+- dane niezbalansowane - w idealnym przypadku klasyfikacji, przypadków z każdej grupy powinno być tyle samo. W przeciwnym przypadku model będzie działał lepiej dla klasy większościowej. Najprostszą metodą balansowania danych jest upsampling czyli dolosowywanie obserwacji z klasy mniejszościowej, tak aby wyrównać liczebności (lub w drugę stronę - downsampling). Alternatywnie można zastosować metodę SMOTE, która generuje sztuczne obserwacje dla klasy mniejszościowej (pakiety [DMwR](https://cran.r-project.org/web/packages/DMwR/index.html), [imbalance](https://cran.r-project.org/web/packages/imbalance/index.html)). 
 
-- dane niezbalansowane - w idealnym przypadku klasyfikacji, przypadków z każdej grupy powinno być tyle samo. W przeciwnym przypadku model będzie działał lepiej dla klasy większościowej. Najprostszą metodą balansowania danych jest upsampling czyli dolosowywanie obserwacji z klasy mniejszościowej, tak aby wyrównać liczebności. Alternatywnie można zastosować metodę SMOTE, która generuje sztuczne obserwacje dla klasy mniejszościowej (pakiety [DMwR](https://cran.r-project.org/web/packages/DMwR/index.html), [imbalance](https://cran.r-project.org/web/packages/imbalance/index.html)). 
+- braki danych - niektóre algorytmy klasyfikacji nie obsługują braków danych. Usunięcie tych obserwacji spowodowałoby znaczne zmniejszenie próby badawczej, zatem stosuje się metody mające na celu uzupełnienie braków danych. W najprostszym przypadku braki można zastąpić średnią lub dominantą. Do bardziej zaawansowanych należy metoda najbliższych sąsiadów ([VIM](https://cran.r-project.org/web/packages/VIM/index.html)) albo imputacja wielokrotna ([mice](https://cran.r-project.org/web/packages/mice/index.html)).
 
 ---
 
@@ -98,17 +118,29 @@ Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawiera�
 
 - regresja logistyczna: wymaga spełnienia założeń
 
-- drzewa decyzyjne: łatwo można przeuczyć
+- drzewa decyzyjne: łatwa interpretacja
 
 - metody nieparametryczne: mało efektywne dla dużych zbiorów
 
-- metody gradientowe: czarna skrzynka
+- metody gradientowe: SVM, sieci neuronowe, gradient
+
+---
+
+# Złożoność modelu
+
+![](img/model_comp.jpg)
+
+---
+
+# Złożoność modelu
+
+![](img/model_comp2.png)
 
 ---
 
 # Frameworki do ML
 
-Istnieje wiele pakietów implementujących różne algorytmy ML: 97 w [Machine Learning Task View](https://cran.r-project.org/web/views/MachineLearning.html) (stan na 29.05.2020). Można korzystać z nich pojedyńczo, ale nie są w żadnej sposób wystandaryzowane: różne nazwy argumentów i struktury obiektów wynikowych. 
+Istnieje wiele pakietów implementujących różne algorytmy ML: 97 w [Machine Learning Task View](https://cran.r-project.org/web/views/MachineLearning.html) (stan na 29.05.2020). Można korzystać z nich pojedynczo, ale nie są w żadnej sposób wystandaryzowane: różne nazwy argumentów i struktury obiektów wynikowych. 
 
 Pakiety mające na celu integrację różnych algorytmów:
 
@@ -204,17 +236,41 @@ Wyniki klasyfikacji można oceniać za pomocą wielu miar:
 
 ---
 
-# Podział zbiorów
+# SVM - maszyna wektorów nośnych
 
-Tworzenie modelu na całym zbiorze danych nie pozwala ocenić jego jakości w odniesieniu do nowych przypadków. W celu faktycznej oceny dokonuje się podziału zbioru danych na przynajmniej dwa rozłączne zbiory:
+![](img/svm1.png)
 
-- zbiór treningowy (train)
+---
 
-- zbiór walidacyjny (valid)
+# SVM - maszyna wektorów nośnych
 
-- zbiór testowy (test) - opcjonalnie
+![](img/svm2.png)
 
-Bardzo wysoka wartość dokładność na zbiorze treningowym, a niska na zbiorze walidacyjnym jest symptomem przeuczenia modelu - algorytm nauczył się odpowiedzi "na pamięć".
+---
+
+# Lasy losowe
+
+1.  Weź zbiór danych
+2.  Wybierz `\(n\)` drzew do zbudowania 
+3.  Dla wartości od `\(i = 1\)` do `\(n\)`:
+4.  |  Wylosuj próbę bootstrapową
+5.  |  Stwórz drzewo na podstawie wylosowanych danych
+6.  |  Dla każdego podziału
+7.  |  | Wylosuj `\(m\)` zmiennych ze wszystkich `\(p\)` zmiennych
+8.  |  | Wybierz najlepszą zmienną do podziału
+9.  |  | Stwórz podział
+10. | Zakończ proces budowy drzewa kiedy kryterium jest optymalne
+11. Zwróć zbiór wynikowych drzew
+
+[Źródło](https://bradleyboehmke.github.io/HOML/random-forest.html)
+
+Pakiet [ranger](https://cran.r-project.org/web/packages/ranger/index.html) zawiera szybką implementację lasów losowych.
+
+---
+
+# Boosting gradientowy
+
+![](img/gb.png)
 
 ---
 
@@ -306,7 +362,7 @@ Krzywa ROC to jeden ze sposobów wizualizacji jakości klasyfikacji, pokazujący
 
 3. dla każdego progu obliczamy macierz pomyłek
 
-Pole pod krzywą ROC - AUC (Area under curve) jest jedną z miar jakości klasyfikacji.
+Pole pod krzywą ROC - AUC (Area under curve) jest jedną z miar jakości klasyfikacji. AUC = 1 (klasyfikator idealny), AUC = 0.5 (klasyfikator losowy), AUC &lt; 0.5 (klasyfikator gorszy od losowego).
 
 [Źródło](https://algolytics.pl/tutorial-jak-ocenic-jakosc-i-poprawnosc-modeli-klasyfikacyjnych-czesc-4-krzywa-roc/)
 
@@ -317,6 +373,10 @@ Pole pod krzywą ROC - AUC (Area under curve) jest jedną z miar jakości klasyf
 - Ważność cech - jak bardzo model wykorzystuje daną cechę do predycji.
 
 - Partial dependency plots - jak zmienia się prawdopodobieństwo klasyfikacji w zależności od predyktora.
+
+[Explanatory Model Analysis](https://pbiecek.github.io/ema/)
+
+[Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/)
 
 ---
 
@@ -330,7 +390,7 @@ Sprawdź jak model będzie się sprawdzał na danych, w których braki danych s�
 credit_wna &lt;- credit %&gt;% mutate_at(c("saving_accounts", "checking_account"), fct_explicit_na)
 ```
 
-<div class="countdown" id="timer_5ed6668c" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60143f7a" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -349,6 +409,18 @@ homes &lt;- read_csv("http://www.wawrowski.edu.pl/data/sf_ny_homes.csv")
 homes &lt;- homes %&gt;% 
   mutate(in_sf=as.factor(in_sf))
 ```
+
+---
+
+![](img/machine_learning.png)
+
+https://xkcd.com/1838/
+
+---
+
+![](img/twitter.png)
+
+https://twitter.com/computerfact/status/974364686685794304
 
 ---
 
