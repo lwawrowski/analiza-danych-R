@@ -76,6 +76,20 @@ Uczenie nienadzorowane - końcowy wynik nie jest znany
 
 ---
 
+class: inverse
+
+# Zadanie
+
+W klasyfikacji bardzo ważne jest odpowiednie przygotowanie zbioru danych oraz dobór predyktorów. Może w tym pomóc pakiet [vtreat](https://cran.r-project.org/web/packages/vtreat/index.html) dokładnie omówiony w tym [webinarze](https://www.youtube.com/watch?v=sniHkkrAsOc). 
+
+Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawierała wysokość raty.
+
+<div class="countdown" id="timer_60169125" style="top:0;right:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
 # Podział danych
 
 - dane uczące (treningowe) - zbiór przykładów używanych do dopasowania parametrów algorytmu
@@ -89,20 +103,6 @@ Często nazewnictwo danych testowych i walidacyjnych jest mylone.
 [Wikipedia](https://en.wikipedia.org/wiki/Training%2C_validation%2C_and_test_sets)
 
 Pakiet [rsample](https://cran.r-project.org/web/packages/rsample/index.html) zawiera funkcje do podziału zbiorów.
-
----
-
-class: inverse
-
-# Zadanie
-
-W klasyfikacji bardzo ważne jest odpowiednie przygotowanie zbioru danych oraz dobór predyktorów. Może w tym pomóc pakiet [vtreat](https://cran.r-project.org/web/packages/vtreat/index.html) dokładnie omówiony w tym [webinarze](https://www.youtube.com/watch?v=sniHkkrAsOc). 
-
-Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawierała wysokość raty.
-
-<div class="countdown" id="timer_60143f31" style="top:0;right:0;" data-warnwhen="0">
-<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
-</div>
 
 ---
 
@@ -350,6 +350,8 @@ m4 &lt;- h2o.getModel(gbm_gridperf@model_ids[[1]])
 
 - strata na niespłaconym kredycie: 50%
 
+`$$\text{wynik}=\text{TP}\cdot(3500\cdot0,2)-\text{FP}\cdot(3500\cdot0,5)$$`
+
 ---
 
 # Krzywa ROC
@@ -390,7 +392,7 @@ Sprawdź jak model będzie się sprawdzał na danych, w których braki danych s�
 credit_wna &lt;- credit %&gt;% mutate_at(c("saving_accounts", "checking_account"), fct_explicit_na)
 ```
 
-<div class="countdown" id="timer_60143f7a" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_601692b1" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -421,6 +423,12 @@ https://xkcd.com/1838/
 ![](img/twitter.png)
 
 https://twitter.com/computerfact/status/974364686685794304
+
+---
+
+![](img/ml_statistics.jpeg)
+
+https://towardsdatascience.com/no-machine-learning-is-not-just-glorified-statistics-26d3952234e3
 
 ---
 
