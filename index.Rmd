@@ -25,7 +25,3 @@ Dodatkowa:
 - [Data Science Live Book](https://livebook.datascienceheroes.com/)
 
 **[Skrypty z zajęć](https://github.com/lwawrowski/cdv_bigdata)**
-
-```{r include=FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
-```
