@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Metody przetwarzania  i analizy danych</title>
     <meta charset="utf-8" />
     <meta name="author" content="© Łukasz Wawrowski" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="default.css" type="text/css" />
     <link rel="stylesheet" href="default-fonts.css" type="text/css" />
   </head>
@@ -46,19 +47,39 @@ Explanatory Data Analysis (EDA):
 
 - badanie bez zakładania hipotez badawczych
 
+- identyfikacja wartości nietypowych
+
 ---
 
 # Pakiety
 
 [The Landscape of R Packages for Automated Exploratory Data Analysis](https://journal.r-project.org/archive/2019/RJ-2019-033/index.html)
 
-[summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html) - najczęściej pobierany pakiet 
+[summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
 
 - `view(dfSummary(zbior))` - wyświetla podsumowanie zawierające kilka statystyk opisowych, częstości, histogram i braki danych
 
 - `freq(zbior$zmienna)` - wyświetla tabelę częstości
 
 - `descr(zbior)` - wyświetla zestaw 15 statystyk opisowych
+
+---
+
+# Pakiety
+
+[dlookr](https://github.com/choonghyunryu/dlookr/)
+
+- `diagnose(zbior)` - diagnostyka zbioru
+
+- `diagnose_numeric(zbior)` - więcej informacji dla cech numerycznych
+
+- `diagnose_category(zbior)` - więcej informacji dla cech jakościowych
+
+- `diagnose_outlier(zbior)` - analiza wartości nietypowych
+
+[dataReporter](https://github.com/ekstroem/dataReporter)
+
+- `makeDataReport(zbior, output = "html")` - raport dla zbioru
 
 ---
 
@@ -133,6 +154,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -150,17 +197,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

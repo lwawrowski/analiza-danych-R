@@ -45,19 +45,39 @@ Explanatory Data Analysis (EDA):
 
 - badanie bez zakładania hipotez badawczych
 
+- identyfikacja wartości nietypowych
+
 ---
 
 # Pakiety
 
 [The Landscape of R Packages for Automated Exploratory Data Analysis](https://journal.r-project.org/archive/2019/RJ-2019-033/index.html)
 
-[summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html) - najczęściej pobierany pakiet 
+[summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
 
 - `view(dfSummary(zbior))` - wyświetla podsumowanie zawierające kilka statystyk opisowych, częstości, histogram i braki danych
 
 - `freq(zbior$zmienna)` - wyświetla tabelę częstości
 
 - `descr(zbior)` - wyświetla zestaw 15 statystyk opisowych
+
+---
+
+# Pakiety
+
+[dlookr](https://github.com/choonghyunryu/dlookr/)
+
+- `diagnose(zbior)` - diagnostyka zbioru
+
+- `diagnose_numeric(zbior)` - więcej informacji dla cech numerycznych
+
+- `diagnose_category(zbior)` - więcej informacji dla cech jakościowych
+
+- `diagnose_outlier(zbior)` - analiza wartości nietypowych
+
+[dataReporter](https://github.com/ekstroem/dataReporter)
+
+- `makeDataReport(zbior, output = "html")` - raport dla zbioru
 
 ---
 
