@@ -284,7 +284,7 @@ class: inverse
 
 Sprawdź czy wynagrodzenie różni się w zależności od płci.
 
-`r countdown(minutes = 10, seconds = 0, top = 0)`
+`r countdown(minutes = 5, seconds = 0, top = 0)`
 
 ---
 
@@ -324,7 +324,7 @@ class: inverse
 
 Sprawdź czy wynagrodzenie różni się w zależności od kategorii pracownika.
 
-`r countdown(minutes = 10, seconds = 0, top = 0)`
+`r countdown(minutes = 5, seconds = 0, top = 0)`
 
 ---
 

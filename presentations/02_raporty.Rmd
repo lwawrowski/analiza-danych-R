@@ -80,7 +80,7 @@ Pliki źródłowe mają zawsze rozszerzenie .Rmd.
 
   - prezentacje (pakiet [xaringan](https://bookdown.org/yihui/rmarkdown/xaringan.html))
   
-  - strony internetowe (pakiet [prettydoc](https://prettydoc.statr.me/))
+  - strony internetowe (pakiety [prettydoc](https://prettydoc.statr.me/), [distill](https://rstudio.github.io/distill/))
   
   - artykuły naukowe (pakiet [papaja](https://crsh.github.io/papaja_man/))
 
@@ -353,7 +353,7 @@ class: inverse
 
 3. Umieść w raporcie tabelę zawierającą średnie wynagrodzenia (początkowe i bieżące) w grupach kategorii pracownika.
 
-`r countdown(minutes = 20, seconds = 0, top = 0)`
+`r countdown(minutes = 10, seconds = 0, top = 0)`
 
 ---
 
