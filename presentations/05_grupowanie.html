@@ -4,7 +4,7 @@
     <title>Metody przetwarzania i analizy danych</title>
     <meta charset="utf-8" />
     <meta name="author" content="© Łukasz Wawrowski" />
-    <script src="libs/header-attrs-2.5/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
     <link href="libs/countdown-0.3.5/countdown.css" rel="stylesheet" />
     <script src="libs/countdown-0.3.5/countdown.js"></script>
     <link rel="stylesheet" href="default.css" type="text/css" />
@@ -15,7 +15,7 @@
 class: center, middle, inverse, title-slide
 
 # Metody przetwarzania<br>i analizy danych
-## Grupowanie
+## Grupowanie i braki danych
 ### © Łukasz Wawrowski
 
 ---
@@ -130,21 +130,13 @@ Segementacja [klientów sklepu](http://www.wawrowski.edu.pl/data/klienci.csv) w 
 
 ---
 
-# Zbiór palmerpenguins
-
-[Zbiór danych na temat pingwinów](https://github.com/allisonhorst/palmerpenguins)
-
-&lt;img src="img/lter_penguins.png" width="600px"&gt;
-
----
-
 class: inverse
 
 # Zadanie
 
 Dokonaj grupowania danych dotyczących [32 samochodów](http://www.wawrowski.edu.pl/data/auta.csv) według następujących zmiennych: pojemność, przebieg, lata oraz cena.
 
-<div class="countdown" id="timer_6003cf9b" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_629a7230" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -176,21 +168,144 @@ class: inverse
 
 Do danych z poprzedniego zadania zastosuj metodę hierarchiczną.
 
-<div class="countdown" id="timer_6003cce8" style="top:0;right:0;" data-warnwhen="0">
+<div class="countdown" id="timer_629a7089" style="top:0;right:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
 ---
 
-# Redukcja wymiarów
+# Zbiór palmerpenguins
 
-- [PCA](https://miroslawmamczur.pl/na-czym-polega-analiza-skladowych-glownych-pca/)
+[Zbiór danych na temat pingwinów](https://github.com/allisonhorst/palmerpenguins)
 
-- [t-SNE](https://miroslawmamczur.pl/jak-dziala-metoda-redukcji-wymiarow-t-sne/)
+&lt;img src="img/lter_penguins.png" width="600px"&gt;
 
-- [UMAP](https://cran.r-project.org/web/packages/umap/vignettes/umap.html)
+---
 
-Wiele narzędzi do wizualizacji wyników można znaleźć w pakiecie [factoextra](https://github.com/kassambara/factoextra).
+# Braki danych
+
+- usunięcie obserwacji z brakami danych
+
+- imputacja statystyczna:
+
+   - metody deterministyczne - zawsze te same wartości imputacyjne:
+      
+      - zastępowanie wartością przeciętną, imputacja regresyjna,
+      - nie wprowadzają dodatkowego źródła błędu losowego,
+      - zniekształcają rozkłady zmiennych
+   
+   - metody stochastyczne - można uzyskać różne wartości imputacyjne:
+   
+      - metoda hot-deck, stochastyczna imputacja regresyjna,
+      - generują dodatkowy błąd,
+      - lepiej zachowują rozkłady zmiennych
+      
+---
+      
+# Pakiet VIM
+
+[Visualization and Imputation of Missing Values](https://cran.r-project.org/web/packages/VIM/index.html)
+
+[Alexander Kowarik, Matthias Templ (2016). Imputation with the R Package VIM. Journal of Statistical Software, 74(7), 1-16.](https://www.jstatsoft.org/article/view/v074i07/v74i07.pdf)
+
+- implementuje najpopularniejsze metody do zastępowania braków danych,
+
+- funkcje z pakietu zwracają zbiór danych z uzupełnionymi wartościami i flagą dla imputowanych obserwacji
+
+---
+
+# Metoda hot-deck
+
+Dla każdego braku danych poszukiwany jest _dawca_ - obserwacja podobna pod kątem cech skorelowanych ze zmienną (pomocniczych), która zawiera brak danych. 
+
+Warianty:
+
+- losowa - stworzenie grup imputacyjnych na podstawie cech pomocniczcych. Dawca wybierany jest losowo z odpowiedniej grupy.
+
+- sekwencyjna - uporządkowanie danych na podstawie cech pomocniczcych. Dawca wybierany jest jako pierwsza obserwacja o takich samych cechach pomocniczych.
+
+---
+
+# Metoda hot-deck
+
+Funkcja `hotdeck`
+
+
+```r
+hotdeck(data = zbior, variable = "cecha", 
+        ord_var = c("zmienna1", "zmienna2"), domain_var = "domena")
+```
+
+- `data` - zbiór danych wejściowych
+
+- `variable` - cecha/cechy do imputacji
+
+- `ord_var` - zmienne pomocnicze
+
+- `domain_var` - zmienne domenowe - w ramach, których ma być przeprowadzona imputacja
+
+---
+
+# Metoda najbliższych sąsiadów
+
+Poszukiwanie obserwacji dawcy na podstawie wybranych zmiennych oraz kryterium minimalnej odległości dla wybranej liczby `\(k\)` sąsiadów.
+
+Obliczanie odległości opiera się na metryce Gowera (1971), która umożliwia obliczanie odległości dla cech jakościowych i ilościowych.
+
+Imputowana wartość dla cech ilościowych to mediana z wartości `\(k\)` sąsiadów, a dla cech jakościowych najczęściej występujący wariant.
+
+---
+
+# Metoda najbliższych sąsiadów
+
+Funkcja `kNN`
+
+
+```r
+kNN(data = zbior, variable = c("cecha1", "cecha2"), 
+    dist_var = c("zmienna1", "zmienna2", "zmienna3"), k = 5)
+```
+
+- `data` - zbiór danych wejściowych
+
+- `variable` - cecha/cechy do imputacji
+
+- `dist_var` - zmienne wykorzystywane do obliczenia odległości
+
+- `k` - liczba sąsiadów
+
+---
+
+# Imputacja regresyjna
+
+Zastąpienie braków danych wartościami teoretycznymi z modelu liniowego.
+
+Funkcja `regressionImp`
+
+
+```r
+regressionImp(formula = model, data = zbior)
+```
+
+- `formula` - model dla zmiennej imputowanej
+
+- `data` - zbiór danych wejściowych
+
+Podobnie działa funkcja `rangerImpute()` wykorzystująca lasy losowe, natomiast przy domyślnych parametrach nie będzie metodą deterministyczną.
+
+---
+
+# Paradoks Simpsona
+
+Efekt działania kilku grup wydaje się odwrócony, kiedy grupy są połączone.
+
+&lt;img src="img/simpson.png" width="600px"&gt;
+
+--
+
+- Nabór na Uniwersytecie w Berekley w 1951 roku: spośród kandydatów przyjęto 45% mężczyzn i 30% kobiet.
+
+- Uniwersytet został oskarżony o seksizm i sprawa została skierowana do sądu.
 
 ---
 
@@ -205,6 +320,17 @@ Wiele narzędzi do wizualizacji wyników można znaleźć w pakiecie [factoextra
 - GMM
 
 [Skuteczność algorytmów](https://towardsdatascience.com/the-5-clustering-algorithms-data-scientists-need-to-know-a36d136ef68)
+---
+
+# Redukcja wymiarów
+
+- [PCA](https://miroslawmamczur.pl/na-czym-polega-analiza-skladowych-glownych-pca/)
+
+- [t-SNE](https://miroslawmamczur.pl/jak-dziala-metoda-redukcji-wymiarow-t-sne/)
+
+- [UMAP](https://cran.r-project.org/web/packages/umap/vignettes/umap.html)
+
+Wiele narzędzi do wizualizacji wyników można znaleźć w pakiecie [factoextra](https://github.com/kassambara/factoextra).
 
 ---
 
