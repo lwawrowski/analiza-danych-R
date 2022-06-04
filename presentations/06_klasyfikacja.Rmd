@@ -78,8 +78,6 @@ class: inverse
 
 # Zadanie
 
-W klasyfikacji bardzo ważne jest odpowiednie przygotowanie zbioru danych oraz dobór predyktorów. Może w tym pomóc pakiet [vtreat](https://cran.r-project.org/web/packages/vtreat/index.html) dokładnie omówiony w tym [webinarze](https://www.youtube.com/watch?v=sniHkkrAsOc). 
-
 Proszę utworzyć nową zmienną o nazwie _installment_, która będzie zawierała wysokość raty.
 
 `r countdown(minutes = 5, seconds = 0, top = 0)`
@@ -102,17 +100,7 @@ Pakiet [rsample](https://cran.r-project.org/web/packages/rsample/index.html) zaw
 
 ---
 
-# Główne problemy
-
-- dane niezbalansowane - w idealnym przypadku klasyfikacji, przypadków z każdej grupy powinno być tyle samo. W przeciwnym przypadku model będzie działał lepiej dla klasy większościowej. Najprostszą metodą balansowania danych jest upsampling czyli dolosowywanie obserwacji z klasy mniejszościowej, tak aby wyrównać liczebności (lub w drugę stronę - downsampling). Alternatywnie można zastosować metodę SMOTE, która generuje sztuczne obserwacje dla klasy mniejszościowej (pakiety [DMwR](https://cran.r-project.org/web/packages/DMwR/index.html), [imbalance](https://cran.r-project.org/web/packages/imbalance/index.html)). 
-
-- braki danych - niektóre algorytmy klasyfikacji nie obsługują braków danych. Usunięcie tych obserwacji spowodowałoby znaczne zmniejszenie próby badawczej, zatem stosuje się metody mające na celu uzupełnienie braków danych. W najprostszym przypadku braki można zastąpić średnią lub dominantą. Do bardziej zaawansowanych należy metoda najbliższych sąsiadów ([VIM](https://cran.r-project.org/web/packages/VIM/index.html)) albo imputacja wielokrotna ([mice](https://cran.r-project.org/web/packages/mice/index.html)).
-
----
-
 # Algorytmy
-
-- regresja logistyczna: wymaga spełnienia założeń
 
 - drzewa decyzyjne: łatwa interpretacja
 
@@ -136,7 +124,7 @@ Pakiet [rsample](https://cran.r-project.org/web/packages/rsample/index.html) zaw
 
 # Frameworki do ML
 
-Istnieje wiele pakietów implementujących różne algorytmy ML: 97 w [Machine Learning Task View](https://cran.r-project.org/web/views/MachineLearning.html) (stan na 29.05.2020). Można korzystać z nich pojedynczo, ale nie są w żadnej sposób wystandaryzowane: różne nazwy argumentów i struktury obiektów wynikowych. 
+Istnieje wiele pakietów implementujących różne algorytmy ML (sprawdź na [Machine Learning Task View](https://cran.r-project.org/web/views/MachineLearning.html)). Można korzystać z nich pojedynczo, ale nie są w żadnej sposób wystandaryzowane: różne nazwy argumentów i struktury obiektów wynikowych. 
 
 Pakiety mające na celu integrację różnych algorytmów:
 
@@ -382,20 +370,6 @@ class: inverse
 
 # Zadanie
 
-Sprawdź jak model będzie się sprawdzał na danych, w których braki danych są traktowane jako osobna kategoria:
-
-```r
-credit_wna <- credit %>% mutate_at(c("saving_accounts", "checking_account"), fct_explicit_na)
-```
-
-`r countdown(minutes = 10, seconds = 0, top = 0)`
-
----
-
-class: inverse
-
-# Zadanie
-
 Przeprowadź [klasyfikację mieszkań](http://www.wawrowski.edu.pl/data/sf_ny_homes.csv) ze względu na miejsce. 
 
 ```{r, eval = FALSE}
@@ -404,24 +378,6 @@ homes <- read_csv("http://www.wawrowski.edu.pl/data/sf_ny_homes.csv")
 homes <- homes %>% 
   mutate(in_sf=as.factor(in_sf))
 ```
-
----
-
-![](img/machine_learning.png)
-
-https://xkcd.com/1838/
-
----
-
-![](img/twitter.png)
-
-https://twitter.com/computerfact/status/974364686685794304
-
----
-
-![](img/ml_statistics.jpeg)
-
-https://towardsdatascience.com/no-machine-learning-is-not-just-glorified-statistics-26d3952234e3
 
 ---
 
