@@ -1,0 +1,19 @@
+project:
+  type: book
+
+book:
+  title: "Metody przetwarzania i analizy danych w R"
+  author: "Łukasz Wawrowski"
+  date: "02/24/2023"
+  chapters:
+    - index.qmd
+    - 01-eda.qmd
+    - 02-testy.qmd
+    - 03-regresja.qmd
+    - 04-grupowanie.qmd
+    - 05-klasyfikacja.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc-title: "Spis treści"

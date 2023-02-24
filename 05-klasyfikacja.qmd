@@ -231,6 +231,7 @@ Innym metodem opisu działania modelu jest partial dependency plot, przedstawiaj
 
 ```{r}
 h2o.partialPlot(object = m4, data = valid_credit_h2o, cols = c("checking_account","credit_amount"))
+h2o.shutdown(prompt = FALSE)
 ```
 
 W tym przypadku możemy zaobserwować, że im klient bogatszy tym większa szansa na klasyfikację do grupy wiarygodnych kredytobiorców. Z kolei wraz ze wzrostem wysokości kredytu to prawdopodobieństwo maleje.
