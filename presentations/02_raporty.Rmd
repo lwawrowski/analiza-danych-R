@@ -47,6 +47,10 @@ Połączenie języka __R__ i __markdown__ umożliwia tworzenie dynamicznych rapo
 
 Pliki źródłowe mają zawsze rozszerzenie .Rmd.
 
+--
+
+Następca R Markdown: [Quarto](https://quarto.org/)
+
 ---
 
 # Nowy dokument
