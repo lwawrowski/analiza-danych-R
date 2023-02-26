@@ -347,6 +347,22 @@ __Wynik__
 
 ---
 
+# Polski słownik
+
+.pull-left[
+
+RStudio będzie sugerował błędy w słowach w języku polskim poprzez czerwone podkreślenie. W celu poprawy komfortu pracy można dodać słownik języka polskiego. Z repozytorium [LibreOffice](https://github.com/LibreOffice/dictionaries/tree/master/pl_PL) pobieramy plik [pl_PL.dic](https://raw.githubusercontent.com/LibreOffice/dictionaries/master/pl_PL/pl_PL.dic) i dodajemy go do programu: Tools -> Global options -> Spelling
+
+]
+
+.pull-right[
+
+![](img/pl_dic.png)
+
+]
+
+---
+
 class: inverse
 
 # Zadanie
