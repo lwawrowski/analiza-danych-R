@@ -5,6 +5,7 @@ book:
   title: "Metody przetwarzania i analizy danych w R"
   author: "Łukasz Wawrowski"
   date: "02/24/2023"
+  favicon: favicon.png
   chapters:
     - index.qmd
     - 01-eda.qmd
