@@ -47,6 +47,10 @@ Połączenie języka __R__ i __markdown__ umożliwia tworzenie dynamicznych rapo
 
 Pliki źródłowe mają zawsze rozszerzenie .Rmd.
 
+--
+
+Następca R Markdown: [Quarto](https://quarto.org/)
+
 ---
 
 # Nowy dokument
@@ -338,6 +342,22 @@ centymetry.
 __Wynik__
 
 Średnia długość płatków irysów wynosi `r round(mean(iris$Petal.Length),2)` centymetry.
+
+]
+
+---
+
+# Polski słownik
+
+.pull-left[
+
+RStudio będzie sugerował błędy w słowach w języku polskim poprzez czerwone podkreślenie. W celu poprawy komfortu pracy można dodać słownik języka polskiego. Z repozytorium [LibreOffice](https://github.com/LibreOffice/dictionaries/tree/master/pl_PL) pobieramy plik [pl_PL.dic](https://raw.githubusercontent.com/LibreOffice/dictionaries/master/pl_PL/pl_PL.dic) i dodajemy go do programu: Tools -> Global options -> Spelling
+
+]
+
+.pull-right[
+
+![](img/pl_dic.png)
 
 ]
 
