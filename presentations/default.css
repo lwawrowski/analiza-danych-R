@@ -91,7 +91,7 @@ th, td { padding: 5px; }
   padding-bottom: 10px;
 }
 
-.title-slide h3:nth-child(3) {
+.title-slide h3 {
   font-size: 12pt;
   left:3%;
   bottom:4%;
