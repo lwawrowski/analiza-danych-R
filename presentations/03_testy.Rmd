@@ -43,6 +43,8 @@ library(countdown)
 
 - [Rozważania o p-value](http://cejsh.icm.edu.pl/cejsh/element/bwmeta1.element.cejsh-e3daa053-7cf2-4eee-9192-16c48c3a7a45/c/05.pdf)
 
+- [Oświadczenie Amerykańskiego Towarzystwa statystycznego o stosowaniu wartości p](https://idane.pl/post/oswiadczenie-amerykanskiego-towarzystwa-statystycznego-o-stosowaniu-wartosci-p-i-co-z-tego-wynika/)
+
 ]
 
 .pull-right[
@@ -224,11 +226,7 @@ Jeśli chcemy sprawdzić homogeniczność wariancji w więcej niż dwóch grupac
 
 Funkcja `bartlett.test()` z pakietu _stats_:
 
-- `x` - wektor wartości cechy
-
-- `g` - wektor zawierający identyfikator grup
-
-Jako wzór z tyldą `zmienna_analizowana ~ zmienna_grupująca`.
+- jako wzór z tyldą `zmienna_analizowana ~ zmienna_grupująca`.
 
 ---
 
@@ -253,10 +251,6 @@ Porównanie wartości średnich:
 - $H_1: m_1 \neq m_2$ lub $H_1: m_1 < m_2$ lub $H_1: m_1 > m_2$
 
 Funkcja `t.test()`
-
-- `x` - wektor wartości cechy
-
-- `g` - wektor zawierający identyfikator grup
 
 - jako wzór z tyldą `zmienna_analizowana ~ zmienna_grupująca`
 
