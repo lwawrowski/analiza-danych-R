@@ -43,6 +43,16 @@ Uczenie nienadzorowane - końcowy wynik nie jest znany
 
 ---
 
+# Klasyfikacja 
+
+- dane tabelaryczne
+
+- obrazy
+
+- teksty
+
+---
+
 # Klasyfikacja
 
 - binarna (binary) - tylko dwa warianty: zachorowanie, spłata kredytu
@@ -292,7 +302,7 @@ Domyślne parametry modelu nie muszą dawać najlepszych rezultatów. W celu ule
 
 - sample rate
 
-Można przeszukiwać całą przestrzeń paramterów (intensywne obliczeniowo) albo losowo.
+Można przeszukiwać całą przestrzeń parametrów (intensywne obliczeniowo) albo losowo.
 
 ---
 
