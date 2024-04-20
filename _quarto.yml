@@ -10,9 +10,9 @@ book:
     - index.qmd
     - 01-eda.qmd
     - 02-testy.qmd
-    - 03-regresja.qmd
-    - 04-grupowanie.qmd
-    - 05-klasyfikacja.qmd
+    - 03-klasyfikacja.qmd
+    - 04-regresja.qmd
+    - 05-grupowanie.qmd
 
 format:
   html:

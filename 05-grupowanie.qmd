@@ -1,6 +1,6 @@
 # Grupowanie
 
-[Prezentacja](presentations/05_grupowanie.html)
+[Prezentacja](presentations/06_grupowanie.html)
 
 ## Wprowadzenie
 

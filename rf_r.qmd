@@ -1,0 +1,76 @@
+---
+title: "Klasyfikacja z wykorzystaniem lasów losowych - R"
+self-contained: true
+toc: true
+execute: 
+  warning: false
+---
+
+# Wczytanie pakietów
+
+```{r}
+library(tidyverse)
+library(rsample)
+library(caret)
+library(ranger)
+```
+
+# Wczytanie danych
+
+```{r}
+credit <- read_csv("data/german_credit_data.csv")
+
+credit <- credit %>% 
+  janitor::clean_names() %>% 
+  mutate_if(is.character, as.factor)
+
+summary(credit)
+```
+
+# Usunięcie braków danych
+
+```{r}
+credit_imp <- VIM::kNN(credit, imp_var = F)
+
+summary(credit_imp)
+```
+
+# Podział zbioru
+
+```{r}
+set.seed(123)
+credit_split <- initial_split(data = credit_imp, strata = "risk")
+
+credit_train <- training(credit_split)
+credit_test <- assessment(credit_split)
+```
+
+# Model
+
+## Dane treningowe
+
+```{r}
+model <- ranger(risk ~ ., data = credit_train, num.trees = 100)
+
+credit_train_preds <- predict(model, credit_train)
+
+confusionMatrix(data = credit_train_preds$predictions, reference = credit_train$risk,
+                mode = "everything", positive = "good")
+
+```
+
+## Dane testowe
+
+```{r}
+credit_test_preds <- predict(model, credit_test)
+
+confusionMatrix(data = credit_test_preds$predictions, reference = credit_test$risk,
+                mode = "everything", positive = "good")
+```
+
+# Zapisanie modelu
+
+```{r}
+save(model, file="model_rf.rda")
+```
+

@@ -4,7 +4,7 @@
     <title>Metody przetwarzania i analizy danych</title>
     <meta charset="utf-8" />
     <meta name="author" content="© Łukasz Wawrowski" />
-    <script src="libs/header-attrs-2.21/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.22/header-attrs.js"></script>
     <link href="libs/countdown-0.4.0/countdown.css" rel="stylesheet" />
     <script src="libs/countdown-0.4.0/countdown.js"></script>
     <link rel="stylesheet" href="default.css" type="text/css" />
@@ -67,7 +67,7 @@ Zbiór [salary](http://www.wawrowski.edu.pl/data/salary.xlsx) zawiera informacje
 
 # Wykres rozrzutu
 
-![](04_regresja_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](05_regresja_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -77,7 +77,7 @@ class: inverse
 
 Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
 
-<div class="countdown" id="timer_0685e9c9" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_009fbe7c" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -86,7 +86,7 @@ Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
 
 # Wykres rozrzutu
 
-![](04_regresja_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](05_regresja_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -111,7 +111,7 @@ Weźmy pod uwagę prosty przykład dochodów i wydatków:
 
 Wykres rozrzutu
 
-![](04_regresja_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](05_regresja_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -119,7 +119,7 @@ Wykres rozrzutu
 
 Spróbujmy teraz dopasować kilka prostych - mogą one przebiegać na wiele różnych sposobów.
 
-![](04_regresja_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](05_regresja_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -127,7 +127,7 @@ Spróbujmy teraz dopasować kilka prostych - mogą one przebiegać na wiele ró�
 
 W następnym kroku obliczamy różnice pomiędzy istniejącymi punktami, a odpowiadającym im wartościom na prostej: 
 
-![](04_regresja_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](05_regresja_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -252,7 +252,7 @@ class: inverse
 
 Stwórz model regresji prostej objaśniający zależność sprzedaży od liczby klientów na podstawie [sklepu Rossmann](http://www.wawrowski.edu.pl/data/sklep77.xlsx). Jaka jest prognozowana sprzedaż dla 300, 700 i 1050 klientów?
 
-<div class="countdown" id="timer_24ec45c1" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_dd83e7e6" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -293,176 +293,13 @@ Na podstawie zbioru [pracownicy](http://www.wawrowski.edu.pl/data/pracownicy.xls
 
 ---
 
-### Mechanizmy powstawania braków danych
-
-**Całkowicie losowy - Missing Completely at Random (MCAR)**
-
-- Proces powstawania braków jest całkowicie losowy.
-
-**Losowy - Missing at Random (MAR)**
-
-- Braki danych zależą od zmiennych obserwowanych np. mężczyźni odmawiają odpowiedzi w pytaniach o depresję, a kobiety o wagę. 
-- Można sprawdzić np. testem `\(\chi^2\)`.
-- Lepszym określeniem byłoby Missing Conditionally at Random
-
-**Nielosowy - Missing not at Random (MNAR)**
-
-- Braki danych zależą od zmiennych obserwowalnych i nieobserwowalnych np. inteligencji, statusu społecznego.
-
-[Rubin, D. (1976). Inference and Missing Data. Biometrika, 63(3), 581-592](https://www.jstor.org/stable/2335739)
-
----
-
-# Możliwe rozwiązania
-
-- usunięcie obserwacji z brakami danych
-
-- imputacja statystyczna:
-
-   - metody deterministyczne - zawsze te same wartości imputacyjne:
-      
-      - zastępowanie wartością przeciętną, imputacja regresyjna,
-      - nie wprowadzają dodatkowego źródła błędu losowego,
-      - zniekształcają rozkłady zmiennych
-   
-   - metody stochastyczne - można uzyskać różne wartości imputacyjne:
-   
-      - metoda hot-deck, stochastyczna imputacja regresyjna,
-      - generują dodatkowy błąd,
-      - lepiej zachowują rozkłady zmiennych
-
-[Tomasz Piasecki - Imputacja dochodów w badaniach statystyki publicznej dotyczących gospodarstw domowych](https://stat.gov.pl/cps/rde/xbcr/lodz/ASSETS_Konferencja_MRS_2013_plakat_Piasecki_T_Imputacja_dochodow_w_badaniach_statystyki_publicznej.pdf)
-
----
-
-# Zastępowanie braków danych
-
-Zmienna ilościowa
-
-
-```r
-dane &lt;- dane_braki %&gt;%
-  mutate(zmienna=if_else(condition = is.na(zmienna), 
-                         true = mean(zmienna, na.rm = T), 
-                         false = zmienna))
-```
-
-
-Zmienna jakościowa
-
-
-```r
-dominanta &lt;- names(sort(table(dane_braki$zmienna), decreasing = T))[1]
-
-dane &lt;- dane_braki %&gt;%
-  mutate(zmienna=if_else(condition = is.na(zmienna), 
-                         true = dominanta, 
-                         false = zmienna))
-```
-
----
-
-# Pakiet VIM
-
-[Visualization and Imputation of Missing Values](https://cran.r-project.org/web/packages/VIM/index.html)
-
-[Alexander Kowarik, Matthias Templ (2016). Imputation with the R Package VIM. Journal of Statistical Software, 74(7), 1-16.](https://www.jstatsoft.org/article/view/v074i07/v74i07.pdf)
-
-- implementuje najpopularniejsze metody do zastępowania braków danych,
-
-- funkcje z pakietu zwracają zbiór danych z uzupełnionymi wartościami i flagą dla imputowanych obserwacji
-
----
-
-# Metoda hot-deck
-
-Dla każdego braku danych poszukiwany jest _dawca_ - obserwacja podobna pod kątem cech skorelowanych ze zmienną (pomocniczych), która zawiera brak danych. 
-
-Warianty:
-
-- losowa - stworzenie grup imputacyjnych na podstawie cech pomocniczych. Dawca wybierany jest losowo z odpowiedniej grupy.
-
-- sekwencyjna - uporządkowanie danych na podstawie cech pomocniczych. Dawca wybierany jest jako pierwsza obserwacja o takich samych cechach pomocniczych.
-
----
-
-# Metoda hot-deck
-
-Funkcja `hotdeck`
-
-
-```r
-hotdeck(data = zbior, variable = "cecha", 
-        ord_var = c("zmienna1", "zmienna2"), domain_var = "domena")
-```
-
-- `data` - zbiór danych wejściowych
-
-- `variable` - cecha/cechy do imputacji
-
-- `ord_var` - zmienne pomocnicze
-
-- `domain_var` - zmienne domenowe - w ramach, których ma być przeprowadzona imputacja
-
----
-
-# Metoda najbliższych sąsiadów
-
-Poszukiwanie obserwacji dawcy na podstawie wybranych zmiennych oraz kryterium minimalnej odległości dla wybranej liczby `\(k\)` sąsiadów.
-
-Obliczanie odległości opiera się na metryce Gowera (1971), która umożliwia obliczanie odległości dla cech jakościowych i ilościowych.
-
-Imputowana wartość dla cech ilościowych to mediana z wartości `\(k\)` sąsiadów, a dla cech jakościowych najczęściej występujący wariant.
-
----
-
-# Metoda najbliższych sąsiadów
-
-Funkcja `kNN`
-
-
-```r
-kNN(data = zbior, variable = c("cecha1", "cecha2"), 
-    dist_var = c("zmienna1", "zmienna2", "zmienna3"), k = 5)
-```
-
-- `data` - zbiór danych wejściowych
-
-- `variable` - cecha/cechy do imputacji
-
-- `dist_var` - zmienne wykorzystywane do obliczenia odległości
-
-- `k` - liczba sąsiadów
-
----
-
-# Imputacja regresyjna
-
-Zastąpienie braków danych wartościami teoretycznymi z modelu liniowego.
-
-Funkcja `regressionImp`
-
-
-```r
-regressionImp(formula = model, data = zbior)
-```
-
-- `formula` - model dla zmiennej imputowanej
-
-- `data` - zbiór danych wejściowych
-
-Podobnie działa funkcja `rangerImpute()` wykorzystująca lasy losowe, natomiast przy domyślnych parametrach nie będzie metodą deterministyczną.
-
-
----
-
 class: inverse
 
 # Zadanie
 
 Na bazie zbioru pracownicy stwórz nowy zbiór danych, który nie będzie zawierał niepotrzebnych zmiennych oraz braków danych.
 
-<div class="countdown" id="timer_242e2169" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_dbb6045f" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -575,7 +412,7 @@ Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/dat
 
 Przyda się pakiet _janitor_ i funkcja `clean_names()` do uporządkowania nazw kolumn.
 
-<div class="countdown" id="timer_ad19a6a5" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_d769788c" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>

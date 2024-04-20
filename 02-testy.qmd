@@ -1,8 +1,6 @@
 # Testowanie hipotez 
 
-[Prezentacja - raporty](presentations/02_raporty.html)
-
-[Prezentacja - testy](presentations/03_testy.html)
+[Prezentacja](presentations/03_testy.html)
 
 ## Wprowadzenie
 

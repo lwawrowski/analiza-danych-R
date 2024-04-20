@@ -1,6 +1,6 @@
 # Regresja
 
-[Prezentacja](presentations/04_regresja.html)
+[Prezentacja](presentations/05_regresja.html)
 
 ## Wprowadzenie
 

@@ -1,6 +1,6 @@
 # Klasyfikacja
 
-[Prezentacja](presentations/06_klasyfikacja.html)
+[Prezentacja](presentations/04_klasyfikacja.html)
 
 ## Wprowadzenie
 
@@ -112,7 +112,7 @@ Generalnie wyniki w obu przypadkach powinny być do siebie zbliżone, przy czym 
 
 ## Gradient Boosting Machine
 
-Spróbujemy polepszyć jakość klasyfikacji z wykorzystaniem metody gradient boostingu. W tym celu wykorzystamy pakiet [h2o](https://www.h2o.ai/), który dostarcza kompleksowych rozwiązań z zakresu machine learning. W pierwszej kolejności trzeba zmienić format danych na ten obsługowany przez pakiet.
+Spróbujemy polepszyć jakość klasyfikacji z wykorzystaniem metody gradient boostingu. W tym celu wykorzystamy pakiet [h2o](https://www.h2o.ai/), który dostarcza kompleksowych rozwiązań z zakresu machine learning. W pierwszej kolejności trzeba zmienić format danych na ten obsługiwany przez pakiet.
 
 ```{r}
 library(h2o)

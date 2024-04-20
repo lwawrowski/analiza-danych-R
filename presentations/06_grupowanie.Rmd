@@ -1,6 +1,6 @@
 ---
 title: "Metody przetwarzania<br>i analizy danych"
-subtitle: "Grupowanie i braki danych"
+subtitle: "Grupowanie"
 author: "&copy; Łukasz Wawrowski"
 date: ""
 output:
@@ -25,9 +25,9 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 12, fig.heig
 
 Uczenie nadzorowane - końcowy wynik jest znany
 
-- regresja
-
 - klasyfikacja
+
+- regresja
 
 Uczenie nienadzorowane - końcowy wynik nie jest znany
 
@@ -196,116 +196,6 @@ Do danych z poprzedniego zadania zastosuj metodę hierarchiczną.
 [Zbiór danych na temat pingwinów](https://github.com/allisonhorst/palmerpenguins)
 
 <img src="img/lter_penguins.png" width="600px">
-
----
-
-# Braki danych
-
-- usunięcie obserwacji z brakami danych
-
-- imputacja statystyczna:
-
-   - metody deterministyczne - zawsze te same wartości imputacyjne:
-      
-      - zastępowanie wartością przeciętną, imputacja regresyjna,
-      - nie wprowadzają dodatkowego źródła błędu losowego,
-      - zniekształcają rozkłady zmiennych
-   
-   - metody stochastyczne - można uzyskać różne wartości imputacyjne:
-   
-      - metoda hot-deck, stochastyczna imputacja regresyjna,
-      - generują dodatkowy błąd,
-      - lepiej zachowują rozkłady zmiennych
-      
----
-      
-# Pakiet VIM
-
-[Visualization and Imputation of Missing Values](https://cran.r-project.org/web/packages/VIM/index.html)
-
-[Alexander Kowarik, Matthias Templ (2016). Imputation with the R Package VIM. Journal of Statistical Software, 74(7), 1-16.](https://www.jstatsoft.org/article/view/v074i07/v74i07.pdf)
-
-- implementuje najpopularniejsze metody do zastępowania braków danych,
-
-- funkcje z pakietu zwracają zbiór danych z uzupełnionymi wartościami i flagą dla imputowanych obserwacji
-
----
-
-# Metoda hot-deck
-
-Dla każdego braku danych poszukiwany jest _dawca_ - obserwacja podobna pod kątem cech skorelowanych ze zmienną (pomocniczych), która zawiera brak danych. 
-
-Warianty:
-
-- losowa - stworzenie grup imputacyjnych na podstawie cech pomocniczcych. Dawca wybierany jest losowo z odpowiedniej grupy.
-
-- sekwencyjna - uporządkowanie danych na podstawie cech pomocniczcych. Dawca wybierany jest jako pierwsza obserwacja o takich samych cechach pomocniczych.
-
----
-
-# Metoda hot-deck
-
-Funkcja `hotdeck`
-
-```{r eval=FALSE}
-hotdeck(data = zbior, variable = "cecha", 
-        ord_var = c("zmienna1", "zmienna2"), domain_var = "domena")
-```
-
-- `data` - zbiór danych wejściowych
-
-- `variable` - cecha/cechy do imputacji
-
-- `ord_var` - zmienne pomocnicze
-
-- `domain_var` - zmienne domenowe - w ramach, których ma być przeprowadzona imputacja
-
----
-
-# Metoda najbliższych sąsiadów
-
-Poszukiwanie obserwacji dawcy na podstawie wybranych zmiennych oraz kryterium minimalnej odległości dla wybranej liczby $k$ sąsiadów.
-
-Obliczanie odległości opiera się na metryce Gowera (1971), która umożliwia obliczanie odległości dla cech jakościowych i ilościowych.
-
-Imputowana wartość dla cech ilościowych to mediana z wartości $k$ sąsiadów, a dla cech jakościowych najczęściej występujący wariant.
-
----
-
-# Metoda najbliższych sąsiadów
-
-Funkcja `kNN`
-
-```{r eval=FALSE}
-kNN(data = zbior, variable = c("cecha1", "cecha2"), 
-    dist_var = c("zmienna1", "zmienna2", "zmienna3"), k = 5)
-```
-
-- `data` - zbiór danych wejściowych
-
-- `variable` - cecha/cechy do imputacji
-
-- `dist_var` - zmienne wykorzystywane do obliczenia odległości
-
-- `k` - liczba sąsiadów
-
----
-
-# Imputacja regresyjna
-
-Zastąpienie braków danych wartościami teoretycznymi z modelu liniowego.
-
-Funkcja `regressionImp`
-
-```{r eval=FALSE}
-regressionImp(formula = model, data = zbior)
-```
-
-- `formula` - model dla zmiennej imputowanej
-
-- `data` - zbiór danych wejściowych
-
-Podobnie działa funkcja `rangerImpute()` wykorzystująca lasy losowe, natomiast przy domyślnych parametrach nie będzie metodą deterministyczną.
 
 ---
 

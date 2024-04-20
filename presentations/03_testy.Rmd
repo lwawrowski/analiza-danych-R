@@ -200,22 +200,6 @@ Czy cecha _bieżące wynagrodzenie_ ma rozkład normalny? Sprawdź za pomocą od
 
 ---
 
-# Generowanie wartości
-
-- losowanie wartości z rozkładu:
-
-  - jednostajnego - funkcja `runif()`
-  
-  - normalnego - funkcja `rnorm()`
-  
-  - [inne rozkłady](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/Distributions.html)
-  
---
-  
-ziarno generatora: `set.seed()`
-
----
-
 # Test wariancji
 
 Jeśli chcemy sprawdzić homogeniczność wariancji w więcej niż dwóch grupach to należy skorzystać z testu Bartletta:

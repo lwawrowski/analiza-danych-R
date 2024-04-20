@@ -1,0 +1,89 @@
+---
+title: "Klasyfikacja z wykorzystaniem lasów losowych - Python"
+self-contained: true
+toc: true
+execute: 
+  warning: false
+---
+
+# Wczytanie pakietów
+
+```{python}
+import pandas as pd
+import pickle
+
+from sklearn.model_selection import train_test_split
+from sklearn.impute import SimpleImputer
+from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.metrics import (
+    balanced_accuracy_score,
+    cohen_kappa_score,
+    accuracy_score,
+    confusion_matrix
+)
+```
+
+# Wczytanie danych
+
+```{python}
+credit = pd.read_csv("data/german_credit_data.csv")
+```
+
+# Usunięcie braków danych
+
+```{python}
+imp = SimpleImputer(strategy="most_frequent")
+credit_imp = pd.DataFrame(imp.fit_transform(credit), columns=credit.columns)
+```
+
+# Podział zbioru
+
+```{python}
+y = credit["Risk"]
+X = credit.drop(columns=["Risk"])
+
+cols_num = X.select_dtypes(include="number").columns.tolist()
+cols_str = X.select_dtypes(include="object").columns.tolist()
+X = pd.get_dummies(X, columns=cols_str) if len(cols_str) > 0 else X
+
+X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=123
+    )
+```
+
+# Model
+
+## Dane treningowe
+
+```{python}
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train, y_train)
+
+credit_train_preds = model.predict(X_train)
+
+print(confusion_matrix(y_train, credit_train_preds))
+print(f"Accuracy: {accuracy_score(y_train, credit_train_preds)}")
+print(f"Kappa: {cohen_kappa_score(y_train, credit_train_preds)}")
+print(f"Balanced accuracy: {balanced_accuracy_score(y_train, credit_train_preds)}")
+```
+
+## Dane testowe
+
+```{python}
+credit_test_preds = model.predict(X_test)
+
+print(confusion_matrix(y_test, credit_test_preds))
+print(f"Accuracy: {accuracy_score(y_test, credit_test_preds)}")
+print(f"Kappa: {cohen_kappa_score(y_test, credit_test_preds)}")
+print(f"Balanced accuracy: {balanced_accuracy_score(y_test, credit_test_preds)}")
+
+```
+
+# Zapisanie modelu
+
+```{python}
+with open("model.pkl", "wb") as f:
+  pickle.dump(model, f)
+```
+

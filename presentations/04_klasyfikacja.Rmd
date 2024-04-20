@@ -25,9 +25,9 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 12, fig.heig
 
 Uczenie nadzorowane - końcowy wynik jest znany
 
-- regresja
-
 - klasyfikacja
+
+- regresja
 
 Uczenie nienadzorowane - końcowy wynik nie jest znany
 
@@ -112,11 +112,11 @@ Pakiet [rsample](https://cran.r-project.org/web/packages/rsample/index.html) zaw
 
 # Algorytmy
 
-- drzewa decyzyjne: łatwa interpretacja
+- white-box: regresja logistyczna, drzewa decyzyjne
 
-- metody nieparametryczne: mało efektywne dla dużych zbiorów
+- black-box: sieci neuronowe, XGBoost
 
-- metody gradientowe: SVM, sieci neuronowe, gradient
+Niektóre z metod opierają się na losowości i wyniki mogą się wtedy nieznacznie różnić pomiędzy uruchomieniami. Aby tego uniknąć można zastosować ziarno generatora `set.seed()`.
 
 ---
 
@@ -278,7 +278,7 @@ H2O is an open source, in-memory, distributed, fast, and scalable machine learni
 
 - interfejs graficzny `h2o.flow()`
 
-- automatyczny dobór modelu `h2o.automl()` - [webinar](https://www.youtube.com/watch?v=DjzKTeIIxOY&t=2978s)
+- automatyczny dobór modelu `h2o.automl()` - [webinar](https://www.youtube.com/watch?v=DjzKTeIIxOY)
 
 ---
 
