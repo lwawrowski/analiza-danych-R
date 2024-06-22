@@ -123,7 +123,7 @@ p1 + p2
 
 4. Oblicz nowe centrum grupy.
 
-5. Przypisz każdą z obserwacji do nowych centroidów. Jeśli któraś obserwacja zmieniła grupę - przejdź do kroku nr 4, a w przeciwnym przypadku zakończ algorytm.
+5. Przypisz każdą z obserwacji do nowych centroidów. Jeśli któraś obserwacja zmieniła grupę - przejdź do kroków nr 3 i 4, a w przeciwnym przypadku zakończ algorytm.
 
 ---
 
@@ -169,7 +169,7 @@ Dokonaj grupowania danych dotyczących [32 samochodów](http://www.wawrowski.edu
 
 3. Połącz dwa najbliżej siebie leżące grupy w jedną.
 
-4. Powtórz krok nr 3, aż do uzyskania jednej grupy.
+4. Powtórz kroki nr 2 i 3, aż do uzyskania jednej grupy.
 
 ---
 
@@ -191,11 +191,40 @@ Do danych z poprzedniego zadania zastosuj metodę hierarchiczną.
 
 ---
 
-# Zbiór palmerpenguins
+# Inne algorytmy grupowania
 
-[Zbiór danych na temat pingwinów](https://github.com/allisonhorst/palmerpenguins)
+Algorytmów grupowania jest bardzo wiele. 
 
-<img src="img/lter_penguins.png" width="600px">
+- [DBSCAN](https://github.com/mhahsler/dbscan)
+
+- [MeanShift](https://cran.r-project.org/web/packages/meanShiftR/)
+
+- [GMM](https://cran.r-project.org/web/packages/mclust/)
+
+Niektóre z nich mają na celu wykrywanie anomalii, dzieląc dane zawsze na dwie grupy - obserwacji nietypowych oraz typowych.
+
+- [Local Outlier Factor](https://github.com/mhahsler/dbscan)
+
+- [One Class SVM](https://lsinks.github.io/posts/2023-03-30-One-Class-SVM/one-class-svm.html)
+
+---
+
+# Skuteczność algorytmów
+
+<img src="img/cluster_comparison.png" width="600px">
+
+Źródło: https://scikit-learn.org/stable/auto_examples/cluster/plot_cluster_comparison.html
+---
+
+# Redukcja wymiarów
+
+- [PCA](https://miroslawmamczur.pl/na-czym-polega-analiza-skladowych-glownych-pca/)
+
+- [t-SNE](https://miroslawmamczur.pl/jak-dziala-metoda-redukcji-wymiarow-t-sne/)
+
+- [UMAP](https://cran.r-project.org/web/packages/umap/vignettes/umap.html)
+
+Wiele narzędzi do wizualizacji wyników można znaleźć w pakiecie [factoextra](https://github.com/kassambara/factoextra).
 
 ---
 
@@ -213,28 +242,11 @@ Efekt działania kilku grup wydaje się odwrócony, kiedy grupy są połączone.
 
 ---
 
-# Inne algorytmy grupowania
+# Zbiór palmerpenguins
 
-- DBSCAN
+[Zbiór danych na temat pingwinów](https://github.com/allisonhorst/palmerpenguins)
 
-- BIRCH
-
-- MeanShift
-
-- GMM
-
-[Skuteczność algorytmów](https://towardsdatascience.com/the-5-clustering-algorithms-data-scientists-need-to-know-a36d136ef68)
----
-
-# Redukcja wymiarów
-
-- [PCA](https://miroslawmamczur.pl/na-czym-polega-analiza-skladowych-glownych-pca/)
-
-- [t-SNE](https://miroslawmamczur.pl/jak-dziala-metoda-redukcji-wymiarow-t-sne/)
-
-- [UMAP](https://cran.r-project.org/web/packages/umap/vignettes/umap.html)
-
-Wiele narzędzi do wizualizacji wyników można znaleźć w pakiecie [factoextra](https://github.com/kassambara/factoextra).
+<img src="img/lter_penguins.png" width="600px">
 
 ---
 
