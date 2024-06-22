@@ -37,7 +37,7 @@ Cele analizy regresji:
 
 - poznawcze - badanie związków przyczynowo-skutkowych
 
-- predycyjne - oszacowanie nieznanej wartości cechy
+- predykcyjne - oszacowanie nieznanej wartości cechy
 
 Model regresji jest tylko przybliżeniem rzeczywistości!
 
@@ -77,7 +77,7 @@ class: inverse
 
 Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
 
-<div class="countdown" id="timer_009fbe7c" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_7c616924" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -87,6 +87,13 @@ Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
 # Wykres rozrzutu
 
 ![](05_regresja_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+
+# Wykres rozrzutu
+
+![](05_regresja_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
 
 ---
 
@@ -111,7 +118,7 @@ Weźmy pod uwagę prosty przykład dochodów i wydatków:
 
 Wykres rozrzutu
 
-![](05_regresja_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](05_regresja_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -119,7 +126,7 @@ Wykres rozrzutu
 
 Spróbujmy teraz dopasować kilka prostych - mogą one przebiegać na wiele różnych sposobów.
 
-![](05_regresja_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](05_regresja_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -127,7 +134,7 @@ Spróbujmy teraz dopasować kilka prostych - mogą one przebiegać na wiele ró�
 
 W następnym kroku obliczamy różnice pomiędzy istniejącymi punktami, a odpowiadającym im wartościom na prostej: 
 
-![](05_regresja_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](05_regresja_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -207,6 +214,17 @@ Miara ta określa, o ile, przeciętnie biorąc `\(+/-\)`, wartości empiryczne z
 
 `$$R^2=1-\frac{\sum\limits_{i=1}^{n}{(y_{i}-\hat{y}_{i})^2}}{\sum\limits_{i=1}^{n}{(y_{i}-\bar{y}_{i})^2}}$$`
 
+Współczynnik determinacji przyjmuje wartości z przedziału `\(&lt;0;1&gt;\)` wyłącznie wtedy, kiedy został wykorzystany model oszacowany metodą najmniejszych kwadratów. W przeciwnym przypadku wartości tego współczynnika mogą być z przedziału `\((-\infty;1&gt;\)`.
+
+---
+
+# Dopasowanie modelu 
+
+**Dopasowany współczynnik determinacji** ma na celu uwzględnienie i eliminację własności współczynnika determinacji polegającej na automatycznym zwiększaniu wartości `\(R^2\)` przy dodawaniu kolejnych cech do modelu. W tej formule uwzględnia się liczbę obserwacji oraz liczbę cech objaśniających:
+
+`$$\bar{R}^2=1-(1-R^2)\frac{n-1}{n-p-1}$$`
+Dopasowany współczynnik determinacji `\(\bar{R}^2\)` będzie zawsze mniejszy bądź równy wartości `\(R^2\)`. Może także przyjmować wartości ujemne.
+
 ---
 
 # Test Walda
@@ -246,13 +264,50 @@ predict(object = model, newdata = nowe_dane)
 
 ---
 
+# Trend liniowy
+
+W przypadku istnienia zależności liniowej w czasie, przedstawioną metodę można także wykorzystać do prognozowania wartości cechy w przyszłości. 
+
+
+```r
+df_trend  &lt;- data.frame(rok=c(2016, 2017, 2018, 2019, 2020),
+                        t=1:5,
+                        y=c(53, 55, 57, 56, 59))
+
+knitr::kable(df_trend)
+```
+
+
+
+|  rok|  t|  y|
+|----:|--:|--:|
+| 2016|  1| 53|
+| 2017|  2| 55|
+| 2018|  3| 57|
+| 2019|  4| 56|
+| 2020|  5| 59|
+
+---
+
+# Sezonowość
+
+Dla danych charakteryzujących się występowaniem sezonowości należy skorzystać z metod, które to uwzględnią np.
+
+- [prophet](https://facebook.github.io/prophet/)
+
+- [ARIMA](https://fable.tidyverts.org/)
+
+- [TimeGPT](https://docs.nixtla.io/docs/getting-started-timegpt_quickstart)
+
+---
+
 class: inverse
 
 # Zadanie 
 
 Stwórz model regresji prostej objaśniający zależność sprzedaży od liczby klientów na podstawie [sklepu Rossmann](http://www.wawrowski.edu.pl/data/sklep77.xlsx). Jaka jest prognozowana sprzedaż dla 300, 700 i 1050 klientów?
 
-<div class="countdown" id="timer_dd83e7e6" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_d8e56e09" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -299,7 +354,7 @@ class: inverse
 
 Na bazie zbioru pracownicy stwórz nowy zbiór danych, który nie będzie zawierał niepotrzebnych zmiennych oraz braków danych.
 
-<div class="countdown" id="timer_dbb6045f" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_c31371cb" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -412,7 +467,7 @@ Na podstawie zbioru dotyczącego [50 startupów](http://www.wawrowski.edu.pl/dat
 
 Przyda się pakiet _janitor_ i funkcja `clean_names()` do uporządkowania nazw kolumn.
 
-<div class="countdown" id="timer_d769788c" data-update-every="1" tabindex="0" style="top:0;right:0;">
+<div class="countdown" id="timer_04784740" data-update-every="1" tabindex="0" style="top:0;right:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">&minus;</button><button class="countdown-bump-up">&plus;</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>

@@ -31,7 +31,7 @@ Cele analizy regresji:
 
 - poznawcze - badanie związków przyczynowo-skutkowych
 
-- predycyjne - oszacowanie nieznanej wartości cechy
+- predykcyjne - oszacowanie nieznanej wartości cechy
 
 Model regresji jest tylko przybliżeniem rzeczywistości!
 
@@ -82,10 +82,24 @@ Stwórz wykres rozrzutu dla zbioru `salary` z wykorzystaniem pakietu _ggplot2_.
 ```{r echo=FALSE}
 
 ggplot(salary, aes(x = YearsExperience, y = Salary)) + 
-  geom_point() +
-  geom_smooth(method = "lm")
+  geom_point() + 
+  theme_light()
 
 ```
+
+---
+
+# Wykres rozrzutu
+
+```{r echo=FALSE}
+
+ggplot(salary, aes(x = YearsExperience, y = Salary)) + 
+  geom_smooth(method = "lm", se=FALSE) +
+  geom_point() +
+  theme_light()
+
+```
+
 
 ---
 
@@ -256,6 +270,17 @@ Miara ta określa, o ile, przeciętnie biorąc $+/-$, wartości empiryczne zmien
 
 $$R^2=1-\frac{\sum\limits_{i=1}^{n}{(y_{i}-\hat{y}_{i})^2}}{\sum\limits_{i=1}^{n}{(y_{i}-\bar{y}_{i})^2}}$$
 
+Współczynnik determinacji przyjmuje wartości z przedziału $<0;1>$ wyłącznie wtedy, kiedy został wykorzystany model oszacowany metodą najmniejszych kwadratów. W przeciwnym przypadku wartości tego współczynnika mogą być z przedziału $(-\infty;1>$.
+
+---
+
+# Dopasowanie modelu 
+
+**Dopasowany współczynnik determinacji** ma na celu uwzględnienie i eliminację własności współczynnika determinacji polegającej na automatycznym zwiększaniu wartości $R^2$ przy dodawaniu kolejnych cech do modelu. W tej formule uwzględnia się liczbę obserwacji oraz liczbę cech objaśniających:
+
+$$\bar{R}^2=1-(1-R^2)\frac{n-1}{n-p-1}$$
+Dopasowany współczynnik determinacji $\bar{R}^2$ będzie zawsze mniejszy bądź równy wartości $R^2$. Może także przyjmować wartości ujemne.
+
 ---
 
 # Test Walda
@@ -291,6 +316,32 @@ nowe_dane <- data.frame(x=c(10,20,30))
 
 predict(object = model, newdata = nowe_dane)
 ```
+
+---
+
+# Trend liniowy
+
+W przypadku istnienia zależności liniowej w czasie, przedstawioną metodę można także wykorzystać do prognozowania wartości cechy w przyszłości. 
+
+```{r}
+df_trend  <- data.frame(rok=c(2016, 2017, 2018, 2019, 2020),
+                        t=1:5,
+                        y=c(53, 55, 57, 56, 59))
+
+knitr::kable(df_trend)
+```
+
+---
+
+# Sezonowość
+
+Dla danych charakteryzujących się występowaniem sezonowości należy skorzystać z metod, które to uwzględnią np.
+
+- [prophet](https://facebook.github.io/prophet/)
+
+- [ARIMA](https://fable.tidyverts.org/)
+
+- [TimeGPT](https://docs.nixtla.io/docs/getting-started-timegpt_quickstart)
 
 ---
 
