@@ -201,6 +201,10 @@ Algorytmów grupowania jest bardzo wiele.
 
 - [GMM](https://cran.r-project.org/web/packages/mclust/)
 
+- [K-modes](https://cran.r-project.org/web/packages/klaR/index.html) (dla danych jakościowych)
+
+- [FCM](https://cran.r-project.org/web/packages/ppclust/) (punkt może przynależeć do kilku grup)
+
 Niektóre z nich mają na celu wykrywanie anomalii, dzieląc dane zawsze na dwie grupy - obserwacji nietypowych oraz typowych.
 
 - [Local Outlier Factor](https://github.com/mhahsler/dbscan)
